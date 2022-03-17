@@ -1,7 +1,7 @@
 ﻿#include "Game/Game.h"
 #include "Common.h"
-
-
+#include <wrl.h>
+#include <iostream>
 
 namespace library
 {
@@ -14,13 +14,17 @@ namespace library
     HWND                    g_hWnd = nullptr;
     D3D_DRIVER_TYPE         g_driverType = D3D_DRIVER_TYPE_NULL;
     D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
-    ID3D11Device* g_pd3dDevice = nullptr;
-    ID3D11Device1* g_pd3dDevice1 = nullptr;
-    ID3D11DeviceContext* g_pImmediateContext = nullptr;
-    ID3D11DeviceContext1* g_pImmediateContext1 = nullptr;
-    IDXGISwapChain* g_pSwapChain = nullptr;
-    IDXGISwapChain1* g_pSwapChain1 = nullptr;
-    ID3D11RenderTargetView* g_pRenderTargetView = nullptr;
+    D3D11_TEXTURE2D_DESC    m_bbDesc;
+    D3D11_VIEWPORT          m_viewport;
+
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Device> g_pd3dDevice;
+    //Microsoft::WRL::ComPtr<ID3D11Device1> g_pd3dDevice1;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> g_pImmediateContext;
+    //Microsoft::WRL::ComPtr<ID3D11DeviceContext1> g_pImmediateContext1;
+    Microsoft::WRL::ComPtr<IDXGISwapChain> g_pSwapChain;
+    //Microsoft::WRL::ComPtr<IDXGISwapChain1> g_pSwapChain1;
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> g_pRenderTargetView;
     /*--------------------------------------------------------------------
       Forward declarations
     --------------------------------------------------------------------*/
@@ -72,7 +76,6 @@ namespace library
 //--------------------------------------------------------------------------------------
     HRESULT InitWindow(_In_ HINSTANCE hInstance, _In_ INT nCmdShow)
     {
-
         // Register class
         WNDCLASSEX wcex;
         wcex.cbSize = sizeof(WNDCLASSEX);
@@ -113,152 +116,88 @@ namespace library
     {
         HRESULT hr = S_OK;
 
-        RECT rc;
-        GetClientRect(g_hWnd, &rc);
-        UINT width = rc.right - rc.left;
-        UINT height = rc.bottom - rc.top;
+        D3D_FEATURE_LEVEL levels[] = {
+            D3D_FEATURE_LEVEL_9_1,
+            D3D_FEATURE_LEVEL_9_2,
+            D3D_FEATURE_LEVEL_9_3,
+            D3D_FEATURE_LEVEL_10_0,
+            D3D_FEATURE_LEVEL_10_1,
+            D3D_FEATURE_LEVEL_11_0,
+            D3D_FEATURE_LEVEL_11_1
+        };
 
-        UINT createDeviceFlags = 0;
-#ifdef _DEBUG
-        createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+        // This flag adds support for surfaces with a color-channel ordering different
+        // from the API default. It is required for compatibility with Direct2D.
+        UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
+
+#if defined(DEBUG) || defined(_DEBUG)
+        deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-        D3D_DRIVER_TYPE driverTypes[] =
-        {
-            D3D_DRIVER_TYPE_HARDWARE,
-            D3D_DRIVER_TYPE_WARP,
-            D3D_DRIVER_TYPE_REFERENCE,
-        };
-        UINT numDriverTypes = ARRAYSIZE(driverTypes);
+        DXGI_SWAP_CHAIN_DESC desc;
+        ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
+        desc.Windowed = TRUE;
+        desc.BufferCount = 2;
+        desc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        desc.SampleDesc.Count = 1;      //multisampling setting
+        desc.SampleDesc.Quality = 0;    //vendor-specific flag
+        desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+        desc.OutputWindow = g_hWnd;
 
-        D3D_FEATURE_LEVEL featureLevels[] =
-        {
-            D3D_FEATURE_LEVEL_11_1,
-            D3D_FEATURE_LEVEL_11_0,
-            D3D_FEATURE_LEVEL_10_1,
-            D3D_FEATURE_LEVEL_10_0,
-        };
-        UINT numFeatureLevels = ARRAYSIZE(featureLevels);
+        Microsoft::WRL::ComPtr<ID3D11Device> device;
+        Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
+        Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
+        
 
-        for (UINT driverTypeIndex = 0; driverTypeIndex < numDriverTypes; driverTypeIndex++)
-        {
-            g_driverType = driverTypes[driverTypeIndex];
-            hr = D3D11CreateDevice(nullptr, g_driverType, nullptr, createDeviceFlags, featureLevels, numFeatureLevels,
-                D3D11_SDK_VERSION, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
+        hr = D3D11CreateDeviceAndSwapChain(
+            nullptr,
+            D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_HARDWARE,
+            nullptr,
+            deviceFlags,
+            levels,
+            ARRAYSIZE(levels),
+            D3D11_SDK_VERSION,
+            &desc,
+            swapChain.GetAddressOf(),
+            device.GetAddressOf(),
+            &g_featureLevel,
+            context.GetAddressOf()
+        );
 
-            if (hr == E_INVALIDARG)
-            {
-                // DirectX 11.0 platforms will not recognize D3D_FEATURE_LEVEL_11_1 so we need to retry without it
-                hr = D3D11CreateDevice(nullptr, g_driverType, nullptr, createDeviceFlags, &featureLevels[1], numFeatureLevels - 1,
-                    D3D11_SDK_VERSION, &g_pd3dDevice, &g_featureLevel, &g_pImmediateContext);
-            }
+        device.As(&g_pd3dDevice);
+        context.As(&g_pImmediateContext);
+        swapChain.As(&g_pSwapChain);
 
-            if (SUCCEEDED(hr))
-                break;
-        }
-        if (FAILED(hr))
-            return hr;
+        // Configure the back buffer and viewport.
+        hr = g_pSwapChain->GetBuffer(
+            0,
+            __uuidof(ID3D11Texture2D),
+            (void**)&pBackBuffer);
 
-        // Obtain DXGI factory from device (since we used nullptr for pAdapter above)
-        IDXGIFactory1* dxgiFactory = nullptr;
-        {
-            IDXGIDevice* dxgiDevice = nullptr;
-            hr = g_pd3dDevice->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&dxgiDevice));
-            if (SUCCEEDED(hr))
-            {
-                IDXGIAdapter* adapter = nullptr;
-                hr = dxgiDevice->GetAdapter(&adapter);
-                if (SUCCEEDED(hr))
-                {
-                    hr = adapter->GetParent(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&dxgiFactory));
-                    adapter->Release();
-                }
-                dxgiDevice->Release();
-            }
-        }
-        if (FAILED(hr))
-            return hr;
+        pBackBuffer->GetDesc(&m_bbDesc);
 
-        // Create swap chain
-        IDXGIFactory2* dxgiFactory2 = nullptr;
-        hr = dxgiFactory->QueryInterface(__uuidof(IDXGIFactory2), reinterpret_cast<void**>(&dxgiFactory2));
-        if (dxgiFactory2)
-        {
-            // DirectX 11.1 or later
-            hr = g_pd3dDevice->QueryInterface(__uuidof(ID3D11Device1), reinterpret_cast<void**>(&g_pd3dDevice1));
-            if (SUCCEEDED(hr))
-            {
-                (void)g_pImmediateContext->QueryInterface(__uuidof(ID3D11DeviceContext1), reinterpret_cast<void**>(&g_pImmediateContext1));
-            }
+        ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
+        m_viewport.Height = (float)m_bbDesc.Height;
+        m_viewport.Width = (float)m_bbDesc.Width;
+        m_viewport.MinDepth = 0;
+        m_viewport.MaxDepth = 1;
 
-            DXGI_SWAP_CHAIN_DESC1 sd = {};
-            sd.Width = width;
-            sd.Height = height;
-            sd.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-            sd.SampleDesc.Count = 1;
-            sd.SampleDesc.Quality = 0;
-            sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-            sd.BufferCount = 1;
 
-            hr = dxgiFactory2->CreateSwapChainForHwnd(g_pd3dDevice, g_hWnd, &sd, nullptr, nullptr, &g_pSwapChain1);
-            if (SUCCEEDED(hr))
-            {
-                hr = g_pSwapChain1->QueryInterface(__uuidof(IDXGISwapChain), reinterpret_cast<void**>(&g_pSwapChain));
-            }
+        g_pImmediateContext->RSSetViewports(
+            1,
+            &m_viewport
+        );
 
-            dxgiFactory2->Release();
-        }
-        else
-        {
-            // DirectX 11.0 systems
-            DXGI_SWAP_CHAIN_DESC sd = {};
-            sd.BufferCount = 1;
-            sd.BufferDesc.Width = width;
-            sd.BufferDesc.Height = height;
-            sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-            sd.BufferDesc.RefreshRate.Numerator = 60;
-            sd.BufferDesc.RefreshRate.Denominator = 1;
-            sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-            sd.OutputWindow = g_hWnd;
-            sd.SampleDesc.Count = 1;
-            sd.SampleDesc.Quality = 0;
-            sd.Windowed = TRUE;
+        hr = g_pd3dDevice->CreateRenderTargetView(
+            pBackBuffer.Get(),
+            nullptr,
+            g_pRenderTargetView.GetAddressOf()
+        );
+        
+        return hr;
 
-            hr = dxgiFactory->CreateSwapChain(g_pd3dDevice, &sd, &g_pSwapChain);
-        }
 
-        // Note this tutorial doesn't handle full-screen swapchains so we block the ALT+ENTER shortcut
-        dxgiFactory->MakeWindowAssociation(g_hWnd, DXGI_MWA_NO_ALT_ENTER);
-
-        dxgiFactory->Release();
-
-        if (FAILED(hr))
-            return hr;
-
-        // Create a render target view
-        ID3D11Texture2D* pBackBuffer = nullptr;
-        hr = g_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
-        if (FAILED(hr))
-            return hr;
-
-        hr = g_pd3dDevice->CreateRenderTargetView(pBackBuffer, nullptr, &g_pRenderTargetView);
-        pBackBuffer->Release();
-        if (FAILED(hr))
-            return hr;
-
-        g_pImmediateContext->OMSetRenderTargets(1, &g_pRenderTargetView, nullptr);
-
-        // Setup the viewport
-        D3D11_VIEWPORT vp;
-        vp.Width = (FLOAT)width;
-        vp.Height = (FLOAT)height;
-        vp.MinDepth = 0.0f;
-        vp.MaxDepth = 1.0f;
-        vp.TopLeftX = 0;
-        vp.TopLeftY = 0;
-        g_pImmediateContext->RSSetViewports(1, &vp);
-
-        return S_OK;
     }
 
 
@@ -267,8 +206,9 @@ namespace library
     //--------------------------------------------------------------------------------------
     void Render()
     {
-        // Just clear the backbuffer
-        g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, Colors::MidnightBlue);
+        float ClearColor[4] = { 0.0f, 0.125f, 0.6f, 1.0f }; // RGBA
+        g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView.Get(), ClearColor);
+
         g_pSwapChain->Present(0, 0);
     }
 
@@ -278,15 +218,18 @@ namespace library
     //--------------------------------------------------------------------------------------
     void CleanupDevice()
     {
+        //std::cout << "hello";
         if (g_pImmediateContext) g_pImmediateContext->ClearState();
 
         if (g_pRenderTargetView) g_pRenderTargetView->Release();
-        if (g_pSwapChain1) g_pSwapChain1->Release();
+        //std::cout << "hello";
+        if (pBackBuffer) pBackBuffer->Release();
         if (g_pSwapChain) g_pSwapChain->Release();
-        if (g_pImmediateContext1) g_pImmediateContext1->Release();
+        
         if (g_pImmediateContext) g_pImmediateContext->Release();
-        if (g_pd3dDevice1) g_pd3dDevice1->Release();
+        
         if (g_pd3dDevice) g_pd3dDevice->Release();
+        
     }
 
 }
