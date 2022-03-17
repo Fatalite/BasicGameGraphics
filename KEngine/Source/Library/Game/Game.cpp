@@ -10,26 +10,26 @@ namespace library
     --------------------------------------------------------------------*/
 
 
-    HINSTANCE               g_hInst = nullptr;
-    HWND                    g_hWnd = nullptr;
+    HINSTANCE               g_hInst = 0;
+    HWND                    g_hWnd = 0;
     D3D_DRIVER_TYPE         g_driverType = D3D_DRIVER_TYPE_NULL;
     D3D_FEATURE_LEVEL       g_featureLevel = D3D_FEATURE_LEVEL_11_0;
-    D3D11_TEXTURE2D_DESC    m_bbDesc;
+    D3D11_TEXTURE2D_DESC    m_bbDesc ;
     D3D11_VIEWPORT          m_viewport;
 
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer;
-    Microsoft::WRL::ComPtr<ID3D11Device> g_pd3dDevice;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer = 0;
+    Microsoft::WRL::ComPtr<ID3D11Device> g_pd3dDevice = 0;
     //Microsoft::WRL::ComPtr<ID3D11Device1> g_pd3dDevice1;
-    Microsoft::WRL::ComPtr<ID3D11DeviceContext> g_pImmediateContext;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> g_pImmediateContext = 0;
     //Microsoft::WRL::ComPtr<ID3D11DeviceContext1> g_pImmediateContext1;
-    Microsoft::WRL::ComPtr<IDXGISwapChain> g_pSwapChain;
+    Microsoft::WRL::ComPtr<IDXGISwapChain> g_pSwapChain = 0;
     //Microsoft::WRL::ComPtr<IDXGISwapChain1> g_pSwapChain1;
-    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> g_pRenderTargetView;
+    Microsoft::WRL::ComPtr<ID3D11RenderTargetView> g_pRenderTargetView = 0;
     //-----------------------------------------------------------------------------
     // Direct3D device resources for the depth stencil
     //-----------------------------------------------------------------------------
-    Microsoft::WRL::ComPtr<ID3D11Texture2D>         g_pDepthStencil;
-    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  g_pDepthStencilView;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D>         g_pDepthStencil = 0;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  g_pDepthStencilView = 0;
 
     /*--------------------------------------------------------------------
       Forward declarations
@@ -135,25 +135,11 @@ namespace library
             D3D_FEATURE_LEVEL_11_0,
             D3D_FEATURE_LEVEL_11_1,
         };
+        UINT createDeviceFlags = 0;
 
-        // This flag adds support for surfaces with a color-channel ordering different
-        // from the API default. It is required for compatibility with Direct2D.
-        UINT deviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
-
-#if defined(DEBUG) || defined(_DEBUG)
-        deviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+#ifdef _DEBUG
+        createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
-
-        DXGI_SWAP_CHAIN_DESC desc;
-        ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
-        desc.Windowed = TRUE;
-        desc.BufferCount = 2;
-        desc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        desc.SampleDesc.Count = 1;      //multisampling setting
-        desc.SampleDesc.Quality = 0;    //vendor-specific flag
-        desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-        desc.OutputWindow = g_hWnd;
 
         Microsoft::WRL::ComPtr<ID3D11Device> device;
         Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
@@ -164,7 +150,7 @@ namespace library
             nullptr,                    // Specify nullptr to use the default adapter.
             D3D_DRIVER_TYPE_HARDWARE,   // Create a device using the hardware graphics driver.
             0,                          // Should be 0 unless the driver is D3D_DRIVER_TYPE_SOFTWARE.
-            deviceFlags,                // Set debug and Direct2D compatibility flags.
+            createDeviceFlags,                // Set debug and Direct2D compatibility flags.
             levels,                     // List of feature levels this app can support.
             ARRAYSIZE(levels),          // Size of the list above.
             D3D11_SDK_VERSION,          // Always set this to D3D11_SDK_VERSION for Windows Store apps.
@@ -183,6 +169,17 @@ namespace library
         // Store pointers to the Direct3D 11.1 API device and immediate context.
         device.As(&g_pd3dDevice);
         context.As(&g_pImmediateContext);
+
+        DXGI_SWAP_CHAIN_DESC desc;
+        ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
+        desc.Windowed = TRUE;
+        desc.BufferCount = 2;
+        desc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+        desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+        desc.SampleDesc.Count = 1;      //multisampling setting
+        desc.SampleDesc.Quality = 0;    //vendor-specific flag
+        desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
+        desc.OutputWindow = g_hWnd;
 
         // Create the DXGI device object to use in other factories, such as Direct2D.
         Microsoft::WRL::ComPtr<IDXGIDevice3> dxgiDevice;

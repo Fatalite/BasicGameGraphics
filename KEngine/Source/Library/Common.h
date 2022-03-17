@@ -14,7 +14,7 @@
 
 #define WIN32_LEAN_AND_MEAN // C4668 ERROR
 #include <windows.h>
-
+#include <dxgi.h>
 #include <d3d11_4.h>
 #include <directxcolors.h>
 

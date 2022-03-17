@@ -57,7 +57,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             Render();
         }
     }
-    std::cout << "hsdfasdfsdfsd";
+    
     CleanupDevice();
     
     return static_cast<INT>(msg.wParam);
