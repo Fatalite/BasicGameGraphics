@@ -58,8 +58,12 @@ namespace library
             EndPaint(hWnd, &ps);
             break;
 
+        case WM_CLOSE:
+            DestroyWindow(hWnd);
+            return 0;
         case WM_DESTROY:
             PostQuitMessage(0);
+
             break;
 
 
@@ -219,17 +223,22 @@ namespace library
     void CleanupDevice()
     {
         //std::cout << "hello";
-        if (g_pImmediateContext) g_pImmediateContext->ClearState();
+        //if (g_pImmediateContext) g_pImmediateContext->ClearState();
 
-        if (g_pRenderTargetView) g_pRenderTargetView->Release();
+        //if (g_pRenderTargetView) g_pRenderTargetView->Release();
         //std::cout << "hello";
-        if (pBackBuffer) pBackBuffer->Release();
-        if (g_pSwapChain) g_pSwapChain->Release();
+        //if (pBackBuffer) pBackBuffer->Release();
+        //if (g_pSwapChain) g_pSwapChain->Release();
+
+        g_pImmediateContext.Reset();
+        pBackBuffer.Reset();
+        g_pSwapChain.Reset();
+
+        g_pImmediateContext.Reset();
+        //if (g_pImmediateContext) g_pImmediateContext->Release();
         
-        if (g_pImmediateContext) g_pImmediateContext->Release();
-        
-        if (g_pd3dDevice) g_pd3dDevice->Release();
-        
+        //if (g_pd3dDevice) g_pd3dDevice->Release();
+        g_pd3dDevice.Reset();
     }
 
 }

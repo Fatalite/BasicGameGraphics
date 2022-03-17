@@ -7,7 +7,7 @@
 ===================================================================+*/
 
 #include "Common.h"
-
+#include <iostream>
 #include "Game/Game.h"
 using namespace library;
 /*F+F+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -33,8 +33,9 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    if (FAILED(InitWindow(hInstance, nCmdShow)))
+    if (FAILED(InitWindow(hInstance, nCmdShow))) {
         return 0;
+    }
 
     if (FAILED(InitDevice()))
     {
@@ -56,8 +57,8 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             Render();
         }
     }
-
+    std::cout << "hsdfasdfsdfsd";
     CleanupDevice();
-
+    
     return static_cast<INT>(msg.wParam);
 }
