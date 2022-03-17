@@ -1,1 +1,11 @@
-﻿
+﻿  모듈 종속성의 소스를 검사하는 중...
+  Game.cpp
+  Library.vcxproj -> C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Debug\Libraryd.lib
+  하위 디렉터리 또는 파일 C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\..\Library\x64\Debug이(가) 이미 있습니다.
+  C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Debug\Game.exe
+  C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Debug\Game.pdb
+  C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Debug\Libraryd.idb
+  C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Debug\Libraryd.lib
+  C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Debug\Libraryd.pdb
+  C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Debug\x64 - 바로 가기.lnk
+          6개 파일이 복사되었습니다.

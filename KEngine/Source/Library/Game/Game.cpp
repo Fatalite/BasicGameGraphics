@@ -25,6 +25,12 @@ namespace library
     Microsoft::WRL::ComPtr<IDXGISwapChain> g_pSwapChain;
     //Microsoft::WRL::ComPtr<IDXGISwapChain1> g_pSwapChain1;
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> g_pRenderTargetView;
+    //-----------------------------------------------------------------------------
+    // Direct3D device resources for the depth stencil
+    //-----------------------------------------------------------------------------
+    Microsoft::WRL::ComPtr<ID3D11Texture2D>         g_pDepthStencil;
+    Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  g_pDepthStencilView;
+
     /*--------------------------------------------------------------------
       Forward declarations
     --------------------------------------------------------------------*/
@@ -127,7 +133,7 @@ namespace library
             D3D_FEATURE_LEVEL_10_0,
             D3D_FEATURE_LEVEL_10_1,
             D3D_FEATURE_LEVEL_11_0,
-            D3D_FEATURE_LEVEL_11_1
+            D3D_FEATURE_LEVEL_11_1,
         };
 
         // This flag adds support for surfaces with a color-channel ordering different
@@ -154,25 +160,81 @@ namespace library
         Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
         
 
-        hr = D3D11CreateDeviceAndSwapChain(
-            nullptr,
-            D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_HARDWARE,
-            nullptr,
-            deviceFlags,
-            levels,
-            ARRAYSIZE(levels),
-            D3D11_SDK_VERSION,
-            &desc,
-            swapChain.GetAddressOf(),
-            device.GetAddressOf(),
-            &g_featureLevel,
-            context.GetAddressOf()
+        hr = D3D11CreateDevice(
+            nullptr,                    // Specify nullptr to use the default adapter.
+            D3D_DRIVER_TYPE_HARDWARE,   // Create a device using the hardware graphics driver.
+            0,                          // Should be 0 unless the driver is D3D_DRIVER_TYPE_SOFTWARE.
+            deviceFlags,                // Set debug and Direct2D compatibility flags.
+            levels,                     // List of feature levels this app can support.
+            ARRAYSIZE(levels),          // Size of the list above.
+            D3D11_SDK_VERSION,          // Always set this to D3D11_SDK_VERSION for Windows Store apps.
+            &device,                    // Returns the Direct3D device created.
+            &g_featureLevel,            // Returns feature level of device created.
+            &context                    // Returns the device immediate context.
         );
 
+        if (FAILED(hr))
+        {
+            // Handle device interface creation failure if it occurs.
+            // For example, reduce the feature level requirement, or fail over 
+            // to WARP rendering.
+        }
+
+        // Store pointers to the Direct3D 11.1 API device and immediate context.
         device.As(&g_pd3dDevice);
         context.As(&g_pImmediateContext);
-        swapChain.As(&g_pSwapChain);
 
+        // Create the DXGI device object to use in other factories, such as Direct2D.
+        Microsoft::WRL::ComPtr<IDXGIDevice3> dxgiDevice;
+        g_pd3dDevice.As(&dxgiDevice);
+
+        // Create swap chain.
+        Microsoft::WRL::ComPtr<IDXGIAdapter> adapter;
+        Microsoft::WRL::ComPtr<IDXGIFactory> factory;
+
+        hr = dxgiDevice->GetAdapter(&adapter);
+
+        if (SUCCEEDED(hr))
+        {
+            adapter->GetParent(IID_PPV_ARGS(&factory));
+
+            hr = factory->CreateSwapChain(
+                g_pd3dDevice.Get(),
+                &desc,
+                &g_pSwapChain
+            );
+        }
+        //
+        // 
+        // 
+        // 
+        // 
+        CD3D11_TEXTURE2D_DESC depthStencilDesc(
+            DXGI_FORMAT_D24_UNORM_S8_UINT,
+            static_cast<UINT> (m_bbDesc.Width),
+            static_cast<UINT> (m_bbDesc.Height),
+            1, // This depth stencil view has only one texture.
+            1, // Use a single mipmap level.
+            D3D11_BIND_DEPTH_STENCIL
+        );
+
+        g_pd3dDevice->CreateTexture2D(
+            &depthStencilDesc,
+            nullptr,
+            &g_pDepthStencil
+        );
+
+        CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
+
+        g_pd3dDevice->CreateDepthStencilView(
+            g_pDepthStencil.Get(),
+            &depthStencilViewDesc,
+            &g_pDepthStencilView
+        );
+        //
+        // 
+        // 
+        // 
         // Configure the back buffer and viewport.
         hr = g_pSwapChain->GetBuffer(
             0,
