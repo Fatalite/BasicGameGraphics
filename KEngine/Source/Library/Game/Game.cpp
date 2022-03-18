@@ -2,14 +2,13 @@
 #include "Common.h"
 #include <wrl.h>
 #include <iostream>
-
+// DirectX11 Init 순서
+// Device -> SwapChain -> SwapChain DESC -> Depth Stencil & DESC -> Backbuffer -> RTV -> Viewport -> TargetView
 namespace library
 {
     /*--------------------------------------------------------------------
       Global Variables
     --------------------------------------------------------------------*/
-
-
     HINSTANCE               g_hInst = 0;
     HWND                    g_hWnd = 0;
     D3D_DRIVER_TYPE         g_driverType = D3D_DRIVER_TYPE_NULL;
@@ -19,37 +18,12 @@ namespace library
 
     Microsoft::WRL::ComPtr<ID3D11Texture2D> pBackBuffer = 0;
     Microsoft::WRL::ComPtr<ID3D11Device> g_pd3dDevice = 0;
-    //Microsoft::WRL::ComPtr<ID3D11Device1> g_pd3dDevice1;
     Microsoft::WRL::ComPtr<ID3D11DeviceContext> g_pImmediateContext = 0;
-    //Microsoft::WRL::ComPtr<ID3D11DeviceContext1> g_pImmediateContext1;
     Microsoft::WRL::ComPtr<IDXGISwapChain> g_pSwapChain = 0;
-    //Microsoft::WRL::ComPtr<IDXGISwapChain1> g_pSwapChain1;
     Microsoft::WRL::ComPtr<ID3D11RenderTargetView> g_pRenderTargetView = 0;
-    //-----------------------------------------------------------------------------
-    // Direct3D device resources for the depth stencil
-    //-----------------------------------------------------------------------------
     Microsoft::WRL::ComPtr<ID3D11Texture2D>         g_pDepthStencil = 0;
     Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  g_pDepthStencilView = 0;
 
-    /*--------------------------------------------------------------------
-      Forward declarations
-    --------------------------------------------------------------------*/
-
-    /*F+F+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-      Function: WindowProc
-      Summary:  Defines the behavior of the window—its appearance, how
-                it interacts with the user, and so forth
-      Args:     HWND hWnd
-                  Handle to the window
-                UINT uMsg
-                  Message code
-                WPARAM wParam
-                  Additional data that pertains to the message
-                LPARAM lParam
-                  Additional data that pertains to the message
-      Returns:  LRESULT
-                  Integer value that your program returns to Windows
-    -----------------------------------------------------------------F-F*/
     LRESULT CALLBACK WindowProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 
     LRESULT CALLBACK WindowProc(_In_ HWND hWnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam)
@@ -81,12 +55,12 @@ namespace library
         return 0;
     }
 
-    //--------------------------------------------------------------------------------------
+ //--------------------------------------------------------------------------------------
 // Register class and create window
 //--------------------------------------------------------------------------------------
     HRESULT InitWindow(_In_ HINSTANCE hInstance, _In_ INT nCmdShow)
     {
-        // Register class
+
         WNDCLASSEX wcex;
         wcex.cbSize = sizeof(WNDCLASSEX);
         wcex.style = CS_HREDRAW | CS_VREDRAW;
@@ -98,16 +72,16 @@ namespace library
         wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
         wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
         wcex.lpszMenuName = nullptr;
-        wcex.lpszClassName = L"TutorialWindowClass";
+        wcex.lpszClassName = L"LAB1";
         wcex.hIconSm = LoadIcon(wcex.hInstance, (LPCTSTR)IDI_TUTORIAL1);
         if (!RegisterClassEx(&wcex))
             return E_FAIL;
 
-        // Create window
+
         g_hInst = hInstance;
         RECT rc = { 0, 0, 800, 600 };
         AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-        g_hWnd = CreateWindow(L"TutorialWindowClass", L"Direct3D 11 Tutorial 1: Direct3D 11 Basics",
+        g_hWnd = CreateWindow(L"LAB1", L"Game Graphics Programming Lab 01: Direct3D 11 Basics",
             WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
             CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr, hInstance,
             nullptr);
@@ -145,7 +119,6 @@ namespace library
         Microsoft::WRL::ComPtr<ID3D11DeviceContext> context;
         Microsoft::WRL::ComPtr<IDXGISwapChain> swapChain;
         
-
         hr = D3D11CreateDevice(
             nullptr,                    // Specify nullptr to use the default adapter.
             D3D_DRIVER_TYPE_HARDWARE,   // Create a device using the hardware graphics driver.
@@ -161,12 +134,8 @@ namespace library
 
         if (FAILED(hr))
         {
-            // Handle device interface creation failure if it occurs.
-            // For example, reduce the feature level requirement, or fail over 
-            // to WARP rendering.
         }
 
-        // Store pointers to the Direct3D 11.1 API device and immediate context.
         device.As(&g_pd3dDevice);
         context.As(&g_pImmediateContext);
 
@@ -201,11 +170,7 @@ namespace library
                 &g_pSwapChain
             );
         }
-        //
-        // 
-        // 
-        // 
-        // 
+
         CD3D11_TEXTURE2D_DESC depthStencilDesc(
             DXGI_FORMAT_D24_UNORM_S8_UINT,
             static_cast<UINT> (m_bbDesc.Width),
@@ -228,11 +193,7 @@ namespace library
             &depthStencilViewDesc,
             &g_pDepthStencilView
         );
-        //
-        // 
-        // 
-        // 
-        // Configure the back buffer and viewport.
+
         hr = g_pSwapChain->GetBuffer(
             0,
             __uuidof(ID3D11Texture2D),
@@ -269,7 +230,7 @@ namespace library
     //--------------------------------------------------------------------------------------
     void Render()
     {
-        float ClearColor[4] = { 0.0f, 0.125f, 0.6f, 1.0f }; // RGBA
+        float ClearColor[4] = { 0.0f, 0.0f, 0.6f, 1.0f };
         g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView.Get(), ClearColor);
 
         g_pSwapChain->Present(0, 0);
@@ -281,22 +242,11 @@ namespace library
     //--------------------------------------------------------------------------------------
     void CleanupDevice()
     {
-        //std::cout << "hello";
-        //if (g_pImmediateContext) g_pImmediateContext->ClearState();
-
-        //if (g_pRenderTargetView) g_pRenderTargetView->Release();
-        //std::cout << "hello";
-        //if (pBackBuffer) pBackBuffer->Release();
-        //if (g_pSwapChain) g_pSwapChain->Release();
 
         g_pImmediateContext.Reset();
         pBackBuffer.Reset();
         g_pSwapChain.Reset();
-
         g_pImmediateContext.Reset();
-        //if (g_pImmediateContext) g_pImmediateContext->Release();
-        
-        //if (g_pd3dDevice) g_pd3dDevice->Release();
         g_pd3dDevice.Reset();
     }
 
