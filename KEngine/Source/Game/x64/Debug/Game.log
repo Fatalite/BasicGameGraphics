@@ -1,4 +1,5 @@
-﻿  Main.cpp
+﻿cl : 명령줄 warning D9025: '/std:c++20'을(를) '/std:c++latest'(으)로 재정의합니다.
+  Main.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winbase.h(7723,48): warning C5039: 'TpSetCallbackCleanupGroup': -EHc 아래의 'extern "C"' 함수로 전달되는 잠재적인 throw 함수에 대한 포인터 또는 참조입니다. 이 함수가 예외를 throw하는 경우 정의되지 않은 동작이 발생할 수 있습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\dxgi.h(182,30): warning C4820: 'DXGI_FRAME_STATISTICS': '4'바이트 채움 문자가 데이터 멤버 'DXGI_FRAME_STATISTICS::SyncRefreshCount' 뒤에 추가되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\dxgi.h(189,16): warning C4820: 'DXGI_MAPPED_RECT': '4'바이트 채움 문자가 데이터 멤버 'DXGI_MAPPED_RECT::Pitch' 뒤에 추가되었습니다.
@@ -503,10 +504,10 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11_4.h(3789,11
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11_4.h(3793,5): warning C4820: 'D3D11_VIDEO_DECODER_BUFFER_DESC2': '4'바이트 채움 문자가 데이터 멤버 'D3D11_VIDEO_DECODER_BUFFER_DESC2::cBlocksStripeClear' 뒤에 추가되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\DirectXMath.h(22,127): warning C4668: '_MANAGED'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\DirectXMath.h(22,142): warning C4668: '_M_CEE'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\xmemory(162,5): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\xmemory(172,5): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\atomic(292,9): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\atomic(308,9): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\atomic(325,9): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include\atomic(388,9): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xmemory(162,5): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\xmemory(172,5): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\atomic(292,9): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\atomic(308,9): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\atomic(325,9): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\atomic(388,9): warning C4365: '인수': 'long'에서 'unsigned int'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
   Game.vcxproj -> C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Debug\Game.exe
