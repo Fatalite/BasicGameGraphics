@@ -1,5 +1,5 @@
 ﻿  코드를 생성하고 있습니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Game\Game.cpp(166): warning C4711: 자동 인라인 확장을 위해 'void * __ptr64 * __ptr64 __cdecl IID_PPV_ARGS_Helper<class Microsoft::WRL::ComPtr<struct IDXGIFactory> >(class Microsoft::WRL::Details::ComPtrRef<class Microsoft::WRL::ComPtr<struct IDXGIFactory> >)' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Game\Game.cpp(165): warning C4711: 자동 인라인 확장을 위해 'void * __ptr64 * __ptr64 __cdecl IID_PPV_ARGS_Helper<class Microsoft::WRL::ComPtr<struct IDXGIFactory> >(class Microsoft::WRL::Details::ComPtrRef<class Microsoft::WRL::ComPtr<struct IDXGIFactory> >)' 함수가 선택되었습니다.
 C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Game\Main.cpp(36): warning C4711: 자동 인라인 확장을 위해 'long __cdecl library::InitWindow(struct HINSTANCE__ * __ptr64,int)' 함수가 선택되었습니다.
 C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Game\Main.cpp(57): warning C4711: 자동 인라인 확장을 위해 'void __cdecl library::Render(void)' 함수가 선택되었습니다.
   4 of 117 functions ( 3.4%) were compiled, the rest were copied from previous compilation.
