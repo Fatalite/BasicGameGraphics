@@ -1,8 +1,15 @@
 ﻿  코드를 생성하고 있습니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Game\Game.cpp(165): warning C4711: 자동 인라인 확장을 위해 'void * __ptr64 * __ptr64 __cdecl IID_PPV_ARGS_Helper<class Microsoft::WRL::ComPtr<struct IDXGIFactory> >(class Microsoft::WRL::Details::ComPtrRef<class Microsoft::WRL::ComPtr<struct IDXGIFactory> >)' 함수가 선택되었습니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Game\Main.cpp(36): warning C4711: 자동 인라인 확장을 위해 'long __cdecl library::InitWindow(struct HINSTANCE__ * __ptr64,int)' 함수가 선택되었습니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Game\Main.cpp(57): warning C4711: 자동 인라인 확장을 위해 'void __cdecl library::Render(void)' 함수가 선택되었습니다.
-  4 of 117 functions ( 3.4%) were compiled, the rest were copied from previous compilation.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\MainWindow.h(35): warning C4711: 자동 인라인 확장을 위해 '__cdecl library::BaseWindow<class library::MainWindow>::BaseWindow<class library::MainWindow>(void) __ptr64' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Game\Game.cpp(23): warning C4711: 자동 인라인 확장을 위해 '__cdecl library::Renderer::Renderer(void) __ptr64' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\MainWindow.h(35): warning C4711: 자동 인라인 확장을 위해 '__cdecl library::BaseWindow<class library::MainWindow>::BaseWindow<class library::MainWindow>(void) __ptr64' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Game\Game.cpp(23): warning C4711: 자동 인라인 확장을 위해 '__cdecl library::Renderer::Renderer(void) __ptr64' 함수가 선택되었습니다.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30133\include\memory(3416): warning C4711: 자동 인라인 확장을 위해 '__cdecl library::Game::Game(wchar_t const * __ptr64) __ptr64' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Game\Game.cpp(45): warning C4711: 자동 인라인 확장을 위해 'wchar_t const * __ptr64 __cdecl library::Game::GetGameName(void)const __ptr64' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Game\Game.cpp(51): warning C4711: 자동 인라인 확장을 위해 'struct HWND__ * __ptr64 __cdecl library::BaseWindow<class library::MainWindow>::GetWindow(void)const __ptr64' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Game\Main.cpp(41): warning C4711: 자동 인라인 확장을 위해 'long __cdecl library::Game::Initialize(struct HINSTANCE__ * __ptr64,int) __ptr64' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Game\Game.cpp(67): warning C4711: 자동 인라인 확장을 위해 'struct HWND__ * __ptr64 __cdecl library::BaseWindow<class library::MainWindow>::GetWindow(void)const __ptr64' 함수가 선택되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Game\Main.cpp(46): warning C4711: 자동 인라인 확장을 위해 'int __cdecl library::Game::Run(void) __ptr64' 함수가 선택되었습니다.
+  4 of 173 functions ( 2.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   코드를 생성했습니다.
