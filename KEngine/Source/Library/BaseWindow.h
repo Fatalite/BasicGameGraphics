@@ -51,7 +51,7 @@ namespace library
         //non-queue와 queue 메세지를 처리한다.
         DerivedType* pThis = NULL;
 
-        if (uMsg == WM_NCCREATE)
+        if (uMsg == WM_CREATE)
         {
             CREATESTRUCT* pCreate = (CREATESTRUCT*)lParam;
             pThis = (DerivedType*)pCreate->lpCreateParams;
@@ -100,32 +100,16 @@ namespace library
         WNDCLASS wc = { 0 };
 
         wc.lpfnWndProc = DerivedType::WindowProc;
-        wc.hInstance = hInstance;
-        //CLASS NAME
-        wc.lpszClassName = pszWindowName;
-        wc.lpszMenuName = NULL;
-        wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-        wc.lpfnWndProc = WindowProc;
-        
-        struct WindowXY {
-            INT x;
-            INT y;
-        };
+        wc.hInstance = GetModuleHandle(NULL);
+        wc.lpszClassName = GetWindowClassName();
 
-        WindowXY xy_tmp;
-        xy_tmp.x = 800;
-        xy_tmp.y = 600;
-
-        //RegisterClass(&wc);
-        assert(SUCCEEDED(RegisterClass(&wc)));
-        m_hWnd = CreateWindow(
-            pszWindowName, L"Hello", WS_OVERLAPPEDWINDOW,
-            xy_tmp.x, xy_tmp.y, nWidth, nHeight,
-            NULL, NULL,hInstance, this
+        RegisterClass(&wc);
+        OutputDebugString((L"Test Output Debug\n"));
+        m_hWnd = CreateWindowEx(
+            NULL , GetWindowClassName(), pszWindowName, WS_OVERLAPPEDWINDOW, x, y,
+            nWidth, nHeight, hWndParent, hMenu, GetModuleHandle(NULL), this
         );
-        std::cout << "안녕";
-        if (!m_hWnd)
-            return E_FAIL;
+
 
         
         return S_OK;

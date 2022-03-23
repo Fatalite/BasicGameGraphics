@@ -38,7 +38,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     std::unique_ptr<library::Game> game = std::make_unique<library::Game>(L"Game Graphics Programming Lab 02: Object Oriented Design");
     //게임 객체 생성.
-    if (!game->Initialize(hInstance, nCmdShow))
+    if (FAILED(game->Initialize(hInstance, nCmdShow)))
     {
         return 0;
     }

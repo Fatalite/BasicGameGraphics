@@ -83,7 +83,7 @@ namespace library
             &context                    // Returns the device immediate context.
         );
 
-
+        assert(SUCCEEDED(hr));
         device.As(&m_d3dDevice);
         
         context.As(&m_immediateContext);
@@ -122,8 +122,8 @@ namespace library
             
             
         }
-        m_bbDesc.Width = 1;
-        m_bbDesc.Height = 1;
+        //m_bbDesc.Width = 1;
+        //m_bbDesc.Height = 1;
         CD3D11_TEXTURE2D_DESC depthStencilDesc(
             DXGI_FORMAT_D24_UNORM_S8_UINT,
             static_cast<UINT> (m_bbDesc.Width),
@@ -158,8 +158,8 @@ namespace library
         pBackBuffer->GetDesc(&m_bbDesc);
 
         ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
-        m_viewport.Height = (float)m_bbDesc.Height;
-        m_viewport.Width = (float)m_bbDesc.Width;
+        m_viewport.Height = (float)800;
+        m_viewport.Width = (float)600;
         m_viewport.MinDepth = 0;
         m_viewport.MaxDepth = 1;
 

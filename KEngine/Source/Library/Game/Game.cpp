@@ -40,14 +40,14 @@ namespace library
 	HRESULT Game::Initialize(_In_ HINSTANCE hInstance, _In_ INT nCmdShow) {
 		//mainWindow init
 		HRESULT HR = m_mainWindow->Initialize(hInstance, nCmdShow, GetGameName());
-		
-		if (HR == FALSE) {
+		assert(SUCCEEDED(HR));
+		if (!SUCCEEDED(HR)) {
 			//mainwindow가 init에 실패하면
 			return HR;
 		}
 		//Renderer init
 		HR = m_renderer->Initialize(m_mainWindow->GetWindow());
-
+		assert(SUCCEEDED(HR));
 
 		return HR;
 	};
@@ -95,6 +95,6 @@ namespace library
 	  TODO: Game::GetGameName definition (remove the comment)
 	--------------------------------------------------------------------*/
 	PCWSTR Game::GetGameName() const {
-		return L"GAME";
+		return this->m_pszGameName;
 	}
 }
