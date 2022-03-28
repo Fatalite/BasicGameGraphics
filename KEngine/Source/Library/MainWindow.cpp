@@ -31,7 +31,7 @@ namespace library
             return 0;
         }
         
-
+        //cas WM_SIZE
         default:
             return DefWindowProc(this->GetWindow(), uMsg, wParam, lParam);
         }
