@@ -48,6 +48,8 @@ namespace library
         PCWSTR m_pszGameName;
         std::unique_ptr<MainWindow> m_mainWindow;
         std::unique_ptr<Renderer> m_renderer;
+
+        
     };
 }
 

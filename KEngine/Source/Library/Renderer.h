@@ -41,7 +41,11 @@ namespace library
         void Render();
         void Resize(UINT, UINT);
 
+        HRESULT compileShaderFromFile(PCWSTR, PCSTR, PCSTR, ID3DBlob**);
+        HRESULT BuildVertexLayout();
+        //HRESULT DrawTriangle();
     private:
+        //for inits
         D3D_DRIVER_TYPE m_driverType;
         D3D_FEATURE_LEVEL m_featureLevel;
 
@@ -61,5 +65,13 @@ namespace library
         ComPtr<IDXGISwapChain> m_swapChain;
         ComPtr<IDXGISwapChain1> m_swapChain1;
         ComPtr<ID3D11RenderTargetView> m_renderTargetView;
+
+        //for vertex and pixel shader
+        ComPtr<ID3D11Buffer> m_vertextBuffer;
+        ComPtr<ID3D11Buffer> m_indexBuffer;
+        ComPtr<ID3D11InputLayout> m_vertexLayout;
+        ComPtr<ID3D11PixelShader> m_pixelShader;
+        ComPtr<ID3D11VertexShader> m_vertexShader;
+
     };
 }

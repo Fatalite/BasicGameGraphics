@@ -23,6 +23,9 @@
 //DirectXMath
 #include "DirectXMath.h"
 #include "DirectXPackedVector.h"
+#include <d3dcompiler.h>
+
+
 constexpr LPCWSTR PSZ_COURSE_TITLE = L"Game Graphics Programming";
 
 using namespace DirectX;

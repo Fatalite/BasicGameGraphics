@@ -1,4 +1,8 @@
-﻿  모듈 종속성의 소스를 검사하는 중...
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\PixelShader.cso
+  compilation object save succeeded; see C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\VertexShader.cso
+  모듈 종속성의 소스를 검사하는 중...
 cl : 명령줄 warning D9025: '/std:c++20'을(를) '/std:c++latest'(으)로 재정의합니다.
   Common.h
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winnt.h(343,5): warning C4668: '_M_HYBRID'은(는) 전처리기 매크로로 정의되어 있지 않으므로 '#if/#elif'에 해당하는 '0'으로 바뀝니다.
@@ -583,6 +587,22 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\implements
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(663,1): warning C4625: 'Microsoft::WRL::Details::EventTargetArray': 복사 생성자가 암시적으로 삭제된 것으로 정의되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(663,1): warning C4626: 'Microsoft::WRL::Details::EventTargetArray': 대입 연산자가 암시적으로 삭제된 것으로 정의되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(646,1): warning C4365: 'return': '__int64'에서 'size_t'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(58,39): warning C4820: '_D3D11_SIGNATURE_PARAMETER_DESC': '2'바이트 채움 문자가 데이터 멤버 '_D3D11_SIGNATURE_PARAMETER_DESC::ReadWriteMask' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(60,1): warning C4820: '_D3D11_SIGNATURE_PARAMETER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SIGNATURE_PARAMETER_DESC::MinPrecision' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(77,41): warning C4820: '_D3D11_SHADER_VARIABLE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_VARIABLE_DESC::uFlags' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(93,37): warning C4820: '_D3D11_SHADER_TYPE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_TYPE_DESC::Offset' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(105,36): warning C4820: '_D3D11_SHADER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(158,1): warning C4820: '_D3D11_SHADER_INPUT_BIND_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_INPUT_BIND_DESC::NumSamples' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(181,36): warning C4820: '_D3D11_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_FUNCTION_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(209,49): warning C4820: '_D3D11_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_FUNCTION_DESC::MinFeatureLevel' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(58,39): warning C4820: '_D3D12_SIGNATURE_PARAMETER_DESC': '2'바이트 채움 문자가 데이터 멤버 '_D3D12_SIGNATURE_PARAMETER_DESC::ReadWriteMask' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(60,1): warning C4820: '_D3D12_SIGNATURE_PARAMETER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SIGNATURE_PARAMETER_DESC::MinPrecision' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(77,41): warning C4820: '_D3D12_SHADER_VARIABLE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_VARIABLE_DESC::uFlags' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(93,37): warning C4820: '_D3D12_SHADER_TYPE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_TYPE_DESC::Offset' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(105,36): warning C4820: '_D3D12_SHADER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(160,1): warning C4820: '_D3D12_SHADER_INPUT_BIND_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_INPUT_BIND_DESC::uID' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(202,36): warning C4820: '_D3D12_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_FUNCTION_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(230,49): warning C4820: '_D3D12_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_FUNCTION_DESC::MinFeatureLevel' 뒤에 추가되었습니다.
 cl : 명령줄 warning D9025: '/std:c++20'을(를) '/std:c++latest'(으)로 재정의합니다.
   Game.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winbase.h(7723,48): warning C5039: 'TpSetCallbackCleanupGroup': -EHc 아래의 'extern "C"' 함수로 전달되는 잠재적인 throw 함수에 대한 포인터 또는 참조입니다. 이 함수가 예외를 throw하는 경우 정의되지 않은 동작이 발생할 수 있습니다.
@@ -1143,7 +1163,23 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\implements
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(663,1): warning C4625: 'Microsoft::WRL::Details::EventTargetArray': 복사 생성자가 암시적으로 삭제된 것으로 정의되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(663,1): warning C4626: 'Microsoft::WRL::Details::EventTargetArray': 대입 연산자가 암시적으로 삭제된 것으로 정의되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(646,1): warning C4365: 'return': '__int64'에서 'size_t'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.h(51,56): warning C4820: 'library::Renderer': '4'바이트 채움 문자가 데이터 멤버 'library::Renderer::m_viewport' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(58,39): warning C4820: '_D3D11_SIGNATURE_PARAMETER_DESC': '2'바이트 채움 문자가 데이터 멤버 '_D3D11_SIGNATURE_PARAMETER_DESC::ReadWriteMask' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(60,1): warning C4820: '_D3D11_SIGNATURE_PARAMETER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SIGNATURE_PARAMETER_DESC::MinPrecision' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(77,41): warning C4820: '_D3D11_SHADER_VARIABLE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_VARIABLE_DESC::uFlags' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(93,37): warning C4820: '_D3D11_SHADER_TYPE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_TYPE_DESC::Offset' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(105,36): warning C4820: '_D3D11_SHADER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(158,1): warning C4820: '_D3D11_SHADER_INPUT_BIND_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_INPUT_BIND_DESC::NumSamples' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(181,36): warning C4820: '_D3D11_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_FUNCTION_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(209,49): warning C4820: '_D3D11_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_FUNCTION_DESC::MinFeatureLevel' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(58,39): warning C4820: '_D3D12_SIGNATURE_PARAMETER_DESC': '2'바이트 채움 문자가 데이터 멤버 '_D3D12_SIGNATURE_PARAMETER_DESC::ReadWriteMask' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(60,1): warning C4820: '_D3D12_SIGNATURE_PARAMETER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SIGNATURE_PARAMETER_DESC::MinPrecision' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(77,41): warning C4820: '_D3D12_SHADER_VARIABLE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_VARIABLE_DESC::uFlags' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(93,37): warning C4820: '_D3D12_SHADER_TYPE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_TYPE_DESC::Offset' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(105,36): warning C4820: '_D3D12_SHADER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(160,1): warning C4820: '_D3D12_SHADER_INPUT_BIND_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_INPUT_BIND_DESC::uID' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(202,36): warning C4820: '_D3D12_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_FUNCTION_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(230,49): warning C4820: '_D3D12_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_FUNCTION_DESC::MinFeatureLevel' 뒤에 추가되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.h(55,56): warning C4820: 'library::Renderer': '4'바이트 채움 문자가 데이터 멤버 'library::Renderer::m_viewport' 뒤에 추가되었습니다.
   MainWindow.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\winbase.h(7723,48): warning C5039: 'TpSetCallbackCleanupGroup': -EHc 아래의 'extern "C"' 함수로 전달되는 잠재적인 throw 함수에 대한 포인터 또는 참조입니다. 이 함수가 예외를 throw하는 경우 정의되지 않은 동작이 발생할 수 있습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\shared\dxgi.h(182,30): warning C4820: 'DXGI_FRAME_STATISTICS': '4'바이트 채움 문자가 데이터 멤버 'DXGI_FRAME_STATISTICS::SyncRefreshCount' 뒤에 추가되었습니다.
@@ -1703,6 +1739,22 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\implements
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(663,1): warning C4625: 'Microsoft::WRL::Details::EventTargetArray': 복사 생성자가 암시적으로 삭제된 것으로 정의되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(663,1): warning C4626: 'Microsoft::WRL::Details::EventTargetArray': 대입 연산자가 암시적으로 삭제된 것으로 정의되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(646,1): warning C4365: 'return': '__int64'에서 'size_t'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(58,39): warning C4820: '_D3D11_SIGNATURE_PARAMETER_DESC': '2'바이트 채움 문자가 데이터 멤버 '_D3D11_SIGNATURE_PARAMETER_DESC::ReadWriteMask' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(60,1): warning C4820: '_D3D11_SIGNATURE_PARAMETER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SIGNATURE_PARAMETER_DESC::MinPrecision' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(77,41): warning C4820: '_D3D11_SHADER_VARIABLE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_VARIABLE_DESC::uFlags' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(93,37): warning C4820: '_D3D11_SHADER_TYPE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_TYPE_DESC::Offset' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(105,36): warning C4820: '_D3D11_SHADER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(158,1): warning C4820: '_D3D11_SHADER_INPUT_BIND_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_INPUT_BIND_DESC::NumSamples' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(181,36): warning C4820: '_D3D11_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_FUNCTION_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(209,49): warning C4820: '_D3D11_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_FUNCTION_DESC::MinFeatureLevel' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(58,39): warning C4820: '_D3D12_SIGNATURE_PARAMETER_DESC': '2'바이트 채움 문자가 데이터 멤버 '_D3D12_SIGNATURE_PARAMETER_DESC::ReadWriteMask' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(60,1): warning C4820: '_D3D12_SIGNATURE_PARAMETER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SIGNATURE_PARAMETER_DESC::MinPrecision' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(77,41): warning C4820: '_D3D12_SHADER_VARIABLE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_VARIABLE_DESC::uFlags' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(93,37): warning C4820: '_D3D12_SHADER_TYPE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_TYPE_DESC::Offset' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(105,36): warning C4820: '_D3D12_SHADER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(160,1): warning C4820: '_D3D12_SHADER_INPUT_BIND_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_INPUT_BIND_DESC::uID' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(202,36): warning C4820: '_D3D12_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_FUNCTION_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(230,49): warning C4820: '_D3D12_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_FUNCTION_DESC::MinFeatureLevel' 뒤에 추가되었습니다.
 C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\MainWindow.cpp(6,93): warning C4100: 'pszWindowName': 참조되지 않은 정식 매개 변수입니다.
 C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\BaseWindow.h(92,20): warning C4100: 'dwStyle': 참조되지 않은 정식 매개 변수입니다.
 C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\BaseWindow.h(99): message : 클래스 템플릿 멤버 함수 'HRESULT library::BaseWindow<library::MainWindow>::initialize(HINSTANCE,INT,PCWSTR,DWORD,INT,INT,INT,INT,HWND,HMENU)'을(를) 컴파일하는 중입니다.
@@ -2269,15 +2321,40 @@ C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\implements
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(663,1): warning C4625: 'Microsoft::WRL::Details::EventTargetArray': 복사 생성자가 암시적으로 삭제된 것으로 정의되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(663,1): warning C4626: 'Microsoft::WRL::Details::EventTargetArray': 대입 연산자가 암시적으로 삭제된 것으로 정의되었습니다.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\winrt\wrl\event.h(646,1): warning C4365: 'return': '__int64'에서 'size_t'(으)로의 변환입니다. signed 또는 unsigned가 일치하지 않습니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.h(51,56): warning C4820: 'library::Renderer': '4'바이트 채움 문자가 데이터 멤버 'library::Renderer::m_viewport' 뒤에 추가되었습니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(23,9): warning C5038: 데이터 멤버 'library::Renderer::m_immediateContext1'은(는) 데이터 멤버 'library::Renderer::pBackBuffer' 이후에 초기화됩니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(25,9): warning C5038: 데이터 멤버 'library::Renderer::pBackBuffer'은(는) 데이터 멤버 'library::Renderer::m_pDepthStencil' 이후에 초기화됩니다.
-C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(27,9): warning C5038: 데이터 멤버 'library::Renderer::m_pDepthStencilView'은(는) 데이터 멤버 'library::Renderer::m_bbDesc' 이후에 초기화됩니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(58,39): warning C4820: '_D3D11_SIGNATURE_PARAMETER_DESC': '2'바이트 채움 문자가 데이터 멤버 '_D3D11_SIGNATURE_PARAMETER_DESC::ReadWriteMask' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(60,1): warning C4820: '_D3D11_SIGNATURE_PARAMETER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SIGNATURE_PARAMETER_DESC::MinPrecision' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(77,41): warning C4820: '_D3D11_SHADER_VARIABLE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_VARIABLE_DESC::uFlags' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(93,37): warning C4820: '_D3D11_SHADER_TYPE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_TYPE_DESC::Offset' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(105,36): warning C4820: '_D3D11_SHADER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(158,1): warning C4820: '_D3D11_SHADER_INPUT_BIND_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_SHADER_INPUT_BIND_DESC::NumSamples' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(181,36): warning C4820: '_D3D11_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_FUNCTION_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d11shader.h(209,49): warning C4820: '_D3D11_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D11_FUNCTION_DESC::MinFeatureLevel' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(58,39): warning C4820: '_D3D12_SIGNATURE_PARAMETER_DESC': '2'바이트 채움 문자가 데이터 멤버 '_D3D12_SIGNATURE_PARAMETER_DESC::ReadWriteMask' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(60,1): warning C4820: '_D3D12_SIGNATURE_PARAMETER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SIGNATURE_PARAMETER_DESC::MinPrecision' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(77,41): warning C4820: '_D3D12_SHADER_VARIABLE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_VARIABLE_DESC::uFlags' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(93,37): warning C4820: '_D3D12_SHADER_TYPE_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_TYPE_DESC::Offset' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(105,36): warning C4820: '_D3D12_SHADER_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(160,1): warning C4820: '_D3D12_SHADER_INPUT_BIND_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_SHADER_INPUT_BIND_DESC::uID' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(202,36): warning C4820: '_D3D12_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_FUNCTION_DESC::Version' 뒤에 추가되었습니다.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.22000.0\um\d3d12shader.h(230,49): warning C4820: '_D3D12_FUNCTION_DESC': '4'바이트 채움 문자가 데이터 멤버 '_D3D12_FUNCTION_DESC::MinFeatureLevel' 뒤에 추가되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.h(55,56): warning C4820: 'library::Renderer': '4'바이트 채움 문자가 데이터 멤버 'library::Renderer::m_viewport' 뒤에 추가되었습니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(24,9): warning C5038: 데이터 멤버 'library::Renderer::m_immediateContext1'은(는) 데이터 멤버 'library::Renderer::pBackBuffer' 이후에 초기화됩니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(26,9): warning C5038: 데이터 멤버 'library::Renderer::pBackBuffer'은(는) 데이터 멤버 'library::Renderer::m_pDepthStencil' 이후에 초기화됩니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(28,9): warning C5038: 데이터 멤버 'library::Renderer::m_pDepthStencilView'은(는) 데이터 멤버 'library::Renderer::m_bbDesc' 이후에 초기화됩니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(197,21): warning C5246: 'vertices': 하위 개체의 초기화는 중괄호로 묶어야 합니다
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(198,21): warning C5246: 'vertices': 하위 개체의 초기화는 중괄호로 묶어야 합니다
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(199,21): warning C5246: 'vertices': 하위 개체의 초기화는 중괄호로 묶어야 합니다
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(181,20): warning C4101: 'View' :참조되지 않은 지역 변수입니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(180,20): warning C4101: 'World' :참조되지 않은 지역 변수입니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(182,20): warning C4101: 'Proj' :참조되지 않은 지역 변수입니다.
+C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Source\Library\Renderer.cpp(299,20): warning C4189: 'blob': 지역 변수가 초기화되었으나 참조되지 않았습니다.
+d3dcompiler.lib(D3DCOMPILER_47.dll) : warning LNK4006: __NULL_IMPORT_DESCRIPTOR이(가) d3d11.lib(d3d11.dll)에 이미 정의되어 있습니다. 초 정의가 무시됩니다.
   Library.vcxproj -> C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\Library.lib
   하위 디렉터리 또는 파일 C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\..\Library\x64\Release이(가) 이미 있습니다.
   C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\Game.exe
   C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\Game.pdb
   C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\Library.lib
   C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\Library.pdb
+  C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\PixelShader.cso
   C:\Users\ugly2\source\repos\GameGraphicsProgramming\KEngine\Build\x64\Release\VertexShader.cso
-          5개 파일이 복사되었습니다.
+          6개 파일이 복사되었습니다.

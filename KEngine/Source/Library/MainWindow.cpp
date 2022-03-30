@@ -26,7 +26,7 @@ namespace library
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(this->GetWindow(), &ps);
-            FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
+            //FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW + 1));
             EndPaint(this->GetWindow(), &ps);
             return 0;
         }

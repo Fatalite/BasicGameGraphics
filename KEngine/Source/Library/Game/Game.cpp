@@ -79,6 +79,7 @@ namespace library
 				}
 			}
 			else {
+				//assert("안녕");
 				m_renderer->Render();
 			}
 		}
