@@ -23,22 +23,18 @@ namespace library
         m_immediateContext(nullptr),
         m_immediateContext1(nullptr),
 
-        pBackBuffer(nullptr),
-        m_pDepthStencil(nullptr),
-        m_pDepthStencilView(nullptr),
-        m_bbDesc(),
-        m_viewport(),
-
         m_swapChain(nullptr),
         m_swapChain1(nullptr),
 
         m_vertexLayout(nullptr),
         m_pixelShader(nullptr),
-        m_vertexShader(nullptr),
+        
         m_vertextBuffer(nullptr),
-        m_indexBuffer(nullptr),
+        m_vertexShader(nullptr),
+        
 
-        m_renderTargetView(nullptr)
+        m_renderTargetView(nullptr),
+        m_indexBuffer(nullptr)
     {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderer::Initialize
@@ -87,27 +83,31 @@ namespace library
             &context                    // Returns the device immediate context.
         );
 
-        assert(SUCCEEDED(hr));
+        if (FAILED(hr)) return (hr);
         device.As(&m_d3dDevice);
-
         context.As(&m_immediateContext);
         //스왑체인 디스크립션
-        DXGI_SWAP_CHAIN_DESC desc;
-        ZeroMemory(&desc, sizeof(DXGI_SWAP_CHAIN_DESC));
-        desc.Windowed = TRUE;
-        desc.BufferCount = 1;
-        desc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
-        desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-        desc.SampleDesc.Count = 1;      //multisampling setting
-        desc.SampleDesc.Quality = 0;    //vendor-specific flag
-        //desc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
-        desc.OutputWindow = hWnd;
 
-        // Create the DXGI device object to use in other factories, such as Direct2D.
+        DXGI_SWAP_CHAIN_DESC desc = {
+
+        .BufferDesc = {
+            .Format = DXGI_FORMAT_B8G8R8A8_UNORM,
+        },
+
+        .SampleDesc = {
+            .Count = 1,
+            .Quality = 0,
+        },
+        .BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
+        .BufferCount = 1,
+        .OutputWindow = hWnd,
+        .Windowed = TRUE,
+
+
+        };
+        
         Microsoft::WRL::ComPtr<IDXGIDevice3> dxgiDevice;
         m_d3dDevice.As(&dxgiDevice);
-
-        // Create swap chain.
         Microsoft::WRL::ComPtr<IDXGIAdapter> adapter;
         Microsoft::WRL::ComPtr<IDXGIFactory> factory;
 
@@ -116,14 +116,12 @@ namespace library
         if (SUCCEEDED(hr))
         {
             adapter->GetParent(IID_PPV_ARGS(&factory));
-            std::cout << "*********************";
             hr = factory->CreateSwapChain(
                 m_d3dDevice.Get(),
                 &desc,
-                &m_swapChain
+                m_swapChain.GetAddressOf()
 
             );
-
         }
         /*
         //m_bbDesc.Width = 1;
@@ -155,6 +153,10 @@ namespace library
         );
         //assert(hr);
         */
+        D3D11_TEXTURE2D_DESC    m_bbDesc;
+        D3D11_VIEWPORT          m_viewport;
+        ComPtr<ID3D11Texture2D> pBackBuffer;
+
         hr = m_swapChain->GetBuffer(
             0,
             __uuidof(ID3D11Texture2D),
@@ -185,12 +187,10 @@ namespace library
         struct Vertex {
             XMFLOAT3 Position;
         };
- 
-
 
         //CompileFromFile Ptr
-        ID3DBlob* vs_blob_ptr = NULL, * ps_blob_ptr = NULL;
-        //ComPtr<ID3DBlob> error_blob_ptr = nullptr;
+        ComPtr<ID3DBlob> vs_blob_ptr = nullptr;
+        ComPtr<ID3DBlob> ps_blob_ptr = nullptr;
         
         //Compile Shaders
         hr = compileShaderFromFile(
@@ -198,13 +198,13 @@ namespace library
             "VS",
             "vs_5_0",
             &vs_blob_ptr);
-        if (FAILED(hr)) assert(hr);
+        if (FAILED(hr)) return (hr);
         
         
         hr = device->CreateVertexShader(vs_blob_ptr->GetBufferPointer(),
             vs_blob_ptr->GetBufferSize(), nullptr, m_vertexShader.GetAddressOf());
 
-        //assert(hr);
+        if (FAILED(hr)) return (hr);
 
 
         D3D11_INPUT_ELEMENT_DESC layout[] = {
@@ -215,7 +215,7 @@ namespace library
         hr = device->CreateInputLayout(layout, numElements, vs_blob_ptr->GetBufferPointer(),
             vs_blob_ptr->GetBufferSize(), m_vertexLayout.GetAddressOf());
 
-        if (FAILED(hr)) assert(hr);
+        if (FAILED(hr)) return (hr);
 
 
 
@@ -237,9 +237,9 @@ namespace library
         bufferDesc.StructureByteStride = 0;
 
         Vertex vertices[] = {
-            XMFLOAT3(0.0f, 0.5f, 0.5f),
-            XMFLOAT3(0.5f,-0.5f, 0.5f),
-            XMFLOAT3(-0.5f,-0.5f, 0.5f),
+            {XMFLOAT3(0.0f, 0.5f, 0.5f)},
+            {XMFLOAT3(0.5f,-0.5f, 0.5f)},
+            {XMFLOAT3(-0.5f,-0.5f, 0.5f) },
 
         };
 
@@ -251,7 +251,7 @@ namespace library
         //ComPtr<ID3D11Buffer> pVertexBuffer = nullptr;
 
         hr = m_d3dDevice->CreateBuffer(&bufferDesc, &subData, m_vertextBuffer.GetAddressOf());
-        if (FAILED(hr)) assert(hr);
+        if (FAILED(hr)) return (hr);
 
         D3D11_BUFFER_DESC indexDesc;
         indexDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -273,7 +273,7 @@ namespace library
         idxsubData.SysMemSlicePitch = 0;
         //make indexbuffer 
         hr = device->CreateBuffer(&indexDesc, &idxsubData, m_indexBuffer.GetAddressOf());
-        if (FAILED(hr)) assert(hr);
+        if (FAILED(hr)) return (hr);
         
 
         //set buffer
@@ -298,22 +298,22 @@ namespace library
         //set Shaders
         float ClearColor[4] = { 0.0f, 0.0f, 0.6f, 1.0f };
         m_immediateContext->ClearRenderTargetView(m_renderTargetView.Get(), ClearColor);
-
         m_immediateContext->VSSetShader(m_vertexShader.Get(), nullptr, 0);
         m_immediateContext->PSSetShader(m_pixelShader.Get(), nullptr, 0);
         m_immediateContext->Draw(3, 0);
-        
         m_swapChain->Present(1, 0);
         
 
         
     }
 
+    /*
     void Renderer::Resize(UINT width, UINT height) {
         HRESULT hr = S_OK;
         hr = m_swapChain->ResizeBuffers(0, width, height, DXGI_FORMAT::DXGI_FORMAT_UNKNOWN, 0);
         //Failed(hr);
     }
+    */
 
 
     HRESULT Renderer::compileShaderFromFile(PCWSTR filename, PCSTR pEntry , PCSTR pShaderModel, ID3DBlob** compiledShader) {
@@ -323,13 +323,11 @@ namespace library
         shaderFlags |= D3D10_SHADER_DEBUG;
         shaderFlags |= D3D10_SHADER_SKIP_OPTIMIZATION;
 #endif
-        ID3DBlob** blob = nullptr;
+        ComPtr<ID3DBlob> blob = nullptr;
         
-        HRESULT hr = D3DCompileFromFile(filename, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, pEntry, pShaderModel, NULL, 0, compiledShader, blob);
-        //compiledShader = blob;
-        //OutputDebugString(ErrorBlob);
-        
-        if (FAILED(hr)) assert(hr);
+        HRESULT hr = D3DCompileFromFile(filename, NULL, D3D_COMPILE_STANDARD_FILE_INCLUDE, pEntry, pShaderModel, NULL, 0, compiledShader,blob.GetAddressOf());
+ 
+        if (FAILED(hr)) return(hr);
         return hr;
     }
 }

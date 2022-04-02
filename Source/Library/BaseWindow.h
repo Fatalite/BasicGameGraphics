@@ -97,14 +97,13 @@ namespace library
         _In_opt_ HWND hWndParent,
         _In_opt_ HMENU hMenu
     ) {
-        WNDCLASS wc = { 0 };
-
-        wc.lpfnWndProc = DerivedType::WindowProc;
-        wc.hInstance = GetModuleHandle(NULL);
-        wc.lpszClassName = GetWindowClassName();
-
+        WNDCLASS wc = { 
+        .lpfnWndProc = DerivedType::WindowProc,
+        .hInstance = GetModuleHandle(NULL),
+        .lpszClassName = GetWindowClassName()
+        };
         RegisterClass(&wc);
-        OutputDebugString((L"Test Output Debug\n"));
+        //OutputDebugString((L"Test Output Debug\n"));
         m_hWnd = CreateWindowEx(
             NULL , GetWindowClassName(), pszWindowName, WS_OVERLAPPEDWINDOW, x, y,
             nWidth, nHeight, hWndParent, hMenu, GetModuleHandle(NULL), this

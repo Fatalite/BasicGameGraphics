@@ -39,22 +39,19 @@ namespace library
 
         HRESULT Initialize(_In_ HWND hWnd);
         void Render();
-        void Resize(UINT, UINT);
+        //void Resize(UINT, UINT);
 
-        HRESULT compileShaderFromFile(PCWSTR, PCSTR, PCSTR, ID3DBlob**);
-        HRESULT BuildVertexLayout();
-        //HRESULT DrawTriangle();
-    private:
+        HRESULT compileShaderFromFile(PCWSTR, PCSTR, PCSTR, ID3DBlob**);    private:
         //for inits
         D3D_DRIVER_TYPE m_driverType;
         D3D_FEATURE_LEVEL m_featureLevel;
 
         //---추가적인 변수-----//
-        D3D11_TEXTURE2D_DESC    m_bbDesc;
-        D3D11_VIEWPORT          m_viewport;
-        ComPtr<ID3D11Texture2D>         m_pDepthStencil;
-        ComPtr<ID3D11DepthStencilView>  m_pDepthStencilView;
-        ComPtr<ID3D11Texture2D> pBackBuffer;
+        //D3D11_TEXTURE2D_DESC    m_bbDesc;
+        //D3D11_VIEWPORT          m_viewport;
+        //ComPtr<ID3D11Texture2D>         m_pDepthStencil;
+        //ComPtr<ID3D11DepthStencilView>  m_pDepthStencilView;
+        //ComPtr<ID3D11Texture2D> pBackBuffer;
         //----상관없음------//
 
 

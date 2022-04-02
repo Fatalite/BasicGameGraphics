@@ -12,20 +12,18 @@
 #define UNICODE
 #endif // ! UNICODE
 
-#define WIN32_LEAN_AND_MEAN // C4668 ERROR
 #include <windows.h>
-#include <dxgi.h>
-#include <d3d11_4.h>
-#include <directxcolors.h>
 #include <wrl.h>
-#include <iostream>
-#include "Resource.h"
-//DirectXMath
-#include "DirectXMath.h"
-#include "DirectXPackedVector.h"
-#include <d3dcompiler.h>
 
+#include <d3d11_4.h>
+#include <d3dcompiler.h>
+#include <directxcolors.h>
+
+#include <memory>
+
+#include "Resource.h"
 
 constexpr LPCWSTR PSZ_COURSE_TITLE = L"Game Graphics Programming";
 
 using namespace DirectX;
+using namespace Microsoft::WRL;
