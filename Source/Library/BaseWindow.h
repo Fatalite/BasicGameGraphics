@@ -73,7 +73,7 @@ namespace library
         }
 
     }
-
+    //
     template <class DerivedType>
     BaseWindow<DerivedType>::BaseWindow() : m_hInstance(NULL),m_hWnd(NULL),m_pszWindowName(NULL) {
     }
@@ -97,21 +97,32 @@ namespace library
         _In_opt_ HWND hWndParent,
         _In_opt_ HMENU hMenu
     ) {
+        HRESULT hr = S_OK;
+
+        //표준 구조체 초기화
+        //WINDOW CLASS 정의
         WNDCLASS wc = { 
         .lpfnWndProc = DerivedType::WindowProc,
         .hInstance = GetModuleHandle(NULL),
         .lpszClassName = GetWindowClassName()
         };
+        // RESISTER WINDOW CLASS
         RegisterClass(&wc);
-        //OutputDebugString((L"Test Output Debug\n"));
+        if (FAILED(hr)) {
+            return hr;
+        }
+        // CREATE WINDOW 
         m_hWnd = CreateWindowEx(
-            NULL , GetWindowClassName(), pszWindowName, WS_OVERLAPPEDWINDOW, x, y,
-            nWidth, nHeight, hWndParent, hMenu, GetModuleHandle(NULL), this
+            // WS_OVERLAPPEDWINDOW -> 무난함
+            NULL , GetWindowClassName(), pszWindowName, WS_OVERLAPPEDWINDOW, 
+
+            // 생성되는 window의 width,height
+            CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+            
+            hWndParent, hMenu, GetModuleHandle(NULL), this
         );
-
-
         
-        return S_OK;
+        return hr;
 
         
     }

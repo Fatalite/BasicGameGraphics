@@ -54,6 +54,10 @@ namespace library
         //ComPtr<ID3D11Texture2D> pBackBuffer;
         //----상관없음------//
 
+        //SimpleVertex 
+        struct Vertex {
+            XMFLOAT3 Position;
+        };
 
         ComPtr<ID3D11Device> m_d3dDevice;
         ComPtr<ID3D11Device1> m_d3dDevice1;
@@ -65,7 +69,7 @@ namespace library
 
         //for vertex and pixel shader
         ComPtr<ID3D11Buffer> m_vertextBuffer;
-        ComPtr<ID3D11Buffer> m_indexBuffer;
+        //ComPtr<ID3D11Buffer> m_indexBuffer;
         ComPtr<ID3D11InputLayout> m_vertexLayout;
         ComPtr<ID3D11PixelShader> m_pixelShader;
         ComPtr<ID3D11VertexShader> m_vertexShader;

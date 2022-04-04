@@ -1,5 +1,4 @@
 #include "Renderer.h"
-#include <filesystem>
 
 namespace library
 {
@@ -33,8 +32,8 @@ namespace library
         m_vertexShader(nullptr),
         
 
-        m_renderTargetView(nullptr),
-        m_indexBuffer(nullptr)
+        m_renderTargetView(nullptr)
+        //m_indexBuffer(nullptr)
     {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderer::Initialize
@@ -154,7 +153,12 @@ namespace library
         //assert(hr);
         */
         D3D11_TEXTURE2D_DESC    m_bbDesc;
-        D3D11_VIEWPORT          m_viewport;
+        D3D11_VIEWPORT          m_viewport = {
+        .Width = (float)600,
+        .Height = (float)800,
+        .MinDepth = 0,
+        .MaxDepth = 1,
+        };
         ComPtr<ID3D11Texture2D> pBackBuffer;
 
         hr = m_swapChain->GetBuffer(
@@ -170,23 +174,10 @@ namespace library
             m_renderTargetView.GetAddressOf()
         );
         m_immediateContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), nullptr);
-        
-        ZeroMemory(&m_viewport, sizeof(D3D11_VIEWPORT));
-        m_viewport.Height = (float)800;
-        m_viewport.Width = (float)600;
-        m_viewport.MinDepth = 0;
-        m_viewport.MaxDepth = 1;
-
-
         m_immediateContext->RSSetViewports(
             1,
             &m_viewport
         );
-
-        
-        struct Vertex {
-            XMFLOAT3 Position;
-        };
 
         //CompileFromFile Ptr
         ComPtr<ID3DBlob> vs_blob_ptr = nullptr;
@@ -228,31 +219,33 @@ namespace library
         hr = m_d3dDevice->CreatePixelShader(ps_blob_ptr->GetBufferPointer(), ps_blob_ptr->GetBufferSize(), nullptr, m_pixelShader.GetAddressOf());
 
         //Describe out buffer
-        D3D11_BUFFER_DESC bufferDesc;
-        bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-        bufferDesc.ByteWidth = sizeof(Vertex) * 3;
-        bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-        bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        bufferDesc.MiscFlags = 0;
-        bufferDesc.StructureByteStride = 0;
+        D3D11_BUFFER_DESC bufferDesc = {
+        .ByteWidth = (sizeof(Vertex) * 3),
+        .Usage = D3D11_USAGE_DYNAMIC,
+        .BindFlags = D3D11_BIND_VERTEX_BUFFER,
+        .CPUAccessFlags = D3D11_CPU_ACCESS_WRITE,
+        .MiscFlags = 0,
+        .StructureByteStride = 0
+        };
 
         Vertex vertices[] = {
-            {XMFLOAT3(0.0f, 0.5f, 0.5f)},
+            {XMFLOAT3(0.0f, 0.0f, 0.5f)},
             {XMFLOAT3(0.5f,-0.5f, 0.5f)},
             {XMFLOAT3(-0.5f,-0.5f, 0.5f) },
 
         };
 
-        D3D11_SUBRESOURCE_DATA subData;
-        subData.pSysMem = vertices;
-        subData.SysMemPitch = 0;
-        subData.SysMemSlicePitch = 0;
-
-        //ComPtr<ID3D11Buffer> pVertexBuffer = nullptr;
+        D3D11_SUBRESOURCE_DATA subData = {
+        .pSysMem = vertices,
+        .SysMemPitch = 0,
+        .SysMemSlicePitch = 0,
+        };
 
         hr = m_d3dDevice->CreateBuffer(&bufferDesc, &subData, m_vertextBuffer.GetAddressOf());
         if (FAILED(hr)) return (hr);
 
+
+        /*
         D3D11_BUFFER_DESC indexDesc;
         indexDesc.Usage = D3D11_USAGE_DYNAMIC;
         indexDesc.ByteWidth = sizeof(Vertex) * 36;
@@ -271,9 +264,12 @@ namespace library
         idxsubData.pSysMem = idxVertexID;
         idxsubData.SysMemPitch = 0;
         idxsubData.SysMemSlicePitch = 0;
+        
+        
         //make indexbuffer 
         hr = device->CreateBuffer(&indexDesc, &idxsubData, m_indexBuffer.GetAddressOf());
         if (FAILED(hr)) return (hr);
+        */
         
 
         //set buffer
