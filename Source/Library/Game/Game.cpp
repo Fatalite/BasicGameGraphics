@@ -64,11 +64,18 @@ namespace library
 		MSG msg = {};
 		//윈도우를 활성화해 보여줌.
 		ShowWindow(m_mainWindow->GetWindow(),SW_SHOW);
-		
-		
+
+		LARGE_INTEGER frequency;
+
+		LARGE_INTEGER startTime;
+		LARGE_INTEGER stopTime;
+		LARGE_INTEGER elapsedTime;
+
 		//주 창의 반복
 		while (true)
 		{
+			QueryPerformanceFrequency(&frequency);
+			QueryPerformanceCounter(&startTime);
 			if (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) {
 				if (msg.message == WM_QUIT) {
 					break;
@@ -79,9 +86,18 @@ namespace library
 				}
 			}
 			else {
-				//assert("안녕");
+				//updata the elapsed time
+				QueryPerformanceCounter(&stopTime);
+				elapsedTime.QuadPart = stopTime.QuadPart - startTime.QuadPart;
+				elapsedTime.QuadPart *= 1000000;
+				elapsedTime.QuadPart /= frequency.QuadPart;
+				//update game logic
+				m_renderer->Update(elapsedTime.QuadPart);
+				//render
 				m_renderer->Render();
 			}
+			
+			
 		}
 
 		return 0;
@@ -96,6 +112,14 @@ namespace library
 	  TODO: Game::GetGameName definition (remove the comment)
 	--------------------------------------------------------------------*/
 	PCWSTR Game::GetGameName() const {
-		return this->m_pszGameName;
+		return m_pszGameName;
 	}
+
+	std::unique_ptr<MainWindow>& Game::GetWindow() {
+		return m_mainWindow;
+	};
+	std::unique_ptr<Renderer>& Game::GetRenderer() {
+		return m_renderer;
+	};
+
 }

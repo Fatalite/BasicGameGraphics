@@ -22,7 +22,7 @@
     <Filter Include="소스 파일\Window">
       <UniqueIdentifier>{df485369-71c2-4ef1-9dc8-8d0fdf8845d6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Shaders">
+    <Filter Include="소스 파일\Shader">
       <UniqueIdentifier>{fdbb24ff-f32f-4389-9e6e-f44344d3e1da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -33,10 +33,22 @@
     <ClCompile Include="Game\Game.cpp">
       <Filter>소스 파일\Game</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
+    <ClCompile Include="Renderer\Renderable.cpp">
       <Filter>소스 파일\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
+    <ClCompile Include="Renderer\Renderer.cpp">
+      <Filter>소스 파일\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\PixelShader.cpp">
+      <Filter>소스 파일\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\Shader.cpp">
+      <Filter>소스 파일\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader\VertexShader.cpp">
+      <Filter>소스 파일\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Window\MainWindow.cpp">
       <Filter>소스 파일\Window</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,17 +56,32 @@
     <ClInclude Include="Resource.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>소스 파일\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseWindow.h">
-      <Filter>소스 파일\Window</Filter>
-    </ClInclude>
-    <ClInclude Include="MainWindow.h">
-      <Filter>소스 파일\Window</Filter>
-    </ClInclude>
     <ClInclude Include="Game\Game.h">
       <Filter>소스 파일\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\DataTypes.h">
+      <Filter>소스 파일\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Renderable.h">
+      <Filter>소스 파일\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\Renderer.h">
+      <Filter>소스 파일\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\PixelShader.h">
+      <Filter>소스 파일\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\Shader.h">
+      <Filter>소스 파일\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\VertexShader.h">
+      <Filter>소스 파일\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\BaseWindow.h">
+      <Filter>소스 파일\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="Window\MainWindow.h">
+      <Filter>소스 파일\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -66,18 +93,5 @@
     <Image Include="directx.ico">
       <Filter>리소스 파일</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
-      <Filter>소스 파일\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="PixelShader.hlsl">
-      <Filter>소스 파일\Shaders</Filter>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Color.fxh">
-      <Filter>소스 파일\Shaders</Filter>
-    </None>
   </ItemGroup>
 </Project>

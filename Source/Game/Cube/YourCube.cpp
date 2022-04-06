@@ -1,0 +1,3 @@
+class YourCube : BaseCube {
+
+};
