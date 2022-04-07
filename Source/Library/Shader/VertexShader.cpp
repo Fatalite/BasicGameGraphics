@@ -38,19 +38,27 @@ namespace library
         if (FAILED(hr)) return (hr);
 
 
-        hr = pDevice->CreateVertexShader(vs_blob_ptr->GetBufferPointer(),
-            vs_blob_ptr->GetBufferSize(), nullptr, m_vertexShader.GetAddressOf());
+        hr = pDevice->CreateVertexShader(
+            vs_blob_ptr->GetBufferPointer(),
+            vs_blob_ptr->GetBufferSize(),
+            nullptr, 
+            m_vertexShader.GetAddressOf());
 
         if (FAILED(hr)) return (hr);
 
 
         D3D11_INPUT_ELEMENT_DESC layout[] = {
-            {"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0}
+            {"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
+            {"COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0}
         };
         UINT numElements = ARRAYSIZE(layout);
 
-        hr = pDevice->CreateInputLayout(layout, numElements, vs_blob_ptr->GetBufferPointer(),
-            vs_blob_ptr->GetBufferSize(), m_vertexLayout.GetAddressOf());
+        hr = pDevice->CreateInputLayout(
+            layout, 
+            numElements, 
+            vs_blob_ptr->GetBufferPointer(),
+            vs_blob_ptr->GetBufferSize(), 
+            m_vertexLayout.GetAddressOf());
 
         if (FAILED(hr)) return (hr);
         return hr;

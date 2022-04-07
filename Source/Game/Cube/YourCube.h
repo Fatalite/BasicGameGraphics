@@ -1,8 +1,11 @@
-#include "BaseCube.h";
+#pragma once
 
-class YourCube : BaseCube {
+
+#include "BaseCube.h"
+
+class YourCube : public BaseCube {
 public:
-	YourCube::YourCube();
-	~YourCube::YourCube();
-	YourCube::Update(float deltaTime);
+	YourCube();
+	//~YourCube();
+	void Update(_In_ FLOAT deltaTime);
 };

@@ -1,14 +1,9 @@
-﻿/*+===================================================================
-  File:      MAIN.CPP
-  Summary:   This application demonstrates creating a Direct3D 11
-             device in a object-oriented fashion
-  Origin:    https://docs.microsoft.com/en-us/previous-versions//ff729719(v=vs.85)
-  Originally created by Microsoft Corporation under MIT License
-  © 2022 Kyung Hee University
-===================================================================+*/
-
-#include "Common.h"
+﻿#include "Common.h"
 #include <memory>
+
+#include "Cube/BaseCube.h"
+#include "Cube/YourCube.h"
+
 #include "Game/Game.h"
 
 /*F+F+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -31,11 +26,39 @@
 -----------------------------------------------------------------F-F*/
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ INT nCmdShow)
 {
+
+#ifdef _DEBUG
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    std::unique_ptr<library::Game> game = std::make_unique<library::Game>(L"Game Graphics Programming Lab 02: Object Oriented Design");
-    //게임 객체 생성.
+    std::unique_ptr<library::Game> game = std::make_unique<library::Game>(L"Game Graphics Programming Lab 04: 3D Spaces and Transformations");
+
+    std::shared_ptr<library::VertexShader> vertexShader = std::make_shared<library::VertexShader>(L"Shaders/Shaders.fxh", "VS", "vs_5_0");
+    if (FAILED(game->GetRenderer()->AddVertexShader(L"MainShader", vertexShader)))
+    {
+        return 0;
+    }
+
+    std::shared_ptr<library::PixelShader> pixelShader = std::make_shared<library::PixelShader>(L"Shaders/Shaders.fxh", "PS", "ps_5_0");
+    if (FAILED(game->GetRenderer()->AddPixelShader(L"MainShader", pixelShader)))
+    {
+        return 0;
+    };
+    
+    std::shared_ptr<YourCube> centerCube = std::make_shared<YourCube>();
+    //std::shared_ptr<YourCube> orbitCube = std::make_shared<YourCube>();
+    centerCube.get()->GetNumIndices();
+    game->GetRenderer()->AddRenderable(L"YourCube", centerCube);
+    //game->GetRenderer()->AddRenderable(L"orbitCube", orbitCube);
+    
+    game->GetRenderer()->SetVertexShaderOfRenderable(L"YourCube", L"MainShader");
+    game->GetRenderer()->SetPixelShaderOfRenderable(L"YourCube", L"MainShader");
+    //game->GetRenderer()->SetPixelShaderOfRenderable(L"orbitCube", L"MainShader");
+
+
     if (FAILED(game->Initialize(hInstance, nCmdShow)))
     {
         return 0;

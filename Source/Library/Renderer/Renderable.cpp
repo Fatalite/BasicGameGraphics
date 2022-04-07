@@ -114,23 +114,16 @@ namespace library
     HRESULT Renderable::initialize(_In_ ID3D11Device* pDevice, _In_ ID3D11DeviceContext* pImmediateContext) {
         //Create the vertex buffer
         D3D11_BUFFER_DESC bufferDesc = {
-        .ByteWidth = (sizeof(SimpleVertex) * 3),
-        .Usage = D3D11_USAGE_DYNAMIC,
+        .ByteWidth = (sizeof(SimpleVertex) * GetNumVertices()),
+        .Usage = D3D11_USAGE_DEFAULT,
         .BindFlags = D3D11_BIND_VERTEX_BUFFER,
-        .CPUAccessFlags = D3D11_CPU_ACCESS_WRITE,
+        .CPUAccessFlags = 0,
         .MiscFlags = 0,
         .StructureByteStride = 0
         };
 
-        SimpleVertex vertices[] = {
-            {XMFLOAT3(0.0f, 0.0f, 0.5f)},
-            {XMFLOAT3(0.5f,-0.5f, 0.5f)},
-            {XMFLOAT3(-0.5f,-0.5f, 0.5f) },
-
-        };
-
         D3D11_SUBRESOURCE_DATA subData = {
-        .pSysMem = vertices,
+        .pSysMem = getVertices(),
         .SysMemPitch = 0,
         .SysMemSlicePitch = 0,
         };
@@ -140,7 +133,7 @@ namespace library
         //Create the index buffer
         D3D11_BUFFER_DESC indexDesc;
         indexDesc.Usage = D3D11_USAGE_DEFAULT;
-        indexDesc.ByteWidth = sizeof(SimpleVertex) * 36;
+        indexDesc.ByteWidth = sizeof(SimpleVertex) * GetNumIndices();
         indexDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
         indexDesc.CPUAccessFlags = 0;
         indexDesc.MiscFlags = 0;
@@ -153,7 +146,8 @@ namespace library
         };
         //define idxbuffer subresource
         D3D11_SUBRESOURCE_DATA idxsubData;
-        idxsubData.pSysMem = idxVertexID;
+        //idxsubData.pSysMem = idxVertexID;
+        idxsubData.pSysMem = getIndices();
         idxsubData.SysMemPitch = 0;
         idxsubData.SysMemSlicePitch = 0;
 
@@ -161,15 +155,35 @@ namespace library
         //make indexbuffer 
         hr = pDevice->CreateBuffer(&indexDesc, &idxsubData, m_indexBuffer.GetAddressOf());
         if (FAILED(hr)) return (hr);
-        //Create the constant buffer
-        //Init the world matrix
-        m_world;
 
 
+        //Create the constant buffer and init WorldMatrix
+        ConstantBuffer cb;
+        cb.World = XMMatrixTranspose(XMMatrixIdentity());
 
+        D3D11_BUFFER_DESC bd;
+        bd.ByteWidth = sizeof(ConstantBuffer);
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bd.CPUAccessFlags = 0;
+        bd.MiscFlags = 0;
+        bd.StructureByteStride = 0;
 
-        //set topology
-        pImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+        D3D11_SUBRESOURCE_DATA initData;
+        initData.pSysMem = &cb;
+        initData.SysMemPitch = 0;
+        initData.SysMemSlicePitch = 0;
+
+        hr = pDevice->CreateBuffer(
+            &bd,
+            &initData,
+            m_constantBuffer.GetAddressOf()
+        );
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+
 
     };
     void Renderable::SetVertexShader(_In_ const std::shared_ptr<VertexShader>& vertexShader) {

@@ -13,18 +13,46 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\Cube">
+      <UniqueIdentifier>{9be5815f-26fb-4822-8e62-a57d0872bcca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Cube">
+      <UniqueIdentifier>{8b84f37c-30dd-4c1c-9432-503437aa3496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Shaders">
+      <UniqueIdentifier>{0742f086-c07f-4193-8b7c-31440ad4042c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Cube\YourCube.cpp">
+      <Filter>소스 파일\Cube</Filter>
+    </ClCompile>
     <ClCompile Include="Cube\BaseCube.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Cube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube\BaseCube.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Cube</Filter>
     </ClInclude>
+    <ClInclude Include="Cube\YourCube.h">
+      <Filter>헤더 파일\Cube</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shaders\PS.hlsl">
+      <Filter>소스 파일\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\VS.hlsl">
+      <Filter>소스 파일\Shaders</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Shaders.fxh">
+      <Filter>소스 파일\Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

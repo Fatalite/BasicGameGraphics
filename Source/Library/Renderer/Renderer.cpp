@@ -17,9 +17,9 @@ namespace library
         m_d3dDevice(nullptr), m_d3dDevice1(nullptr),
         m_immediateContext(nullptr), m_immediateContext1(nullptr),
         m_swapChain(nullptr),m_swapChain1(nullptr),
-        m_renderTargetView(nullptr),
-        m_vertexShaders(nullptr),
-        m_pixelShaders(nullptr)
+        m_renderTargetView(nullptr)
+        //m_vertexShaders(nullptr),
+        //m_pixelShaders(nullptr)
     {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderer::Initialize
@@ -153,21 +153,55 @@ namespace library
             nullptr,
             m_renderTargetView.GetAddressOf()
         );
-        m_immediateContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), nullptr);
+        m_immediateContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
         m_immediateContext->RSSetViewports(
             1,
             &m_viewport
         );
-        
-        //CREATE VIEW AND PROJECTION MATRICS
-        
-        XMVECTOR eye(0.0, 1.0, -5.0, 0.0);
-        XMVECTOR at(0.0, 1.0, 0.0, 0.0);
-        XMVECTOR up(0.0, 1.0, 0.0, 0.0);
+       
+        //CREATE VIEW AND PROJECTION MATRICS(IN RENDERER)
+        ConstantBuffer cb;
+        //Renderer->renderables 
+        XMVECTOR eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
+        XMVECTOR at = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+        XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
         XMMATRIX V = XMMatrixLookAtLH(eye, at, up);
-        
+        cb.View = XMMatrixTranspose(V);
+        cb.Projection = XMMatrixTranspose(XMMatrixPerspectiveFovLH(
+            XM_PIDIV2,
+            static_cast<FLOAT>(800) / static_cast<FLOAT> (600),
+            0.01f,
+            100.0f
+        ));
 
-        
+        std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>::iterator it;
+
+        for (it = m_renderables.begin(); it != m_renderables.end(); it++)
+        {
+            //Init Randerables...!! 
+            //In init, creates Buffers
+            //so, renderables finally have shader,buffers,world matrix
+
+            it->second->Initialize(m_d3dDevice.Get(), m_immediateContext.Get());
+            
+            //SetVertexShaderOfRenderable
+        }
+
+        std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>::iterator itVertexShader;
+
+        for (itVertexShader = m_vertexShaders.begin(); itVertexShader != m_vertexShaders.end(); itVertexShader++)
+        {
+            itVertexShader->second->Initialize(m_d3dDevice.Get());
+        }
+
+
+        std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>>::iterator itPixelShader;
+
+        for (itPixelShader = m_pixelShaders.begin(); itPixelShader != m_pixelShaders.end(); itPixelShader++)
+        {
+            itPixelShader->second->Initialize(m_d3dDevice.Get());
+        }
+
         return hr;
 
     }
@@ -189,6 +223,7 @@ namespace library
             return E_FAIL;
         }
         else {
+            
             m_vertexShaders.insert(std::make_pair(pszVertexShaderName, vertexShader));
             return S_OK;
         }
@@ -216,7 +251,7 @@ namespace library
         //set Shaders
         float ClearColor[4] = { 0.0f, 0.0f, 0.6f, 1.0f };
         m_immediateContext->ClearRenderTargetView(m_renderTargetView.Get(), ClearColor);
-        m_immediateContext->ClearDepthStencilView(m_depthStencilView.Get(), NULL, 1.0, D3D10_CLEAR_STENCIL);
+        m_immediateContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
         std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>::iterator it;
         for (it = m_renderables.begin(); it != m_renderables.end(); it++)
@@ -224,21 +259,32 @@ namespace library
             //set buffer
             UINT stride = sizeof(SimpleVertex);
             UINT offset = 0;
+            //set topology
+            m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
             m_immediateContext->IASetVertexBuffers(0, 1, it->second->GetVertexBuffer().GetAddressOf(), &stride, &offset);
             m_immediateContext->IASetIndexBuffer(it->second->GetIndexBuffer().Get(), DXGI_FORMAT_R16_UINT, 0);
             m_immediateContext->IASetInputLayout(it->second->GetVertexLayout().Get());
+            m_immediateContext->VSSetShader(it->second->GetVertexShader().Get(), nullptr, 0);
+            m_immediateContext->VSSetConstantBuffers(0, 1, it->second->GetConstantBuffer().GetAddressOf());
+            m_immediateContext->PSSetShader(it->second->GetPixelShader().Get(), nullptr, 0);
+            m_immediateContext->PSSetConstantBuffers(0, 1, it->second->GetConstantBuffer().GetAddressOf());
             //Update Constant buffer
-            m_immediateContext->VSSetConstantBuffers(0, 3, it->second->GetConstantBuffer().GetAddressOf());
+            ConstantBuffer cb;
+            cb.World = XMMatrixTranspose(it->second->GetWorldMatrix());
+            cb.View = XMMatrixTranspose(m_view);
+            cb.Projection = XMMatrixTranspose(m_projection);
+
+            m_immediateContext->UpdateSubresource(it->second->GetConstantBuffer().Get(), 0, nullptr, &cb, 0, 0);
             //Render The Triangle
-            m_immediateContext->Draw(3, 0);
+            m_immediateContext->DrawIndexed(36, 0, 0);
         }
         
-        m_swapChain->Present(1, 0);
+        m_swapChain->Present(0, 0);
     };
 
     HRESULT Renderer::SetVertexShaderOfRenderable(_In_ PCWSTR pszRenderableName, _In_ PCWSTR pszVertexShaderName) {
         // 해당 renderable이 있는지?
-        if (m_renderables.contains(pszRenderableName)) {
+        if (!m_renderables.contains(pszRenderableName)) {
             return E_FAIL;
         }
         // 해당 renderable에 추가하기
@@ -256,7 +302,7 @@ namespace library
     }
     HRESULT Renderer::SetPixelShaderOfRenderable(_In_ PCWSTR pszRenderableName, _In_ PCWSTR pszPixelShaderName) {
         // 해당 renderable이 있는지?
-        if (m_renderables.contains(pszRenderableName)) {
+        if (!m_renderables.contains(pszRenderableName)) {
             return E_FAIL;
         }
         // 해당 renderable에 추가하기
