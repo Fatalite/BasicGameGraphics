@@ -59,9 +59,9 @@ protected:
         {.Position = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
         {.Position = DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f) },
         {.Position = DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f) },
-        {.Position = DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f) },
-        {.Position = DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f) },
-        {.Position = DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f) },
+        {.Position = DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),  },
+        {.Position = DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f)},
+        {.Position = DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f)}
     };
     static constexpr const UINT NUM_VERTICES = 8u;
     static constexpr const WORD INDICES[] =

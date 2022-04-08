@@ -20,7 +20,7 @@ namespace library
 		//mainWindow 인스턴스
 		m_mainWindow = std::unique_ptr<MainWindow>(new MainWindow());
 		m_renderer = std::unique_ptr<Renderer>(new Renderer());
-
+		
 	};
 	/*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
 	  Method:   Game::Initialize
@@ -62,20 +62,18 @@ namespace library
 	--------------------------------------------------------------------*/
 	INT Game::Run() {
 		MSG msg = {};
-		//윈도우를 활성화해 보여줌.
-		ShowWindow(m_mainWindow->GetWindow(),SW_SHOW);
 
 		LARGE_INTEGER frequency;
-
 		LARGE_INTEGER startTime;
 		LARGE_INTEGER stopTime;
-		LARGE_INTEGER elapsedTime;
-
+		float elapsedTime;
+		QueryPerformanceCounter(&startTime);
+		//FREQUENCY?????????????????????
+		QueryPerformanceFrequency(&frequency);
 		//주 창의 반복
 		while (true)
 		{
-			QueryPerformanceFrequency(&frequency);
-			QueryPerformanceCounter(&startTime);
+
 			if (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE) == TRUE) {
 				if (msg.message == WM_QUIT) {
 					break;
@@ -88,11 +86,10 @@ namespace library
 			else {
 				//updata the elapsed time
 				QueryPerformanceCounter(&stopTime);
-				elapsedTime.QuadPart = stopTime.QuadPart - startTime.QuadPart;
-				elapsedTime.QuadPart *= 1000000;
-				elapsedTime.QuadPart /= frequency.QuadPart;
+				elapsedTime = (float)(stopTime.QuadPart - startTime.QuadPart);
+				elapsedTime /= (float)(frequency.QuadPart);
 				//update game logic
-				m_renderer->Update(elapsedTime.QuadPart);
+				m_renderer->Update(elapsedTime);
 				//render
 				m_renderer->Render();
 			}

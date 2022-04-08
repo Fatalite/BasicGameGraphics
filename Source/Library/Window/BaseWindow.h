@@ -51,17 +51,16 @@ namespace library
         //non-queue와 queue 메세지를 처리한다.
         DerivedType* pThis = NULL;
 
-        if (uMsg == WM_CREATE)
+        if (uMsg == WM_NCCREATE)
         {
             CREATESTRUCT* pCreate = (CREATESTRUCT*)lParam;
             pThis = (DerivedType*)pCreate->lpCreateParams;
             SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)pThis);
-
             pThis->m_hWnd = hWnd;
         }
         else
         {
-            pThis = (DerivedType*)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+            pThis = reinterpret_cast<DerivedType*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
         }
         if (pThis)
         {
@@ -75,7 +74,7 @@ namespace library
     }
     //
     template <class DerivedType>
-    BaseWindow<DerivedType>::BaseWindow() : m_hInstance(NULL),m_hWnd(NULL),m_pszWindowName(NULL) {
+    BaseWindow<DerivedType>::BaseWindow() : m_hInstance(nullptr),m_hWnd(nullptr),m_pszWindowName(NULL) {
     }
 
     template <class DerivedType>
@@ -101,27 +100,34 @@ namespace library
 
         //표준 구조체 초기화
         //WINDOW CLASS 정의
-        WNDCLASS wc = { 
-        .lpfnWndProc = DerivedType::WindowProc,
-        .hInstance = GetModuleHandle(NULL),
-        .lpszClassName = GetWindowClassName()
-        };
-        // RESISTER WINDOW CLASS
-        RegisterClass(&wc);
-        if (FAILED(hr)) {
-            return hr;
-        }
-        // CREATE WINDOW 
-        m_hWnd = CreateWindowEx(
-            // WS_OVERLAPPEDWINDOW -> 무난함
-            NULL , GetWindowClassName(), pszWindowName, WS_OVERLAPPEDWINDOW, 
+        WNDCLASSEX wcex;
+        wcex.cbSize = sizeof(WNDCLASSEX);
+        wcex.style = CS_HREDRAW | CS_VREDRAW;
+        wcex.lpfnWndProc = DerivedType::WindowProc;
+        wcex.cbClsExtra = 0;
+        wcex.cbWndExtra = 0;
+        wcex.hInstance = hInstance;
+        wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+        wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+        wcex.hIcon = LoadIcon(wcex.hInstance, IDI_APPLICATION);
+        wcex.lpszMenuName = nullptr;
+        wcex.lpszClassName = GetWindowClassName();
+        wcex.hIconSm = LoadIcon(wcex.hInstance, IDI_APPLICATION);
 
-            // 생성되는 window의 width,height
-            CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-            
-            hWndParent, hMenu, GetModuleHandle(NULL), this
-        );
+        // RESISTER WINDOW CLASS
+        if (!RegisterClassEx(&wcex))
+            return E_FAIL;
+        // CREATE WINDOW 
+        m_hInstance = hInstance;
+        m_hWnd = CreateWindow(GetWindowClassName(), pszWindowName, dwStyle, 
+            x, y, nWidth, nHeight,
+            hWndParent, 
+            hMenu, 
+            hInstance, 
+            this);
         
+        
+        ShowWindow(m_hWnd, nCmdShow);
         return hr;
 
         

@@ -3,9 +3,9 @@
 
 #include "BaseCube.h"
 
-class YourCube : public BaseCube {
+class FriendCube : public BaseCube {
 public:
-	YourCube() = default;
+	FriendCube() = default;
 
 	virtual void Update(_In_ FLOAT deltaTime) override;
 };

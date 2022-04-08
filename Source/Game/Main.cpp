@@ -1,9 +1,8 @@
 ﻿#include "Common.h"
 #include <memory>
 
-#include "Cube/BaseCube.h"
 #include "Cube/YourCube.h"
-
+#include "Cube/FriendCube.h"
 #include "Game/Game.h"
 
 /*F+F+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -49,15 +48,34 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     };
     
     std::shared_ptr<YourCube> centerCube = std::make_shared<YourCube>();
-    //std::shared_ptr<YourCube> orbitCube = std::make_shared<YourCube>();
-    centerCube.get()->GetNumIndices();
-    game->GetRenderer()->AddRenderable(L"YourCube", centerCube);
-    //game->GetRenderer()->AddRenderable(L"orbitCube", orbitCube);
+    std::shared_ptr<FriendCube> orbitCube = std::make_shared<FriendCube>();
+    if (FAILED(game->GetRenderer()->AddRenderable(L"YourCube", centerCube)))
+    {
+        return 0;
+    };
+    if (FAILED(game->GetRenderer()->AddRenderable(L"orbitCube", orbitCube)))
+    {
+        return 0;
+    };
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"YourCube", L"MainShader")))
+    {
+        return 0;
+    };
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"YourCube", L"MainShader")))
+    {
+        return 0;
+    };
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"orbitCube", L"MainShader")))
+    {
+        return 0;
+    };
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"orbitCube", L"MainShader")))
+    {
+        return 0;
+    };
     
-    game->GetRenderer()->SetVertexShaderOfRenderable(L"YourCube", L"MainShader");
-    game->GetRenderer()->SetPixelShaderOfRenderable(L"YourCube", L"MainShader");
-    //game->GetRenderer()->SetPixelShaderOfRenderable(L"orbitCube", L"MainShader");
-
+    
+    
 
     if (FAILED(game->Initialize(hInstance, nCmdShow)))
     {

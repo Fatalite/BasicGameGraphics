@@ -16,7 +16,8 @@ namespace library
       Modifies: [m_pixelShader].
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     PixelShader::PixelShader(_In_ PCWSTR pszFileName, _In_ PCSTR pszEntryPoint, _In_ PCSTR pszShaderModel) :
-        Shader(pszFileName, pszEntryPoint, pszShaderModel), m_pixelShader(nullptr)
+        Shader::Shader(pszFileName, pszEntryPoint, pszShaderModel), 
+        m_pixelShader(nullptr)
     {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   PixelShader::Initialize
@@ -32,12 +33,15 @@ namespace library
         ComPtr<ID3DBlob> psBlobPtr = nullptr;
 
         //Compile Shaders
-        hr = compile(&psBlobPtr);
+        hr = compile(psBlobPtr.GetAddressOf());
         if (FAILED(hr)) return (hr);
 
 
-        hr = pDevice->CreatePixelShader(psBlobPtr->GetBufferPointer(),
-            psBlobPtr->GetBufferSize(), nullptr, m_pixelShader.GetAddressOf());
+        hr = pDevice->CreatePixelShader(
+            psBlobPtr->GetBufferPointer(),
+            psBlobPtr->GetBufferSize(), 
+            nullptr, 
+            m_pixelShader.GetAddressOf());
 
         return (hr);
     };

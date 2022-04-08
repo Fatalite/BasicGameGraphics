@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 #include "Common.h"
 
@@ -13,6 +12,7 @@ namespace library
     struct SimpleVertex
     {
         XMFLOAT3 Position;
+        //XMFLOAT4 Color;
     };
 
     /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C

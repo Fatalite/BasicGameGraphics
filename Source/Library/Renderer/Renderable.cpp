@@ -131,19 +131,17 @@ namespace library
         HRESULT hr = pDevice->CreateBuffer(&bufferDesc, &subData, m_vertexBuffer.GetAddressOf());
         if (FAILED(hr)) return (hr);
         //Create the index buffer
+
+        //!!!!!!!!!WARNING WORD IS DATATYPE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //³¢¤Á°¼°¼¤Á¤Á°¼¤Á¤·
         D3D11_BUFFER_DESC indexDesc;
         indexDesc.Usage = D3D11_USAGE_DEFAULT;
-        indexDesc.ByteWidth = sizeof(SimpleVertex) * GetNumIndices();
+        indexDesc.ByteWidth = sizeof(WORD) * GetNumIndices();
         indexDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
         indexDesc.CPUAccessFlags = 0;
         indexDesc.MiscFlags = 0;
         indexDesc.StructureByteStride = 0;
 
-        //indexbuffer subresource
-        UINT idxVertexID[] = {
-            0,1,3, 1,2,3, 1,5,2, 5,6,2, 5,4,6, 4,7,6,
-            4,5,0, 5,1,0, 4,0,7, 0,3,7, 3,2,7, 2,6,7
-        };
         //define idxbuffer subresource
         D3D11_SUBRESOURCE_DATA idxsubData;
         //idxsubData.pSysMem = idxVertexID;
@@ -159,7 +157,6 @@ namespace library
 
         //Create the constant buffer and init WorldMatrix
         ConstantBuffer cb;
-        cb.World = XMMatrixTranspose(XMMatrixIdentity());
 
         D3D11_BUFFER_DESC bd;
         bd.ByteWidth = sizeof(ConstantBuffer);
@@ -183,7 +180,8 @@ namespace library
         {
             return hr;
         }
-
+        cb.World = XMMatrixTranspose(XMMatrixIdentity());
+        return hr;
 
     };
     void Renderable::SetVertexShader(_In_ const std::shared_ptr<VertexShader>& vertexShader) {

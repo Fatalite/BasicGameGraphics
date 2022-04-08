@@ -16,7 +16,7 @@ namespace library
       Modifies: [m_vertexShader].
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     VertexShader::VertexShader(_In_ PCWSTR pszFileName, _In_ PCSTR pszEntryPoint, _In_ PCSTR pszShaderModel) :
-        Shader(pszFileName,pszEntryPoint,pszShaderModel), m_vertexShader(nullptr), m_vertexLayout(nullptr)
+       Shader::Shader(pszFileName,pszEntryPoint,pszShaderModel), m_vertexShader(nullptr), m_vertexLayout(nullptr)
     {
     };
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
@@ -34,7 +34,7 @@ namespace library
         ComPtr<ID3DBlob> vs_blob_ptr = nullptr;
 
         //Compile Shaders
-        hr = compile(&vs_blob_ptr);
+        hr = compile(vs_blob_ptr.GetAddressOf());
         if (FAILED(hr)) return (hr);
 
 
@@ -49,7 +49,7 @@ namespace library
 
         D3D11_INPUT_ELEMENT_DESC layout[] = {
             {"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0},
-            {"COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0}
+            {"COLOR",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0}
         };
         UINT numElements = ARRAYSIZE(layout);
 

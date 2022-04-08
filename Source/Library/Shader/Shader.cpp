@@ -45,24 +45,31 @@ namespace library
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     HRESULT Shader::compile(_Outptr_ ID3DBlob **ppOutBlob) {
         ComPtr<ID3DBlob> errorBlob = nullptr;
-        DWORD shaderFlags = 0;
+        DWORD shaderFlags = D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined(DEBUG) || defined(_DEBUG)
         shaderFlags |= D3D10_SHADER_DEBUG;
         shaderFlags |= D3D10_SHADER_SKIP_OPTIMIZATION;
 #endif
 
         HRESULT hr = D3DCompileFromFile(
-            GetFileName(), 
-            NULL,
-            D3D_COMPILE_STANDARD_FILE_INCLUDE, 
+            m_pszFileName, 
+            nullptr,
+            nullptr, 
             m_pszEntryPoint, 
             m_pszShaderModel, 
-            NULL, 
+            shaderFlags,
             0, 
             ppOutBlob, 
             errorBlob.GetAddressOf());
-
-        if (FAILED(hr)) return(hr);
-        return hr;
+        //OutputDebugStringA((char*)errorBlob->GetBufferPointer());
+        if (FAILED(hr))
+        {
+            if (errorBlob)
+            {
+                OutputDebugStringA(reinterpret_cast<const char*>(errorBlob->GetBufferPointer()));
+            }
+            return hr;
+        }
+        return S_OK;
     }
 }
