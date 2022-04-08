@@ -167,7 +167,7 @@ namespace library
 
             m_cameraRight = XMVector3TransformCoord(DEFAULT_RIGHT, RotateYTempMatrix);
             m_cameraUp = XMVector3TransformCoord(m_cameraUp, RotateYTempMatrix);
-            m_cameraForward = XMVector3TransformCoord(DEFAULT_FORWARD, RotateYTempMatrix);
+            m_cameraForward = XMVector3TransformCoord( DEFAULT_FORWARD, RotateYTempMatrix);
 
             m_eye += m_moveLeftRight * m_cameraRight * m_travelSpeed;
             m_eye += m_moveBackForward * m_cameraForward * m_travelSpeed;
