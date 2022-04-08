@@ -32,6 +32,20 @@
 #include <vector>
 
 #include "Resource.h"
+struct DirectionsInput {
+	BOOL bFront;
+	BOOL bLeft;
+	BOOL bBack;
+	BOOL bRight;
+	BOOL bUp;
+	BOOL bDown;
+};
+
+struct MouseRelativeMovement
+{
+	LONG X;
+	LONG Y;
+};
 
 constexpr LPCWSTR PSZ_COURSE_TITLE = L"Game Graphics Programming";
 

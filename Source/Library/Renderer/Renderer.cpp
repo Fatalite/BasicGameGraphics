@@ -16,13 +16,13 @@ namespace library
         m_driverType(D3D_DRIVER_TYPE_NULL), m_featureLevel(D3D_FEATURE_LEVEL_11_0),
         m_d3dDevice(nullptr), m_d3dDevice1(nullptr),
         m_immediateContext(nullptr), m_immediateContext1(nullptr),
-        m_swapChain(nullptr),m_swapChain1(nullptr),
+        m_swapChain(nullptr), m_swapChain1(nullptr),
         m_renderTargetView(nullptr),
-        m_view(),m_projection(),
+        m_camera(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f)),
+        m_projection(),
         m_renderables(std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>()),
-        m_vertexShaders(std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>()), 
-        m_pixelShaders(std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>>())
-    {};
+        m_vertexShaders(std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>()),
+        m_pixelShaders(std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>>()) {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderer::Initialize
       Summary:  Creates Direct3D device and swap chain
@@ -247,7 +247,7 @@ namespace library
         XMVECTOR at = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
         XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
         XMMATRIX V = XMMatrixLookAtLH(eye, at, up);
-        m_view = V;
+        //m_view = V;
         m_projection = XMMatrixPerspectiveFovLH(
             XM_PIDIV2,
             width / (FLOAT)height,
@@ -346,7 +346,8 @@ namespace library
             //Update Constant buffer
             ConstantBuffer cb;
             cb.World = XMMatrixTranspose(it->second->GetWorldMatrix());
-            cb.View = XMMatrixTranspose(m_view);
+            ///cb.View = XMMatrixTranspose(m_view);
+            cb.View = XMMatrixTranspose(m_camera.GetView());
             cb.Projection = XMMatrixTranspose(m_projection);
 
             m_immediateContext->UpdateSubresource(it->second->GetConstantBuffer().Get(), 0, nullptr, &cb, 0, 0);
@@ -413,5 +414,13 @@ namespace library
     D3D_DRIVER_TYPE Renderer::GetDriverType() const {
         return m_driverType;
     };
-
+    void Renderer::HandleInput(_In_ const DirectionsInput& directions, _In_ const MouseRelativeMovement& mouseRelativeMovement, _In_ FLOAT deltaTime) {
+        
+        //그냥 받은거 카메라한테 넘겨줌
+        m_camera.HandleInput(
+            directions,
+            mouseRelativeMovement,
+            deltaTime
+        );
+    };
 }

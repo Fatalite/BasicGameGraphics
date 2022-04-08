@@ -16,7 +16,7 @@ namespace library
       Modifies: [m_vertexShader].
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     VertexShader::VertexShader(_In_ PCWSTR pszFileName, _In_ PCSTR pszEntryPoint, _In_ PCSTR pszShaderModel) :
-       Shader::Shader(pszFileName,pszEntryPoint,pszShaderModel), m_vertexShader(nullptr), m_vertexLayout(nullptr)
+       Shader(pszFileName,pszEntryPoint,pszShaderModel), m_vertexShader(nullptr), m_vertexLayout(nullptr)
     {
     };
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M

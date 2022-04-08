@@ -126,6 +126,8 @@ namespace library
             hInstance, 
             this);
         
+
+
         
         ShowWindow(m_hWnd, nCmdShow);
         return hr;

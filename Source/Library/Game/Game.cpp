@@ -88,6 +88,16 @@ namespace library
 				QueryPerformanceCounter(&stopTime);
 				elapsedTime = (float)(stopTime.QuadPart - startTime.QuadPart);
 				elapsedTime /= (float)(frequency.QuadPart);
+				
+				// WINDOW TO RENDERER INPUT INFORMATION
+				m_renderer->HandleInput(
+					m_mainWindow->GetDirections(),
+					m_mainWindow->GetMouseRelativeMovement(),
+					elapsedTime
+				);
+				m_mainWindow->ResetMouseMovement();
+
+
 				//update game logic
 				m_renderer->Update(elapsedTime);
 				//render
