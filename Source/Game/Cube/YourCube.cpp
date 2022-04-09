@@ -2,6 +2,7 @@
 
 
 void YourCube::Update(_In_ FLOAT deltaTime) {
-	m_world = XMMatrixRotationY(deltaTime);
+	Scale(1.0f, 1.0f, 1.0f);
+	RotateY(deltaTime);
 };
 

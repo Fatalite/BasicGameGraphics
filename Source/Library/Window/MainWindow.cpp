@@ -69,6 +69,7 @@ namespace library
         case WM_DESTROY:
             PostQuitMessage(0);
             break;
+        //테스트때문에 넣은 부분
         case WM_MOUSEMOVE:
         {
             int x = LOWORD(lParam);
@@ -104,18 +105,18 @@ namespace library
                         if (raw->data.mouse.lLastX > -1) {
                            // OutputDebugStringW(L"안녕하세요?????");
                         }
-                        long a = (long)(raw->data.mouse.lLastX);
-                        std::string s = std::to_string(a);
-                        LPCWSTR tmpstr;
-                        tmpstr = (LPCWSTR)s.c_str();
-                        OutputDebugStringW(tmpstr);
+                        //long a = (long)(raw->data.mouse.lLastX);
+                        //std::string s = std::to_string(a);
+                        //LPCWSTR tmpstr;
+                        //tmpstr = (LPCWSTR)s.c_str();
+                        //OutputDebugStringW(tmpstr);
 
 
                         m_mouseRelativeMovement.Y = raw->data.mouse.lLastY;
-                        a = (long)(m_mouseRelativeMovement.Y);
-                        s = std::to_string(a);
-                        tmpstr = (LPCWSTR)s.c_str();
-                        OutputDebugStringW(tmpstr);
+                        //a = (long)(m_mouseRelativeMovement.Y);
+                        //s = std::to_string(a);
+                        //tmpstr = (LPCWSTR)s.c_str();
+                        //OutputDebugStringW(tmpstr);
                     };
 
                 };
