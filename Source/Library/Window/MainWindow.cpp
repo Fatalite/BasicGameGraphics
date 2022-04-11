@@ -102,21 +102,8 @@ namespace library
                     RAWINPUT* raw = reinterpret_cast<RAWINPUT*>(rawData.get());
                     if (raw->header.dwType == RIM_TYPEMOUSE) {
                         m_mouseRelativeMovement.X = raw->data.mouse.lLastX;
-                        if (raw->data.mouse.lLastX > -1) {
-                           // OutputDebugStringW(L"æ»≥Á«œººø‰?????");
-                        }
-                        //long a = (long)(raw->data.mouse.lLastX);
-                        //std::string s = std::to_string(a);
-                        //LPCWSTR tmpstr;
-                        //tmpstr = (LPCWSTR)s.c_str();
-                        //OutputDebugStringW(tmpstr);
-
-
                         m_mouseRelativeMovement.Y = raw->data.mouse.lLastY;
-                        //a = (long)(m_mouseRelativeMovement.Y);
-                        //s = std::to_string(a);
-                        //tmpstr = (LPCWSTR)s.c_str();
-                        //OutputDebugStringW(tmpstr);
+
                     };
 
                 };
@@ -128,16 +115,16 @@ namespace library
         //≈∞ ≥ª∑»¿ª ∂ß
         case WM_KEYDOWN:
             switch (wParam) {
-            case VK_LEFT:
+            case 0x41:
                 m_directions.bLeft = TRUE;
                 break;
-            case VK_RIGHT:
+            case 0x44:
                 m_directions.bRight = TRUE;
                 break;
-            case VK_UP:
+            case 0x57:
                 m_directions.bFront = TRUE;
                 break;
-            case VK_DOWN:
+            case 0x53:
                 m_directions.bBack = TRUE;
                 break;
             case VK_SHIFT:
@@ -152,16 +139,16 @@ namespace library
         //≈∞ ø√∑»¿ª∂ß
         case WM_KEYUP:
             switch (wParam) {
-            case VK_LEFT:
+            case  0x41:
                 m_directions.bLeft = FALSE;
                 break;
-            case VK_RIGHT:
+            case  0x44:
                 m_directions.bRight = FALSE;
                 break;
-            case VK_UP:
+            case 0x57:
                 m_directions.bFront = FALSE;
                 break;
-            case VK_DOWN:
+            case 0x53:
                 m_directions.bBack = FALSE;
                 break;
             case VK_SHIFT:

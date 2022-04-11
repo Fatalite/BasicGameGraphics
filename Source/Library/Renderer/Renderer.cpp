@@ -359,12 +359,9 @@ namespace library
             m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
             m_immediateContext->IASetInputLayout(it->second->GetVertexLayout().Get());
 
-            //m_immediateContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
-
             m_immediateContext->VSSetShader(it->second->GetVertexShader().Get(), nullptr, 0);
             m_immediateContext->VSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
             m_immediateContext->PSSetShader(it->second->GetPixelShader().Get(), nullptr, 0);
-            //m_immediateContext->PSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
 
             //Render The Triangle
             m_immediateContext->DrawIndexed(it->second->GetNumIndices(), 0, 0);

@@ -14,6 +14,7 @@ namespace library
       TODO: Camera::Camera definition (remove the comment)
     --------------------------------------------------------------------*/
     Camera::Camera(_In_ const XMVECTOR& position)
+        //SPEED를 수동으로 설정하였습니다
         :m_travelSpeed(0.01),m_rotationSpeed(0.001),
         m_moveUpDown(0),m_moveBackForward(0),m_moveLeftRight(0),
         m_yaw(0),m_pitch(0),
@@ -107,17 +108,8 @@ namespace library
     };
 
     void Camera::HandleInput(_In_ const DirectionsInput& directions, _In_ const MouseRelativeMovement& mouseRelativeMovement, _In_ FLOAT deltaTime) {
-        //FLOAT m_yaw;
-       // FLOAT m_pitch;
-
-        //FLOAT m_moveLeftRight;
-        //FLOAT m_moveBackForward;
-        //FLOAT m_moveUpDown;
-        // 
-        //mouse movement를 라디언으로 변환
-        //float dx = XMConvertToRadians();
-        //float dy = XMConvertToRadians();
-        
+        //PITCH!!!! PIDIV2   
+        //CAMERA ROTATION LOGIC(MOUSE)
         if (m_pitch + mouseRelativeMovement.Y * m_rotationSpeed * deltaTime
             < XM_PIDIV2 
             && 
@@ -128,6 +120,7 @@ namespace library
 
         m_yaw = m_yaw + mouseRelativeMovement.X * m_rotationSpeed * deltaTime ;
 
+        //TRANSLATE LOGIC(KEYBOARD)
         if (directions.bUp == TRUE) {
             m_moveUpDown = 1.0f;
         }
@@ -150,6 +143,7 @@ namespace library
             m_moveLeftRight = +1.0f;
 
         }
+        //UPDATE BY DELTA TIME
         Update(deltaTime);
 
     };
@@ -169,9 +163,11 @@ namespace library
             m_cameraUp = XMVector3TransformCoord(m_cameraUp, RotateYTempMatrix);
             m_cameraForward = XMVector3TransformCoord( DEFAULT_FORWARD, RotateYTempMatrix);
 
-            m_eye += m_moveLeftRight * m_cameraRight * m_travelSpeed;
-            m_eye += m_moveBackForward * m_cameraForward * m_travelSpeed;
-            m_eye += m_moveUpDown * m_cameraUp * m_travelSpeed;
+            //UPDATE BY DELTATIME AND TRAVELSPEED
+            //지금 속도가 조금 빠릅니다.
+            m_eye += m_moveLeftRight * m_cameraRight * m_travelSpeed *deltaTime;
+            m_eye += m_moveBackForward * m_cameraForward * m_travelSpeed * deltaTime ;
+            m_eye += m_moveUpDown * m_cameraUp * m_travelSpeed * deltaTime;
 
             m_moveLeftRight = 0.0f;
             m_moveBackForward = 0.0f;

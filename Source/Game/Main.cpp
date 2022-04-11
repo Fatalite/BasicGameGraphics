@@ -4,7 +4,7 @@
 #include "Cube/YourCube.h"
 #include "Cube/FriendCube.h"
 #include "Game/Game.h"
-
+#include "Cube/AmazingCube.h"
 /*F+F+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   Function: wWinMain
   Summary:  Entry point to the program. Initializes everything and
@@ -49,6 +49,8 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     
     std::shared_ptr<YourCube> centerCube = std::make_shared<YourCube>();
     std::shared_ptr<FriendCube> orbitCube = std::make_shared<FriendCube>();
+    std::shared_ptr<AmazingCube> amazingCube = std::make_shared<AmazingCube>();
+
     if (FAILED(game->GetRenderer()->AddRenderable(L"YourCube", centerCube)))
     {
         return 0;
@@ -57,6 +59,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     };
+
     if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"YourCube", L"MainShader")))
     {
         return 0;
@@ -73,7 +76,18 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     };
-    
+    if (FAILED(game->GetRenderer()->AddRenderable(L"amazingCube", amazingCube)))
+    {
+        return 0;
+    };
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"amazingCube", L"MainShader")))
+    {
+        return 0;
+    };
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"amazingCube", L"MainShader")))
+    {
+        return 0;
+    };
     
     
 
