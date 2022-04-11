@@ -70,7 +70,7 @@ namespace library
             PostQuitMessage(0);
             break;
         //테스트때문에 넣은 부분
-        case WM_MOUSEMOVE:
+        /*case WM_MOUSEMOVE:
         {
             int x = LOWORD(lParam);
             int y = HIWORD(lParam);
@@ -79,7 +79,7 @@ namespace library
             tmpstr = (LPCWSTR)s.c_str();
             //OutputDebugStringW(tmpstr);
             return 0;
-        }
+        }*/
         //WM_INPUT!!!! RawInput인듯
         case WM_INPUT:
         {
