@@ -8,7 +8,7 @@ void AmazingCube::Update(_In_ FLOAT deltaTime) {
 
     Scale(1.5f, 0.3f, 0.3f);
     RotateZ(-deltaTime);
-    XMVECTOR tmp = XMVectorSet(5.0f, 0.0f, 0.0f, 0.0f);
+    XMVECTOR tmp = XMVectorSet(-7.0f, 0.0f, 0.0f, 0.0f);
 
     Translate(tmp);
 

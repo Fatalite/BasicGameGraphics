@@ -1,7 +1,11 @@
+/*
+
+
 #include "Camera/Camera.h"
 
 namespace library
 {
+*/
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Camera::Camera
       Summary:  Constructor
@@ -13,6 +17,7 @@ namespace library
     /*--------------------------------------------------------------------
       TODO: Camera::Camera definition (remove the comment)
     --------------------------------------------------------------------*/
+/*
     Camera::Camera(_In_ const XMVECTOR& position)
         //SPEED를 수동으로 설정하였습니다
         :m_travelSpeed(0.01),m_rotationSpeed(0.001),
@@ -25,6 +30,7 @@ namespace library
         m_eye(position),m_at(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),m_up(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
         m_rotation(XMMatrixIdentity()),m_view(XMMatrixIdentity())
     {};
+*/
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Camera::GetEye
       Summary:  Returns the eye vector
@@ -94,7 +100,11 @@ namespace library
     /*--------------------------------------------------------------------
       TODO: Camera::Update definition (remove the comment)
     --------------------------------------------------------------------*/
-    const XMVECTOR& Camera::GetEye() const {
+
+
+    /*
+    
+        const XMVECTOR& Camera::GetEye() const {
         return m_eye;
     };
     const XMVECTOR& Camera::GetAt() const {
@@ -179,4 +189,7 @@ namespace library
         };
 
     };
+    
+    */
+
 

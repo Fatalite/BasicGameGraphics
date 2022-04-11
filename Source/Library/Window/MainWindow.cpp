@@ -17,7 +17,8 @@ namespace library
         hr = initialize(hInstance, nCmdShow, pszWindowName, WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU, CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, nullptr, nullptr);
         
         if (FAILED(hr)) return hr;
-        //for Clip Cursor!!!
+        /*
+                //for Clip Cursor!!!
         POINT p1, p2;
         p1.x = rc.left;
         p1.y = rc.top;
@@ -44,6 +45,7 @@ namespace library
         if (!RegisterRawInputDevices(&rid, 1, sizeof(rid))) {
             return E_FAIL;
         }
+        */
 
 
         return hr;
@@ -55,9 +57,6 @@ namespace library
     {
         PAINTSTRUCT ps;
         HDC hdc;
-        
-
-
 
         switch (uMsg)
         {
@@ -81,6 +80,8 @@ namespace library
             return 0;
         }*/
         //WM_INPUT!!!! RawInput¿ŒµÌ
+        
+        /*
         case WM_INPUT:
         {
             UINT dataSize;
@@ -159,6 +160,8 @@ namespace library
                 break;
             }
             return 0;
+        */
+
         default:
             return DefWindowProc(m_hWnd, uMsg, wParam, lParam);
         }
@@ -166,6 +169,7 @@ namespace library
         return 0;
     }
 
+    /*
     const DirectionsInput& MainWindow::GetDirections() const {
         return m_directions;
     };
@@ -176,5 +180,6 @@ namespace library
         m_mouseRelativeMovement.X = 0;
         m_mouseRelativeMovement.Y = 0;
     };
+    */
 
 }

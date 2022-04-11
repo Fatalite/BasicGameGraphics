@@ -18,7 +18,8 @@ namespace library
         m_immediateContext(nullptr), m_immediateContext1(nullptr),
         m_swapChain(nullptr), m_swapChain1(nullptr),
         m_renderTargetView(nullptr),
-        m_camera(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f)),
+        //m_camera(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f)),
+        m_view(),
         m_projection(),
         m_renderables(std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>()),
         m_vertexShaders(std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>()),
@@ -247,7 +248,7 @@ namespace library
         XMVECTOR at = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
         XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
         XMMATRIX V = XMMatrixLookAtLH(eye, at, up);
-        //m_view = V;
+        m_view = V;
         m_projection = XMMatrixPerspectiveFovLH(
             XM_PIDIV2,
             width / (FLOAT)height,
@@ -335,7 +336,6 @@ namespace library
         float ClearColor[4] = { 0.0f, 0.0f, 0.6f, 1.0f };
         m_immediateContext->ClearRenderTargetView(m_renderTargetView.Get(), ClearColor);
         m_immediateContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH , 1.0f, 0);
-        //m_immediateContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
         std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>::iterator it;
         for (it = m_renderables.begin(); it != m_renderables.end(); it++)
         {
@@ -347,7 +347,7 @@ namespace library
             ConstantBuffer cb;
             cb.World = XMMatrixTranspose(it->second->GetWorldMatrix());
             ///cb.View = XMMatrixTranspose(m_view);
-            cb.View = XMMatrixTranspose(m_camera.GetView());
+            cb.View = XMMatrixTranspose(m_view);
             cb.Projection = XMMatrixTranspose(m_projection);
 
             m_immediateContext->UpdateSubresource(it->second->GetConstantBuffer().Get(), 0, nullptr, &cb, 0, 0);
@@ -411,7 +411,8 @@ namespace library
     D3D_DRIVER_TYPE Renderer::GetDriverType() const {
         return m_driverType;
     };
-    void Renderer::HandleInput(_In_ const DirectionsInput& directions, _In_ const MouseRelativeMovement& mouseRelativeMovement, _In_ FLOAT deltaTime) {
+    /*
+        void Renderer::HandleInput(_In_ const DirectionsInput& directions, _In_ const MouseRelativeMovement& mouseRelativeMovement, _In_ FLOAT deltaTime) {
         
         //그냥 받은거 카메라한테 넘겨줌
         m_camera.HandleInput(
@@ -420,4 +421,5 @@ namespace library
             deltaTime
         );
     };
+    */
 }
