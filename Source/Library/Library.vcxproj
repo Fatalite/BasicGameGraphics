@@ -117,6 +117,7 @@ copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Release"</Command>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Common.h" />
+    <ClCompile Include="DDSTextureLoader.cpp" />
     <ClCompile Include="Game\Game.cpp">
       <FileType>CppCode</FileType>
     </ClCompile>
@@ -129,6 +130,7 @@ copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Release"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Renderer\DataTypes.h" />
     <ClInclude Include="Renderer\Renderable.h" />

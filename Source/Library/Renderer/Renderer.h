@@ -81,7 +81,7 @@ namespace library
         ComPtr<ID3D11RenderTargetView> m_renderTargetView;
         ComPtr<ID3D11Texture2D> m_depthStencil;
         ComPtr<ID3D11DepthStencilView> m_depthStencilView;
-
+        ComPtr<ID3D11Buffer> m_cbChangeOnResize;
 
         Camera m_camera;
         XMMATRIX m_projection;

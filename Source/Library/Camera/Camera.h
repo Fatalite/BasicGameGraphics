@@ -51,15 +51,18 @@ namespace library
         const XMVECTOR& GetAt() const;
         const XMVECTOR& GetUp() const;
         const XMMATRIX& GetView() const;
+        ComPtr<ID3D11Buffer>& GetConstantBuffer();
+
 
         virtual void HandleInput(_In_ const DirectionsInput& directions, _In_ const MouseRelativeMovement& mouseRelativeMovement, _In_ FLOAT deltaTime);
+        virtual HRESULT Initialize(_In_ ID3D11Device* device);
         virtual void Update(_In_ FLOAT deltaTime);
 
     protected:
         static constexpr const XMVECTORF32 DEFAULT_FORWARD = { 0.0f, 0.0f, 1.0f, 0.0f };
         static constexpr const XMVECTORF32 DEFAULT_RIGHT = { 1.0f, 0.0f, 0.0f, 0.0f };
         static constexpr const XMVECTORF32 DEFAULT_UP = { 0.0f, 1.0f, 0.0f, 0.0f };
-
+        ComPtr<ID3D11Buffer> m_cbChangeOnCameraMovement;
         FLOAT m_yaw;
         FLOAT m_pitch;
 

@@ -47,7 +47,7 @@ namespace library
     class Renderable
     {
     public:
-        Renderable() = default;
+        Renderable(_In_ const std::filesystem::path& textureFilePath);
         Renderable(const Renderable& other) = delete;
         Renderable(Renderable&& other) = delete;
         Renderable& operator=(const Renderable& other) = delete;
@@ -73,6 +73,9 @@ namespace library
         void RotateRollPitchYaw(_In_ FLOAT roll, _In_ FLOAT pitch, _In_ FLOAT yaw);
         void Scale(_In_ FLOAT scaleX, _In_ FLOAT scaleY, _In_ FLOAT scaleZ);
         void Translate(_In_ const XMVECTOR& offset);
+        ComPtr<ID3D11ShaderResourceView>& GetTextureResourceView();
+        ComPtr<ID3D11SamplerState>& GetSamplerState();
+
 
         virtual UINT GetNumVertices() const = 0;
         virtual UINT GetNumIndices() const = 0;
@@ -84,9 +87,13 @@ namespace library
         ComPtr<ID3D11Buffer> m_vertexBuffer;
         ComPtr<ID3D11Buffer> m_indexBuffer;
         ComPtr<ID3D11Buffer> m_constantBuffer;
+        ComPtr<ID3D11ShaderResourceView> m_textureRV;
+        ComPtr<ID3D11SamplerState> m_samplerLinear;
+
         std::shared_ptr<VertexShader> m_vertexShader;
         std::shared_ptr<PixelShader> m_pixelShader;
-        BYTE m_padding[8];
+        
+        std::filesystem::path m_textureFilePath;
         XMMATRIX m_world;
 
     };

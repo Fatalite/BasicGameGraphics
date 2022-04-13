@@ -10,6 +10,8 @@
   Returns:  HRESULT
               Status code
 M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
+BaseCube::BaseCube(const std::filesystem::path& textureFilePath):Renderable(textureFilePath) {};
+
 /*--------------------------------------------------------------------
   TODO: BaseCube::Initialize definition (remove the comment)
 --------------------------------------------------------------------*/

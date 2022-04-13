@@ -36,7 +36,7 @@ C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
 class BaseCube : public library::Renderable
 {
 public:
-    BaseCube() = default;
+    BaseCube(const std::filesystem::path& textureFilePath);
     BaseCube(const BaseCube& other) = delete;
     BaseCube(BaseCube&& other) = delete;
     BaseCube& operator=(const BaseCube& other) = delete;
@@ -54,14 +54,14 @@ protected:
 
     static constexpr const library::SimpleVertex VERTICES[] =
     {
-        {.Position = DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f) },
-        {.Position = DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f) },
-        {.Position = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f) },
-        {.Position = DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f) },
-        {.Position = DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f) },
-        {.Position = DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f),  },
-        {.Position = DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f)},
-        {.Position = DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f)}
+        {.Position = DirectX::XMFLOAT3(-1.0f, 1.0f, -1.0f) , .TexCoord = XMFLOAT2(1.0f, 0.0f)},
+        {.Position = DirectX::XMFLOAT3(1.0f, 1.0f, -1.0f), .TexCoord = XMFLOAT2(0.0f, 0.0f) },
+        {.Position = DirectX::XMFLOAT3(1.0f, 1.0f, 1.0f), .TexCoord = XMFLOAT2(0.0f, 1.0f) },
+        {.Position = DirectX::XMFLOAT3(-1.0f, 1.0f, 1.0f), .TexCoord = XMFLOAT2(1.0f, 1.0f) },
+        {.Position = DirectX::XMFLOAT3(-1.0f, -1.0f, -1.0f), .TexCoord = XMFLOAT2(0.0f, 0.0f) },
+        {.Position = DirectX::XMFLOAT3(1.0f, -1.0f, -1.0f), .TexCoord = XMFLOAT2(1.0f, 0.0f) },
+        {.Position = DirectX::XMFLOAT3(1.0f, -1.0f, 1.0f), .TexCoord = XMFLOAT2(1.0f, 1.0f) },
+        {.Position = DirectX::XMFLOAT3(-1.0f, -1.0f, 1.0f) , .TexCoord = XMFLOAT2(0.0f, 1.0f)},
     };
     static constexpr const UINT NUM_VERTICES = 8u;
     static constexpr const WORD INDICES[] =

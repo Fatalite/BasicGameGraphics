@@ -1,5 +1,6 @@
 #include "Renderer/Renderable.h"
-
+#include "DDSTextureLoader.h"
+#include <filesystem>
 namespace library
 {
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
@@ -111,6 +112,10 @@ namespace library
     /*--------------------------------------------------------------------
       TODO: Renderable::GetWorldMatrix definition (remove the comment)
     --------------------------------------------------------------------*/
+    Renderable::Renderable(_In_ const std::filesystem::path& textureFilePath):
+        m_textureFilePath(textureFilePath),m_world()
+    {};
+
     HRESULT Renderable::initialize(_In_ ID3D11Device* pDevice, _In_ ID3D11DeviceContext* pImmediateContext) {
         //Create the vertex buffer
         D3D11_BUFFER_DESC bufferDesc = {
@@ -156,10 +161,10 @@ namespace library
 
 
         //Create the constant buffer and init WorldMatrix
-        ConstantBuffer cb;
+        CBChangesEveryFrame cb;
 
         D3D11_BUFFER_DESC bd;
-        bd.ByteWidth = sizeof(ConstantBuffer);
+        bd.ByteWidth = sizeof(CBChangesEveryFrame);
         bd.Usage = D3D11_USAGE_DEFAULT;
         bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
         bd.CPUAccessFlags = 0;
@@ -181,7 +186,33 @@ namespace library
             return hr;
         }
         cb.World = XMMatrixTranspose(XMMatrixIdentity());
-        return hr;
+
+        //----------------LAB05 ---------------------//
+
+        hr = CreateDDSTextureFromFile(
+            pDevice,
+            m_textureFilePath.filename().wstring().c_str(),
+            nullptr,
+            m_textureRV.GetAddressOf()
+        );
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+
+
+        // Create the sample state
+        D3D11_SAMPLER_DESC sampDesc = {};
+        sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+        sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+        sampDesc.MinLOD = 0;
+        sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+        hr = pDevice->CreateSamplerState(&sampDesc, m_samplerLinear.GetAddressOf());
+        if (FAILED(hr))
+            return hr;
 
     };
     void Renderable::SetVertexShader(_In_ const std::shared_ptr<VertexShader>& vertexShader) {
@@ -296,4 +327,29 @@ M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
        XMMATRIX mTranslate = XMMatrixTranslationFromVector(offset);
        m_world *= mTranslate;
     }
+        /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
+      Method:   Renderable::GetTextureResourceView
+      Summary:  Returns the texture resource view
+      Returns:  ComPtr<ID3D11ShaderResourceView>&
+                  The texture resource view
+    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
+    /*--------------------------------------------------------------------
+      TODO: Renderable::GetTextureResourceView definition (remove the comment)
+    --------------------------------------------------------------------*/
+    ComPtr<ID3D11ShaderResourceView>& Renderable::GetTextureResourceView() {
+        return m_textureRV;
+    };
+    ComPtr<ID3D11SamplerState>& Renderable::GetSamplerState() {
+        return m_samplerLinear;
+    };
+    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
+      Method:   Renderable::GetSamplerState
+      Summary:  Returns the sampler state
+      Returns:  ComPtr<ID3D11SamplerState>&
+                  The sampler state
+    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
+    /*--------------------------------------------------------------------
+      TODO: Renderable::GetSamplerState definition (remove the comment)
+    --------------------------------------------------------------------*/
+
 }

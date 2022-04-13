@@ -25,6 +25,24 @@ namespace library
         m_eye(position),m_at(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),m_up(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
         m_rotation(XMMatrixIdentity()),m_view(XMMatrixIdentity())
     {};
+
+    ComPtr<ID3D11Buffer>& Camera::GetConstantBuffer() {
+        return m_cbChangeOnCameraMovement;
+    };
+    HRESULT Camera::Initialize(_In_ ID3D11Device* device) {
+        //CREATE CAMERA CONSTANT BUFFER , ONCAMERAMOVEMENT CHANGE
+        CBChangeOnCameraMovement cb;
+        D3D11_BUFFER_DESC bd = {};
+        // Create the constant buffers
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.ByteWidth = sizeof(CBChangeOnCameraMovement);
+        bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bd.CPUAccessFlags = 0;
+        HRESULT hr = device->CreateBuffer(&bd, nullptr, m_cbChangeOnCameraMovement.GetAddressOf());
+        if (FAILED(hr))
+            return hr;
+
+    };
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Camera::GetEye
       Summary:  Returns the eye vector
@@ -176,6 +194,8 @@ namespace library
             m_at = m_eye + m_at;
 
             m_view = XMMatrixLookAtLH(m_eye, m_at, m_up);
+
+            
         };
 
     };

@@ -1,17 +1,25 @@
+Texture2D txDiffuse : register(t0);
 
-//--------------------------------------------------------------------------------------
-// Constant Buffer Variables
-//--------------------------------------------------------------------------------------
-/*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
-  Cbuffer:  ConstantBuffer
-  Summary:  Constant buffer used for space transformations
-C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
-cbuffer ConstantBuffer : register(b0)
+SamplerState samLinear : register(s0);
+cbuffer cbView : register(b2)
+{
+
+	matrix View;
+
+};
+
+cbuffer cbProjection : register(b1)
+{
+
+	matrix Projection;
+};
+cbuffer  cbWorld  : register(b0)
 {
 	matrix World;
-	matrix View;
-	matrix Projection;
-}
+
+};
+
+
 /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
   Struct:   VS_INPUT
   Summary:  Used as the input to the vertex shader 
@@ -20,6 +28,8 @@ C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
 struct VS_INPUT
 {
 	float4 Pos : POSITION;
+    float2 TexCoord :TEXCOORD0;
+
 };
 /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
   Struct:   PS_INPUT
@@ -30,6 +40,7 @@ C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
 struct PS_INPUT
 {
     float4 Pos : SV_POSITION;
+    float2 TexCoord :TEXCOORD0;
 };
 
 //--------------------------------------------------------------------------------------
@@ -42,6 +53,7 @@ PS_INPUT VS(VS_INPUT input)
     output.Pos = mul(input.Pos, World);
     output.Pos = mul(output.Pos, View);
     output.Pos = mul(output.Pos, Projection);
+    output.TexCoord = input.TexCoord;
     return output;
 }
 
@@ -50,5 +62,7 @@ PS_INPUT VS(VS_INPUT input)
 //--------------------------------------------------------------------------------------
 float4 PS(PS_INPUT input) : SV_Target
 {
-    return float4(1.0f, 0.0f, 0.0f, 1.0f);
+    return txDiffuse.Sample(
+        samLinear,
+        input.TexCoord);
 }

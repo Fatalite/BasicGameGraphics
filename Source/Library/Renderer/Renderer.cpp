@@ -255,6 +255,38 @@ namespace library
             100.0f
         );
 
+
+        //
+        CBChangeOnResize cb;
+
+        D3D11_BUFFER_DESC bd;
+        bd.ByteWidth = sizeof(CBChangeOnResize);
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bd.CPUAccessFlags = 0;
+        bd.MiscFlags = 0;
+        bd.StructureByteStride = 0;
+
+        D3D11_SUBRESOURCE_DATA initData;
+        initData.pSysMem = &cb;
+        initData.SysMemPitch = 0;
+        initData.SysMemSlicePitch = 0;
+
+        hr = m_d3dDevice->CreateBuffer(
+            &bd,
+            &initData,
+            m_cbChangeOnResize.GetAddressOf()
+        );
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+
+        cb.Projection = XMMatrixTranspose(m_projection);
+        m_immediateContext->UpdateSubresource(m_cbChangeOnResize.Get(), 0, nullptr, &cb, 0, 0);
+        //
+
+
         std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>::iterator itVertexShader;
 
         for (itVertexShader = m_vertexShaders.begin(); itVertexShader != m_vertexShaders.end(); itVertexShader++)
@@ -283,6 +315,7 @@ namespace library
             //SetVertexShaderOfRenderable
         }
 
+        m_camera.Initialize(m_d3dDevice.Get());
 
         return S_OK;
 
@@ -331,11 +364,18 @@ namespace library
         
     };
     void Renderer::Render() {
-        //set Shaders
+        //CLEAR RENDER TARGET VIEW AND DEPTHSTENCIL!!
         float ClearColor[4] = { 0.0f, 0.0f, 0.6f, 1.0f };
         m_immediateContext->ClearRenderTargetView(m_renderTargetView.Get(), ClearColor);
         m_immediateContext->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH , 1.0f, 0);
-        //m_immediateContext->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
+        
+        //CREATE CAMERA BUFFER//
+        CBChangeOnCameraMovement cbc;
+        cbc.View = XMMatrixTranspose(m_camera.GetView());
+        m_immediateContext->UpdateSubresource(m_camera.GetConstantBuffer().Get(), 0, nullptr, &cbc, 0, 0);
+        
+        
+
         std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>::iterator it;
         for (it = m_renderables.begin(); it != m_renderables.end(); it++)
         {
@@ -343,14 +383,12 @@ namespace library
             UINT stride = sizeof(SimpleVertex);
             UINT offset = 0;
 
-            //Update Constant buffer
-            ConstantBuffer cb;
+            //Update Constant buffer 
+            CBChangesEveryFrame cb;
             cb.World = XMMatrixTranspose(it->second->GetWorldMatrix());
-            ///cb.View = XMMatrixTranspose(m_view);
-            cb.View = XMMatrixTranspose(m_camera.GetView());
-            cb.Projection = XMMatrixTranspose(m_projection);
-
+            //-------LAB05--------//
             m_immediateContext->UpdateSubresource(it->second->GetConstantBuffer().Get(), 0, nullptr, &cb, 0, 0);
+
 
             //set topology
             
@@ -359,9 +397,19 @@ namespace library
             m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
             m_immediateContext->IASetInputLayout(it->second->GetVertexLayout().Get());
 
+
             m_immediateContext->VSSetShader(it->second->GetVertexShader().Get(), nullptr, 0);
             m_immediateContext->VSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
+
+            m_immediateContext->VSSetConstantBuffers(1u, 1u, m_cbChangeOnResize.GetAddressOf());
+            m_immediateContext->VSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
+
             m_immediateContext->PSSetShader(it->second->GetPixelShader().Get(), nullptr, 0);
+
+            //-------LAB05-------//
+            m_immediateContext->PSSetConstantBuffers(2, 1, it->second->GetConstantBuffer().GetAddressOf());
+            m_immediateContext->PSSetShaderResources(0, 1,it->second->GetTextureResourceView().GetAddressOf());
+            m_immediateContext->PSSetSamplers(0, 1, it->second->GetSamplerState().GetAddressOf());
 
             //Render The Triangle
             m_immediateContext->DrawIndexed(it->second->GetNumIndices(), 0, 0);

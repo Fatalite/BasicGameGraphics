@@ -12,18 +12,33 @@ namespace library
     struct SimpleVertex
     {
         XMFLOAT3 Position;
-        //XMFLOAT4 Color;
+        XMFLOAT2 TexCoord;
     };
 
-    /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
-      Struct:   ConstantBuffer
-      Summary:  Simple constant buffer structure containing world, view,
-                projection matrices
-    C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
-    struct ConstantBuffer
+    /*S+S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S
+      Struct:   CBChangeOnCameraMovement
+      Summary:  Constant buffer containing view matrix
+    S---S---S---S---S---S---S---S---S---S---S---S---S---S---S---S---S-S*/
+    struct CBChangeOnCameraMovement
+    {
+        XMMATRIX View;
+    };
+
+    /*S+S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S
+      Struct:   CBChangeOnResize
+      Summary:  Constant buffer containing projection matrix
+    S---S---S---S---S---S---S---S---S---S---S---S---S---S---S---S---S-S*/
+    struct CBChangeOnResize
+    {
+        XMMATRIX Projection;
+    };
+
+    /*S+S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S
+      Struct:   CBChangesEveryFrame
+      Summary:  Constant buffer containing world matrix
+    S---S---S---S---S---S---S---S---S---S---S---S---S---S---S---S---S-S*/
+    struct CBChangesEveryFrame
     {
         XMMATRIX World;
-        XMMATRIX View;
-        XMMATRIX Projection;
     };
 }
