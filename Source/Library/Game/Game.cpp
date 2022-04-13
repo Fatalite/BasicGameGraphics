@@ -89,7 +89,6 @@ namespace library
 				elapsedTime = (float)(stopTime.QuadPart - startTime.QuadPart);
 				elapsedTime /= (float)(frequency.QuadPart);
 				
-				/*
 				// WINDOW TO RENDERER INPUT INFORMATION
 				m_renderer->HandleInput(
 					m_mainWindow->GetDirections(),
@@ -97,7 +96,6 @@ namespace library
 					elapsedTime
 				);
 				m_mainWindow->ResetMouseMovement();
-				*/
 
 
 				//update game logic

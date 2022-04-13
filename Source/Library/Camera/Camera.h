@@ -1,4 +1,5 @@
-﻿/*+===================================================================
+﻿#pragma once
+/*+===================================================================
   File:      CUBE.H
   Summary:   Cube header file contains declarations of Cube class
              used for the lab samples of Game Graphics Programming
@@ -6,7 +7,6 @@
   Classes: Cube
   � 2022 Kyung Hee University
 ===================================================================+*/
-/*
 #pragma once
 
 #include "Common.h"
@@ -15,7 +15,6 @@
 
 namespace library
 {
-*/
     /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
       Class:    Camera
       Summary:  Immitates a camera that moves according to the WASD and
@@ -37,7 +36,6 @@ namespace library
                 ~Camera
                   Destructor.
     C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
-/*
     class Camera
     {
     public:
@@ -54,7 +52,7 @@ namespace library
         const XMVECTOR& GetUp() const;
         const XMMATRIX& GetView() const;
 
-        //virtual void HandleInput(_In_ const DirectionsInput& directions, _In_ const MouseRelativeMovement& mouseRelativeMovement, _In_ FLOAT deltaTime);
+        virtual void HandleInput(_In_ const DirectionsInput& directions, _In_ const MouseRelativeMovement& mouseRelativeMovement, _In_ FLOAT deltaTime);
         virtual void Update(_In_ FLOAT deltaTime);
 
     protected:
@@ -71,7 +69,7 @@ namespace library
 
         FLOAT m_travelSpeed;
         FLOAT m_rotationSpeed;
-
+        
         DWORD m_padding;
 
         XMVECTOR m_cameraForward;
@@ -86,4 +84,3 @@ namespace library
         XMMATRIX m_view;
     };
 }
-*/
