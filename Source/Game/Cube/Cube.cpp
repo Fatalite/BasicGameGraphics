@@ -18,7 +18,7 @@ M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
 void Cube::Update(_In_ FLOAT deltaTime)
 {
     static FLOAT s_totalTime = 0.0f;
-    s_totalTime += deltaTime;
+    s_totalTime += deltaTime*0.0001f;
 
     m_world = XMMatrixTranslation(0.0f, XMScalarSin(s_totalTime), 0.0f) * XMMatrixRotationY(s_totalTime);
 }

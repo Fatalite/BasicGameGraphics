@@ -64,6 +64,22 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
+
+    std::shared_ptr<Cube> customCube = std::make_shared<Cube>("handpaintedwall2.dds");
+    if (FAILED(game->GetRenderer()->AddRenderable(L"customCube", customCube)))
+    {
+        return 0;
+    }
+
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"customCube", L"MainShader")))
+    {
+        return 0;
+    }
+
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"customCube", L"MainShader")))
+    {
+        return 0;
+    }
     if (FAILED(game->Initialize(hInstance, nCmdShow)))
     {
         return 0;

@@ -1,5 +1,5 @@
 #include "Renderer/Renderable.h"
-#include "DDSTextureLoader.h"
+#include "Texture/DDSTextureLoader.h"
 #include <filesystem>
 namespace library
 {
