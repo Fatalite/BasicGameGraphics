@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="custom.dds" />
+    <Image Include="handpaintedwall2.dds" />
     <Image Include="seafloor.dds" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -76,5 +76,6 @@
   <ItemGroup>
     <Image Include="seafloor.dds" />
     <Image Include="custom.dds" />
+    <Image Include="handpaintedwall2.dds" />
   </ItemGroup>
 </Project>
