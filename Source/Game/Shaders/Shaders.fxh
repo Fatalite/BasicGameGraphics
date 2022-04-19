@@ -1,10 +1,18 @@
 Texture2D txDiffuse : register(t0);
 
 SamplerState samLinear : register(s0);
-cbuffer cbView : register(b2)
+
+cbuffer cbLights : register(b3)
+{
+ float4 LightPositions[NUM_LIGHTS];
+ float4 LightColors[NUM_LIGHTS];
+};
+
+cbuffer cbChangeOnCameraMovement : register(b2)
 {
 
 	matrix View;
+    float4 CameraPosition;
 
 };
 
@@ -25,10 +33,12 @@ cbuffer  cbWorld  : register(b0)
   Summary:  Used as the input to the vertex shader 
 C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C---C-C*/
 
-struct VS_INPUT
+struct VS_PHONG_INPUT
 {
 	float4 Pos : POSITION;
     float2 TexCoord :TEXCOORD0;
+    float3 Normal : NORMAL;
+
 
 };
 /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C

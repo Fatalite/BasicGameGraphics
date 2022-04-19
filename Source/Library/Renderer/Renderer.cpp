@@ -468,4 +468,9 @@ namespace library
             deltaTime
         );
     };
+
+    HRESULT Renderer::AddPointLight(_In_ size_t index, _In_ const std::shared_ptr<PointLight>& pPointLight) {
+
+    };
+
 }

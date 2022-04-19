@@ -4,18 +4,20 @@
              class used for the lab samples of Game Graphics
              Programming course.
   Classes: Renderer
-  � 2022 Kyung Hee University
+  © 2022 Kyung Hee University
 ===================================================================+*/
 #pragma once
 
 #include "Common.h"
 
+#include "Camera/Camera.h"
+#include "Light/PointLight.h"
 #include "Renderer/DataTypes.h"
 #include "Renderer/Renderable.h"
 #include "Shader/PixelShader.h"
 #include "Shader/VertexShader.h"
 #include "Window/MainWindow.h"
-#include "Camera/Camera.h"
+
 namespace library
 {
     /*C+C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C+++C
@@ -26,18 +28,22 @@ namespace library
                   Creates Direct3D device and swap chain
                 AddRenderable
                   Add a renderable object
+                AddPointLight
+                  Add a point light object
                 AddVertexShader
-                  Add a vertex shader object
+                  Add a vertex shader
                 AddPixelShader
-                  Add a pixel shader object
+                  Add a pixel shader
+                HandleInput
+                  Handles input
                 Update
                   Update the renderables each frame
                 Render
                   Renders the frame
                 SetVertexShaderOfRenderable
-                  Set vertex shader to the renderable
+                  Sets vertex shader of a renderable
                 SetPixelShaderOfRenderable
-                  Set pixel shader to the renderable
+                  Sets pixel shader of a renderable
                 GetDriverType
                   Returns the Direct3D driver type
                 Renderer
@@ -57,6 +63,7 @@ namespace library
 
         HRESULT Initialize(_In_ HWND hWnd);
         HRESULT AddRenderable(_In_ PCWSTR pszRenderableName, _In_ const std::shared_ptr<Renderable>& renderable);
+        HRESULT AddPointLight(_In_ size_t index, _In_ const std::shared_ptr<PointLight>& pPointLight);
         HRESULT AddVertexShader(_In_ PCWSTR pszVertexShaderName, _In_ const std::shared_ptr<VertexShader>& vertexShader);
         HRESULT AddPixelShader(_In_ PCWSTR pszPixelShaderName, _In_ const std::shared_ptr<PixelShader>& pixelShader);
 
@@ -82,11 +89,12 @@ namespace library
         ComPtr<ID3D11Texture2D> m_depthStencil;
         ComPtr<ID3D11DepthStencilView> m_depthStencilView;
         ComPtr<ID3D11Buffer> m_cbChangeOnResize;
-
+        ComPtr<ID3D11Buffer> m_cbLights;
         Camera m_camera;
         XMMATRIX m_projection;
 
         std::unordered_map<PCWSTR, std::shared_ptr<Renderable>> m_renderables;
+        std::shared_ptr<PointLight> m_aPointLights[NUM_LIGHTS];
         std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>> m_vertexShaders;
         std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>> m_pixelShaders;
     };
