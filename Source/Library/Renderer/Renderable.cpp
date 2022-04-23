@@ -113,7 +113,12 @@ namespace library
       TODO: Renderable::GetWorldMatrix definition (remove the comment)
     --------------------------------------------------------------------*/
     Renderable::Renderable(_In_ const std::filesystem::path& textureFilePath):
-        m_textureFilePath(textureFilePath),m_world()
+        m_textureFilePath(textureFilePath),m_world(XMMatrixTranspose(XMMatrixIdentity())),
+        m_bHasTextures(TRUE),m_outputColor()
+    {};
+
+    Renderable::Renderable(_In_ const XMFLOAT4& outputColor):
+        m_bHasTextures(FALSE),m_world(XMMatrixTranspose(XMMatrixIdentity())),m_outputColor(outputColor)
     {};
 
     HRESULT Renderable::initialize(_In_ ID3D11Device* pDevice, _In_ ID3D11DeviceContext* pImmediateContext) {
@@ -186,34 +191,34 @@ namespace library
             return hr;
         }
         cb.World = XMMatrixTranspose(XMMatrixIdentity());
-
-        //----------------LAB05 ---------------------//
-
-        hr = CreateDDSTextureFromFile(
-            pDevice,
-            m_textureFilePath.filename().wstring().c_str(),
-            nullptr,
-            m_textureRV.GetAddressOf()
-        );
-        if (FAILED(hr))
-        {
-            return hr;
+        cb.OutputColor = m_outputColor;
+        pImmediateContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &cb, 0, 0);
+        //----------------LAB06 ---------------------//
+        if (m_bHasTextures) {
+            hr = CreateDDSTextureFromFile(
+                pDevice,
+                m_textureFilePath.filename().wstring().c_str(),
+                nullptr,
+                m_textureRV.GetAddressOf()
+            );
+            if (FAILED(hr))
+            {
+                return hr;
+            }
+            // Create the sample state
+            D3D11_SAMPLER_DESC sampDesc = {};
+            sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+            sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+            sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+            sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+            sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+            sampDesc.MinLOD = 0;
+            sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+            hr = pDevice->CreateSamplerState(&sampDesc, m_samplerLinear.GetAddressOf());
+            if (FAILED(hr))
+                return hr;
         }
-
-
-        // Create the sample state
-        D3D11_SAMPLER_DESC sampDesc = {};
-        sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-        sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-        sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-        sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-        sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-        sampDesc.MinLOD = 0;
-        sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-        hr = pDevice->CreateSamplerState(&sampDesc, m_samplerLinear.GetAddressOf());
-        if (FAILED(hr))
-            return hr;
-
+        return S_OK;
     };
     void Renderable::SetVertexShader(_In_ const std::shared_ptr<VertexShader>& vertexShader) {
         m_vertexShader = vertexShader;
@@ -351,5 +356,10 @@ M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     /*--------------------------------------------------------------------
       TODO: Renderable::GetSamplerState definition (remove the comment)
     --------------------------------------------------------------------*/
-
+    const XMFLOAT4& Renderable::GetOutputColor() const {
+        return m_outputColor;
+    };
+    BOOL Renderable::HasTexture() const {
+        return m_bHasTextures;
+    };
 }

@@ -20,9 +20,9 @@ namespace library
         m_renderTargetView(nullptr),
         m_camera(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f)),
         m_projection(),
-        m_renderables(std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>()),
-        m_vertexShaders(std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>()),
-        m_pixelShaders(std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>>()) {};
+        m_renderables(std::unordered_map<std::wstring, std::shared_ptr<Renderable>>()),
+        m_vertexShaders(std::unordered_map<std::wstring, std::shared_ptr<VertexShader>>()),
+        m_pixelShaders(std::unordered_map<std::wstring, std::shared_ptr<PixelShader>>()) {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderer::Initialize
       Summary:  Creates Direct3D device and swap chain
@@ -287,7 +287,7 @@ namespace library
         //
 
 
-        std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>::iterator itVertexShader;
+        std::unordered_map<std::wstring, std::shared_ptr<VertexShader>>::iterator itVertexShader;
 
         for (itVertexShader = m_vertexShaders.begin(); itVertexShader != m_vertexShaders.end(); itVertexShader++)
         {
@@ -295,14 +295,14 @@ namespace library
         }
 
 
-        std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>>::iterator itPixelShader;
+        std::unordered_map<std::wstring, std::shared_ptr<PixelShader>>::iterator itPixelShader;
 
         for (itPixelShader = m_pixelShaders.begin(); itPixelShader != m_pixelShaders.end(); itPixelShader++)
         {
             itPixelShader->second->Initialize(m_d3dDevice.Get());
         }
 
-        std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>::iterator it;
+        std::unordered_map<std::wstring, std::shared_ptr<Renderable>>::iterator it;
 
         for (it = m_renderables.begin(); it != m_renderables.end(); it++)
         {
@@ -317,6 +317,32 @@ namespace library
 
         m_camera.Initialize(m_d3dDevice.Get());
 
+        CBLights cl;
+
+        D3D11_BUFFER_DESC bdl;
+        bdl.ByteWidth = sizeof(CBLights);
+        bdl.Usage = D3D11_USAGE_DEFAULT;
+        bdl.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bdl.CPUAccessFlags = 0;
+        bdl.MiscFlags = 0;
+        bdl.StructureByteStride = 0;
+
+        D3D11_SUBRESOURCE_DATA initDatal;
+        initDatal.pSysMem = &cl;
+        initDatal.SysMemPitch = 0;
+        initDatal.SysMemSlicePitch = 0;
+
+        hr = m_d3dDevice->CreateBuffer(
+            &bdl,
+            &initDatal,
+            m_cbLights.GetAddressOf()
+        );
+        m_immediateContext->UpdateSubresource(m_cbLights.Get(), 0, nullptr, &cl, 0, 0);
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+        
         return S_OK;
 
     }
@@ -356,12 +382,14 @@ namespace library
     };
 
     void Renderer::Update(_In_ FLOAT deltaTime) {
-        std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>::iterator it;
+        std::unordered_map<std::wstring, std::shared_ptr<Renderable>>::iterator it;
         for (it = m_renderables.begin(); it != m_renderables.end(); it++) 
         {
-            it->second->Update(deltaTime);
+            it->second->Update(deltaTime*0.0001);
         }
-        
+        for (int i = 0; i < NUM_LIGHTS; i++) {
+            m_aPointLights[i]->Update(deltaTime * 0.0001);
+        };
     };
     void Renderer::Render() {
         //CLEAR RENDER TARGET VIEW AND DEPTHSTENCIL!!
@@ -374,21 +402,29 @@ namespace library
         cbc.View = XMMatrixTranspose(m_camera.GetView());
         m_immediateContext->UpdateSubresource(m_camera.GetConstantBuffer().Get(), 0, nullptr, &cbc, 0, 0);
         
-        
+        //UPDATE LIGHT BUFFERS//
+                //-------LAB06--------//
+        CBLights cbLight;
+        for (int i = 0; i < 2; i++) {
+            cbLight.LightColors[i] = (m_aPointLights[i]->GetColor());
+            cbLight.LightPositions[i] = (m_aPointLights[i]->GetPosition());
+        };
+        m_immediateContext->UpdateSubresource(m_cbLights.Get(), 0, nullptr, &cbLight, 0, 0);
 
-        std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>::iterator it;
+
+        std::unordered_map<std::wstring, std::shared_ptr<Renderable>>::iterator it;
         for (it = m_renderables.begin(); it != m_renderables.end(); it++)
         {
-            //set buffer
+            //set bufferN
             UINT stride = sizeof(SimpleVertex);
             UINT offset = 0;
 
             //Update Constant buffer 
             CBChangesEveryFrame cb;
             cb.World = XMMatrixTranspose(it->second->GetWorldMatrix());
+            cb.OutputColor = it->second->GetOutputColor();
             //-------LAB05--------//
             m_immediateContext->UpdateSubresource(it->second->GetConstantBuffer().Get(), 0, nullptr, &cb, 0, 0);
-
 
             //set topology
             
@@ -398,24 +434,37 @@ namespace library
             m_immediateContext->IASetInputLayout(it->second->GetVertexLayout().Get());
 
 
-            m_immediateContext->VSSetShader(it->second->GetVertexShader().Get(), nullptr, 0);
+            
             m_immediateContext->VSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
 
             m_immediateContext->VSSetConstantBuffers(1u, 1u, m_cbChangeOnResize.GetAddressOf());
             m_immediateContext->VSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
 
-            m_immediateContext->PSSetShader(it->second->GetPixelShader().Get(), nullptr, 0);
+            m_immediateContext->VSSetConstantBuffers(3u, 1, m_cbLights.GetAddressOf());
 
+            m_immediateContext->VSSetShader(it->second->GetVertexShader().Get(), nullptr, 0);
             //-------LAB05-------//
-            m_immediateContext->PSSetConstantBuffers(2, 1, it->second->GetConstantBuffer().GetAddressOf());
-            m_immediateContext->PSSetShaderResources(0, 1,it->second->GetTextureResourceView().GetAddressOf());
-            m_immediateContext->PSSetSamplers(0, 1, it->second->GetSamplerState().GetAddressOf());
+            m_immediateContext->PSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
+            m_immediateContext->PSSetConstantBuffers(2u, 1, it->second->GetConstantBuffer().GetAddressOf());
 
-            //Render The Triangle
+            m_immediateContext->PSSetConstantBuffers(3u, 1, m_cbLights.GetAddressOf());
+
+            //-------LAB06-------//
+            if (it->second->HasTexture()) {
+                m_immediateContext->PSSetShaderResources(0, 1, it->second->GetTextureResourceView().GetAddressOf());
+                m_immediateContext->PSSetSamplers(0, 1, it->second->GetSamplerState().GetAddressOf());
+            }
+
+
+            m_immediateContext->PSSetShader(it->second->GetPixelShader().Get(), nullptr, 0);
+            
             m_immediateContext->DrawIndexed(it->second->GetNumIndices(), 0, 0);
             
         }
-        
+
+
+
+
         m_swapChain->Present(0, 0);
     };
 
@@ -470,7 +519,13 @@ namespace library
     };
 
     HRESULT Renderer::AddPointLight(_In_ size_t index, _In_ const std::shared_ptr<PointLight>& pPointLight) {
-
+        if (index >= NUM_LIGHTS) {
+            return E_FAIL;
+        }
+        else {
+            m_aPointLights[index] = pPointLight;
+            return S_OK;
+        }
     };
 
 }

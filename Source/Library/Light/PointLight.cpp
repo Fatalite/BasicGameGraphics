@@ -37,7 +37,7 @@ namespace library
       TODO: PointLight::GetColor definition (remove the comment)
     --------------------------------------------------------------------*/
     PointLight::PointLight(_In_ const XMFLOAT4& position, _In_ const XMFLOAT4& color):
-        m_position(),m_color() {};
+        m_position(position),m_color(color) {};
     const XMFLOAT4& PointLight::GetPosition() const {
         return m_position;
     };

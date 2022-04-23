@@ -127,6 +127,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\PhongShaders.fxh" />
     <None Include="Shaders\Shaders.fxh" />
   </ItemGroup>
   <ItemGroup>

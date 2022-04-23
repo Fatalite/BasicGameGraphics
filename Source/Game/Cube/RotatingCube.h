@@ -27,5 +27,3 @@ public:
     virtual void Update(_In_ FLOAT deltaTime) override;
 };
 
-© 2022 GitHub, Inc.
-
