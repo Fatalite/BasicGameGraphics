@@ -54,9 +54,40 @@ struct PS_LIGHT_CUBE_INPUT
     float4 Position : SV_POSITION;
 };
 
+// CEL SHADER
+struct PS_CEL_INPUT
+{
+    float4 Position : SV_POSITION;
+    float2 TexCoord : TEXCOORD0;
+    float3 Normal : NORMAL;
+    float3 WorldPosition: WORLDPOS;
+};
+
+struct VS_CEL_INPUT
+{
+    float4 Position : SV_POSITION;
+    float2 TexCoord : TEXCOORD0;
+    float3 Normal : NORMAL;
+};
+
 //--------------------------------------------------------------------------------------
 // Vertex Shader
 //--------------------------------------------------------------------------------------
+
+PS_CEL_INPUT VSCel(VS_CEL_INPUT input)
+{
+    PS_CEL_INPUT output = (PS_CEL_INPUT)0;
+    output.Position = mul(input.Position, World);
+    output.Position = mul(output.Position, View);
+    output.Position = mul(output.Position, Projection);
+    output.TexCoord = input.TexCoord;
+
+    output.Normal = normalize(mul(float4(input.Normal,1),World).xyz);
+
+    output.WorldPosition = normalize(mul( input.Position, World ));
+    return output;
+};
+
 
 PS_PHONG_INPUT VSPhong(VS_PHONG_INPUT input)
 {
@@ -70,7 +101,7 @@ PS_PHONG_INPUT VSPhong(VS_PHONG_INPUT input)
 
     output.WorldPosition = normalize(mul( input.Position, World ));
     return output;
-}
+};
 
 PS_LIGHT_CUBE_INPUT VSLightCube(VS_PHONG_INPUT input)
 {
@@ -109,4 +140,16 @@ float4 PSPhong(PS_PHONG_INPUT input) : SV_TARGET
 float4 PSLightCube(PS_LIGHT_CUBE_INPUT input) : SV_Target
 {
     return OutputColor;
+}
+
+float4 PSCel(PS_CEL_INPUT input) : SV_TARGET
+{
+    float3 diffuse = 0;
+    for(uint i=0; i<2; ++i){
+        float3 lightDir = normalize(input.WorldPosition - LightPositions[i].xyz);
+        diffuse += saturate(dot(input.Normal,-(float3)lightDir)) * LightColors[i].xyz;
+        
+    }
+    diffuse = ceil(diffuse * 5) / 5.0f;
+    return float4((1.0f,1.0f,1.0f) * diffuse.xyz,1);
 }

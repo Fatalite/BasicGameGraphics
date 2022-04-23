@@ -53,6 +53,13 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
+    // Cel
+    std::shared_ptr<library::VertexShader> celVertexShader = std::make_shared<library::VertexShader>(L"Shaders/PhongShaders.fxh", "VSCel", "vs_5_0");
+    if (FAILED(game->GetRenderer()->AddVertexShader(L"celShader", celVertexShader)))
+    {
+        return 0;
+    }
+
     // Light Cube
     std::shared_ptr<library::VertexShader> lightVertexShader = std::make_shared<library::VertexShader>(L"Shaders/PhongShaders.fxh", "VSLightCube", "vs_5_0");
     if (FAILED(game->GetRenderer()->AddVertexShader(L"LightShader", lightVertexShader)))
@@ -66,6 +73,14 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
+
+    // Cel
+    std::shared_ptr<library::PixelShader> celPixelShader = std::make_shared<library::PixelShader>(L"Shaders/PhongShaders.fxh", "PSCel", "ps_5_0");
+    if (FAILED(game->GetRenderer()->AddPixelShader(L"celShader", celPixelShader)))
+    {
+        return 0;
+    }
+
     // Light Cube
     std::shared_ptr<library::PixelShader> lightPixelShader = std::make_shared<library::PixelShader>(L"Shaders/PhongShaders.fxh", "PSLightCube", "ps_5_0");
     if (FAILED(game->GetRenderer()->AddPixelShader(L"LightShader", lightPixelShader)))
@@ -129,11 +144,11 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
-    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"PhongCube", L"PhongShader")))
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"PhongCube", L"celShader")))
     {
         return 0;
     }
-    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"PhongCube", L"PhongShader")))
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"PhongCube", L"celShader")))
     {
         return 0;
     }

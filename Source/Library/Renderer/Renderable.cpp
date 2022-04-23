@@ -191,7 +191,7 @@ namespace library
             return hr;
         }
         cb.World = XMMatrixTranspose(XMMatrixIdentity());
-        cb.OutputColor = m_outputColor;
+        //cb.OutputColor = m_outputColor;
         pImmediateContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &cb, 0, 0);
         //----------------LAB06 ---------------------//
         if (m_bHasTextures) {
