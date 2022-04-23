@@ -148,8 +148,10 @@ float4 PSCel(PS_CEL_INPUT input) : SV_TARGET
     for(uint i=0; i<2; ++i){
         float3 lightDir = normalize(input.WorldPosition - LightPositions[i].xyz);
         diffuse += saturate(dot(input.Normal,-(float3)lightDir)) * LightColors[i].xyz;
-        
+        diffuse = ceil(diffuse * 5) / 5.0f;
     }
-    diffuse = ceil(diffuse * 5) / 5.0f;
-    return float4((1.0f,1.0f,1.0f) * diffuse.xyz,1);
+    
+    return float4(diffuse.xyz,1)* float4(txDiffuse.Sample(
+        samLinear,
+        input.TexCoord));
 }
