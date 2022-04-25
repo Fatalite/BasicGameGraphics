@@ -250,7 +250,7 @@ namespace library
         //m_view = V;
         m_projection = XMMatrixPerspectiveFovLH(
             XM_PIDIV2,
-            width / (FLOAT)height,
+            (FLOAT) width / (FLOAT)height,
             0.01f,
             100.0f
         );
@@ -386,11 +386,11 @@ namespace library
         std::unordered_map<std::wstring, std::shared_ptr<Renderable>>::iterator it;
         for (it = m_renderables.begin(); it != m_renderables.end(); it++) 
         {
-            it->second->Update(deltaTime*0.0001);
+            it->second->Update(deltaTime*(FLOAT)0.0001);
         }
         m_camera.Update(deltaTime);
         for (int i = 0; i < NUM_LIGHTS; i++) {
-            m_aPointLights[i]->Update(deltaTime * 0.0001);
+            m_aPointLights[i]->Update(deltaTime * (FLOAT)0.0001);
         };
     };
     void Renderer::Render() {
