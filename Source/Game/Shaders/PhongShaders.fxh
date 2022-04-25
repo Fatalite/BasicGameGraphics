@@ -82,7 +82,7 @@ PS_CEL_INPUT VSCel(VS_CEL_INPUT input)
     output.Position = mul(output.Position, Projection);
     output.TexCoord = input.TexCoord;
 
-    output.Normal = normalize(mul(float4(input.Normal,1),World).xyz);
+    output.Normal = normalize(mul(float4(input.Normal,0),World).xyz);
 
     output.WorldPosition = normalize(mul( input.Position, World ));
     return output;
@@ -97,7 +97,7 @@ PS_PHONG_INPUT VSPhong(VS_PHONG_INPUT input)
     output.Position = mul(output.Position, Projection);
     output.TexCoord = input.TexCoord;
 
-    output.Normal = normalize(mul(float4(input.Normal,1),World).xyz);
+    output.Normal = normalize(mul(float4(input.Normal,0),World).xyz);
 
     output.WorldPosition = normalize(mul( input.Position, World ));
     return output;
@@ -119,21 +119,26 @@ PS_LIGHT_CUBE_INPUT VSLightCube(VS_PHONG_INPUT input)
 //--------------------------------------------------------------------------------------
 float4 PSPhong(PS_PHONG_INPUT input) : SV_TARGET
 {
-    float3 viewDirection = normalize(input.WorldPosition - CameraPosition.xyz);
-    float3 specular = 0;
-    float3 diffuse = 0;
-
-    for(uint i=0;i<2;++i){
-        float3 lightDir = normalize(input.WorldPosition - LightPositions[i].xyz);
-        float3 reflectDirection = reflect((float3)lightDir,input.Normal);
-        diffuse += saturate(dot(input.Normal,-(float3)lightDir)) * LightColors[i].xyz;
-        //specular += saturate(pow(dot(-viewDirection,reflectDirection), 20.0f)) * LightColors[i];
-    }
-
-    return float4(diffuse+specular,1) * float4(txDiffuse.Sample(
-        samLinear,
-        input.TexCoord)) ;
+    float3 diffuse = float3(0.0f, 0.0f, 0.0f);
+    float3 ambience = float3(0.1f, 0.1f, 0.1f);
+	float3 ambienceTerm = float3(0.0f, 0.0f, 0.0f);
+	float3 specular = float3(0.0f, 0.0f, 0.0f);
+	float3 viewDirection = normalize(input.WorldPosition - CameraPosition.xyz);
     
+    for (uint i = 0; i < NUM_LIGHTS; ++i)  
+    {     
+        ambienceTerm += (ambience * txDiffuse.Sample(samLinear, input.TexCoord).rgb) * LightColors[i].xyz;  
+        
+        float3 lightDirection = normalize(input.WorldPosition - LightPositions[i].xyz);
+		float lambertianTerm = dot(normalize(input.Normal), -lightDirection);
+		diffuse += max(lambertianTerm, 0.0f) * txDiffuse.Sample(samLinear, input.TexCoord).rgb * LightColors[i].xyz;
+        
+		float3 reflectDirection = normalize(reflect(lightDirection, input.Normal));
+		specular += pow(max(dot(-viewDirection, reflectDirection), 0.0f), 8.0f) * LightColors[i].xyz * txDiffuse.Sample(samLinear, input.TexCoord).rgb;
+    }
+    
+
+    return float4(saturate( diffuse + ambienceTerm +specular), 1.0f);
     
 }
 

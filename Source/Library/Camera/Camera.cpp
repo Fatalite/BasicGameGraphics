@@ -15,15 +15,15 @@ namespace library
     --------------------------------------------------------------------*/
     Camera::Camera(_In_ const XMVECTOR& position)
         //SPEED를 수동으로 설정하였습니다
-        :m_travelSpeed(0.01),m_rotationSpeed(0.001),
+        :m_travelSpeed(0.0001),m_rotationSpeed(0.001),
         m_moveUpDown(0),m_moveBackForward(0),m_moveLeftRight(0),
         m_yaw(0),m_pitch(0),
         m_padding(NULL),
-        m_cameraForward(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f)),
-        m_cameraRight(XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f)),
-        m_cameraUp(DEFAULT_UP),
+        m_cameraForward(XMVECTOR()),
+        m_cameraRight(XMVECTOR()),
+        m_cameraUp(XMVECTOR()),
         m_eye(position),m_at(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),m_up(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f)),
-        m_rotation(XMMatrixIdentity()),m_view(XMMatrixIdentity())
+        m_rotation(XMMATRIX()),m_view(XMMATRIX()), m_cbChangeOnCameraMovement(nullptr)
     {};
 
     ComPtr<ID3D11Buffer>& Camera::GetConstantBuffer() {
@@ -178,7 +178,7 @@ namespace library
             RotateYTempMatrix = XMMatrixRotationY(m_yaw);
 
             m_cameraRight = XMVector3TransformCoord(DEFAULT_RIGHT, RotateYTempMatrix);
-            m_cameraUp = XMVector3TransformCoord(m_cameraUp, RotateYTempMatrix);
+            m_cameraUp = XMVector3TransformCoord(DEFAULT_UP, RotateYTempMatrix);
             m_cameraForward = XMVector3TransformCoord( DEFAULT_FORWARD, RotateYTempMatrix);
 
             //UPDATE BY DELTATIME AND TRAVELSPEED

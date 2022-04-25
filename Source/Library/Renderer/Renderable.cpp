@@ -113,12 +113,12 @@ namespace library
       TODO: Renderable::GetWorldMatrix definition (remove the comment)
     --------------------------------------------------------------------*/
     Renderable::Renderable(_In_ const std::filesystem::path& textureFilePath):
-        m_textureFilePath(textureFilePath),m_world(XMMatrixTranspose(XMMatrixIdentity())),
+        m_textureFilePath(textureFilePath),m_world(XMMatrixIdentity()),
         m_bHasTextures(TRUE),m_outputColor()
     {};
 
     Renderable::Renderable(_In_ const XMFLOAT4& outputColor):
-        m_bHasTextures(FALSE),m_world(XMMatrixTranspose(XMMatrixIdentity())),m_outputColor(outputColor)
+        m_bHasTextures(FALSE),m_world(XMMatrixIdentity()),m_outputColor(outputColor)
     {};
 
     HRESULT Renderable::initialize(_In_ ID3D11Device* pDevice, _In_ ID3D11DeviceContext* pImmediateContext) {
@@ -190,9 +190,9 @@ namespace library
         {
             return hr;
         }
-        cb.World = XMMatrixTranspose(XMMatrixIdentity());
+         cb.World = XMMatrixTranspose(XMMatrixIdentity());
         //cb.OutputColor = m_outputColor;
-        pImmediateContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &cb, 0, 0);
+        //pImmediateContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &cb, 0, 0);
         //----------------LAB06 ---------------------//
         if (m_bHasTextures) {
             hr = CreateDDSTextureFromFile(
@@ -329,8 +329,7 @@ M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     void Renderable::Translate(_In_ const XMVECTOR& offset)
     {
-       XMMATRIX mTranslate = XMMatrixTranslationFromVector(offset);
-       m_world *= mTranslate;
+        m_world *= XMMatrixTranslationFromVector(offset);
     }
         /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderable::GetTextureResourceView

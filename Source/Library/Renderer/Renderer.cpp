@@ -254,10 +254,11 @@ namespace library
             0.01f,
             100.0f
         );
-
+        CBChangeOnResize cb;
+        cb.Projection = XMMatrixTranspose(m_projection);
 
         //
-        CBChangeOnResize cb;
+        
 
         D3D11_BUFFER_DESC bd;
         bd.ByteWidth = sizeof(CBChangeOnResize);
@@ -282,7 +283,7 @@ namespace library
             return hr;
         }
 
-        cb.Projection = XMMatrixTranspose(m_projection);
+        
         m_immediateContext->UpdateSubresource(m_cbChangeOnResize.Get(), 0, nullptr, &cb, 0, 0);
         //
 
@@ -342,7 +343,7 @@ namespace library
         {
             return hr;
         }
-        
+        m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         return S_OK;
 
     }
@@ -387,6 +388,7 @@ namespace library
         {
             it->second->Update(deltaTime*0.0001);
         }
+        m_camera.Update(deltaTime);
         for (int i = 0; i < NUM_LIGHTS; i++) {
             m_aPointLights[i]->Update(deltaTime * 0.0001);
         };
@@ -400,6 +402,7 @@ namespace library
         //CREATE CAMERA BUFFER//
         CBChangeOnCameraMovement cbc;
         cbc.View = XMMatrixTranspose(m_camera.GetView());
+        XMStoreFloat4(&cbc.CameraPosition, m_camera.GetEye());
         m_immediateContext->UpdateSubresource(m_camera.GetConstantBuffer().Get(), 0, nullptr, &cbc, 0, 0);
         
         //UPDATE LIGHT BUFFERS//
@@ -430,24 +433,22 @@ namespace library
             
             m_immediateContext->IASetVertexBuffers(0u, 1u, it->second->GetVertexBuffer().GetAddressOf(), &stride, &offset);
             m_immediateContext->IASetIndexBuffer(it->second->GetIndexBuffer().Get(), DXGI_FORMAT_R16_UINT, 0);
-            m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
             m_immediateContext->IASetInputLayout(it->second->GetVertexLayout().Get());
 
 
-            
+            m_immediateContext->VSSetShader(it->second->GetVertexShader().Get(), nullptr, 0);
             m_immediateContext->VSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
 
             m_immediateContext->VSSetConstantBuffers(1u, 1u, m_cbChangeOnResize.GetAddressOf());
             m_immediateContext->VSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
 
-            m_immediateContext->VSSetConstantBuffers(3u, 1, m_cbLights.GetAddressOf());
 
-            m_immediateContext->VSSetShader(it->second->GetVertexShader().Get(), nullptr, 0);
+            m_immediateContext->PSSetShader(it->second->GetPixelShader().Get(), nullptr, 0);
             //-------LAB05-------//
             m_immediateContext->PSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
-            m_immediateContext->PSSetConstantBuffers(2u, 1, it->second->GetConstantBuffer().GetAddressOf());
+            m_immediateContext->PSSetConstantBuffers(2u, 1, m_camera.GetConstantBuffer().GetAddressOf());
 
-            m_immediateContext->PSSetConstantBuffers(3u, 1, m_cbLights.GetAddressOf());
+            m_immediateContext->PSSetConstantBuffers(3u, 1u, m_cbLights.GetAddressOf());
 
             //-------LAB06-------//
             if (it->second->HasTexture()) {
@@ -456,7 +457,7 @@ namespace library
             }
 
 
-            m_immediateContext->PSSetShader(it->second->GetPixelShader().Get(), nullptr, 0);
+            
             
             m_immediateContext->DrawIndexed(it->second->GetNumIndices(), 0, 0);
             

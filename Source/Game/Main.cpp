@@ -144,11 +144,11 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
-    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"PhongCube", L"celShader")))
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"PhongCube", L"PhongShader")))
     {
         return 0;
     }
-    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"PhongCube", L"celShader")))
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"PhongCube", L"PhongShader")))
     {
         return 0;
     }
