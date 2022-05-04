@@ -446,20 +446,33 @@ namespace library
             m_immediateContext->PSSetShader(it->second->GetPixelShader().Get(), nullptr, 0);
             //-------LAB05-------//
             m_immediateContext->PSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
-            m_immediateContext->PSSetConstantBuffers(2u, 1, m_camera.GetConstantBuffer().GetAddressOf());
+            m_immediateContext->PSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
 
             m_immediateContext->PSSetConstantBuffers(3u, 1u, m_cbLights.GetAddressOf());
 
-            //-------LAB06-------//
-            if (it->second->HasTexture()) {
-                m_immediateContext->PSSetShaderResources(0, 1, it->second->GetTextureResourceView().GetAddressOf());
-                m_immediateContext->PSSetSamplers(0, 1, it->second->GetSamplerState().GetAddressOf());
+           
+            
+            if (it->second->HasTexture())
+            {
+                for (UINT i = 0u; i < it->second->GetNumMeshes(); ++i)
+                {
+                    const UINT materialIndex = it->second->GetMesh(i).uMaterialIndex;
+                    if (it->second->GetMaterial(materialIndex).pDiffuse)
+                    {
+                        m_immediateContext->PSSetShaderResources(0u, 1u, it->second->GetMaterial(materialIndex).pDiffuse->GetTextureResourceView().GetAddressOf());
+                        m_immediateContext->PSSetSamplers(0u, 1u, it->second->GetMaterial(materialIndex).pDiffuse->GetSamplerState().GetAddressOf());
+                    }
+                    m_immediateContext->DrawIndexed(
+                        it->second->GetMesh(i).uNumIndices,
+                        it->second->GetMesh(i).uBaseIndex,
+                        it->second->GetMesh(i).uBaseVertex);
+                }
             }
-
-
+            else
+            {
+                m_immediateContext->DrawIndexed(it->second->GetNumIndices(), 0u, 0);
+            }
             
-            
-            m_immediateContext->DrawIndexed(it->second->GetNumIndices(), 0, 0);
             
         }
 
