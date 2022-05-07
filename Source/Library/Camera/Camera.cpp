@@ -15,7 +15,7 @@ namespace library
     --------------------------------------------------------------------*/
     Camera::Camera(_In_ const XMVECTOR& position)
         //SPEED를 수동으로 설정하였습니다
-        :m_travelSpeed(0.0001),m_rotationSpeed(0.001),
+        :m_travelSpeed(0.01),m_rotationSpeed(0.001),
         m_moveUpDown(0),m_moveBackForward(0),m_moveLeftRight(0),
         m_yaw(0),m_pitch(0),
         m_padding(NULL),
