@@ -85,10 +85,14 @@
       <Filter>소스 파일\Shaders</Filter>
     </None>
     <None Include="Shaders\PhongShaders.fxh" />
+    <None Include="Shaders\VoxelShaders.fxh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="seafloor.dds" />
     <Image Include="custom.dds" />
     <Image Include="handpaintedwall2.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="HeightMap.txt" />
   </ItemGroup>
 </Project>

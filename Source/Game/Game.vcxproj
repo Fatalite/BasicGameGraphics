@@ -129,11 +129,15 @@
   <ItemGroup>
     <None Include="Shaders\PhongShaders.fxh" />
     <None Include="Shaders\Shaders.fxh" />
+    <None Include="Shaders\VoxelShaders.fxh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="custom.dds" />
     <Image Include="handpaintedwall2.dds" />
     <Image Include="seafloor.dds" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="HeightMap.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
