@@ -1,7 +1,11 @@
 #pragma once
 
 #include "Common.h"
+<<<<<<< HEAD
 #define NUM_LIGHTS 2
+=======
+
+>>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
 namespace library
 {
     /*S+S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S+++S

@@ -9,6 +9,7 @@
 #include "Common.h"
 
 #include <cstdio>
+<<<<<<< HEAD
 #include <fstream>
 #include <memory>
 
@@ -19,6 +20,17 @@
 #include "Game/Game.h"
 #include "Scene/Voxel.h"
 using namespace library;
+=======
+#include <filesystem>
+#include <memory>
+#include <source_location>
+
+#include "Cube/Cube.h"
+#include "Cube/RotatingCube.h"
+#include "Light/RotatingPointLight.h"
+#include "Game/Game.h"
+
+>>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
 /*F+F+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
   Function: wWinMain
   Summary:  Entry point to the program. Initializes everything and
@@ -46,7 +58,24 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
+<<<<<<< HEAD
     std::unique_ptr<library::Game> game = std::make_unique<library::Game>(L"Game Graphics Programming Assignment 2: Voxel Map");
+=======
+    std::unique_ptr<library::Game> game = std::make_unique<library::Game>(L"Game Graphics Programming Lab 06: Lighting");
+
+    // Phong
+    std::shared_ptr<library::VertexShader> phongVertexShader = std::make_shared<library::VertexShader>(L"Shaders/PhongShaders.fxh", "VSPhong", "vs_5_0");
+    if (FAILED(game->GetRenderer()->AddVertexShader(L"PhongShader", phongVertexShader)))
+    {
+        return 0;
+    }
+    // Cel
+    std::shared_ptr<library::VertexShader> celVertexShader = std::make_shared<library::VertexShader>(L"Shaders/PhongShaders.fxh", "VSCel", "vs_5_0");
+    if (FAILED(game->GetRenderer()->AddVertexShader(L"celShader", celVertexShader)))
+    {
+        return 0;
+    }
+>>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
 
     // Phong
     std::shared_ptr<library::VertexShader> phongVertexShader = std::make_shared<library::VertexShader>(L"Shaders/PhongShaders.fxh", "VSPhong", "vs_5_0");
@@ -60,12 +89,15 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
+<<<<<<< HEAD
     // Voxel
     std::shared_ptr<library::VertexShader> voxelVertexShader = std::make_shared<library::VertexShader>(L"Shaders/VoxelShaders.fxh", "VSVoxel", "vs_5_0");
     if (FAILED(game->GetRenderer()->AddVertexShader(L"VoxelShader", voxelVertexShader)))
     {
         return 0;
     }
+=======
+>>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
 
     // Phong
     std::shared_ptr<library::PixelShader> phongPixelShader = std::make_shared<library::PixelShader>(L"Shaders/PhongShaders.fxh", "PSPhong", "ps_5_0");
@@ -73,18 +105,32 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
+<<<<<<< HEAD
+=======
+
+    // Cel
+    std::shared_ptr<library::PixelShader> celPixelShader = std::make_shared<library::PixelShader>(L"Shaders/PhongShaders.fxh", "PSCel", "ps_5_0");
+    if (FAILED(game->GetRenderer()->AddPixelShader(L"celShader", celPixelShader)))
+    {
+        return 0;
+    }
+
+>>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
     // Light Cube
     std::shared_ptr<library::PixelShader> lightPixelShader = std::make_shared<library::PixelShader>(L"Shaders/PhongShaders.fxh", "PSLightCube", "ps_5_0");
     if (FAILED(game->GetRenderer()->AddPixelShader(L"LightShader", lightPixelShader)))
     {
         return 0;
     }
+<<<<<<< HEAD
     // Voxel
     std::shared_ptr<library::PixelShader> voxelPixelShader = std::make_shared<library::PixelShader>(L"Shaders/VoxelShaders.fxh", "PSVoxel", "ps_5_0");
     if (FAILED(game->GetRenderer()->AddPixelShader(L"VoxelShader", voxelPixelShader)))
     {
         return 0;
     }
+=======
+>>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
 
     XMFLOAT4 color;
     XMStoreFloat4(&color, Colors::White);
@@ -139,6 +185,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         return 0;
     }
 
+<<<<<<< HEAD
     std::ofstream sceneFile;
     sceneFile.open("HeightMap.txt");
     constexpr const UINT MAP_WIDTH = 256u;
@@ -311,6 +358,18 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     }
 
     if (FAILED(game->GetRenderer()->SetMainScene(L"VoxelMap")))
+=======
+    std::shared_ptr<Cube> phongCube = std::make_shared<Cube>(L"seafloor.dds");
+    if (FAILED(game->GetRenderer()->AddRenderable(L"PhongCube", phongCube)))
+    {
+        return 0;
+    }
+    if (FAILED(game->GetRenderer()->SetVertexShaderOfRenderable(L"PhongCube", L"PhongShader")))
+    {
+        return 0;
+    }
+    if (FAILED(game->GetRenderer()->SetPixelShaderOfRenderable(L"PhongCube", L"PhongShader")))
+>>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
     {
         return 0;
     }
