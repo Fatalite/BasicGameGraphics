@@ -25,6 +25,18 @@
     <Filter Include="소스 파일\Shader">
       <UniqueIdentifier>{fdbb24ff-f32f-4389-9e6e-f44344d3e1da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Camera">
+      <UniqueIdentifier>{bd81492b-f7e6-4aaf-a858-98b59cd6afed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Texture">
+      <UniqueIdentifier>{c6a4e737-fd35-4bef-aa1b-a95e2044cf1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Model">
+      <UniqueIdentifier>{6c8bc185-9d21-4fb1-8553-aea8d8d18283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Light">
+      <UniqueIdentifier>{5ccef035-f515-4aee-b751-7880d56810e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common.h">
@@ -52,38 +64,26 @@
       <Filter>소스 파일\Window</Filter>
     </ClCompile>
     <ClCompile Include="Camera\Camera.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="Texture\DDSTextureLoader.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Light\PointLight.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="Model\Model.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture\Material.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture\WICTextureLoader.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Model</Filter>
     </ClCompile>
     <ClCompile Include="Texture\Texture.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer\InstancedRenderable.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Texture\WICTextureLoader.cpp">
+      <Filter>소스 파일\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Scene.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Texture\DDSTextureLoader.cpp">
+      <Filter>소스 파일\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Voxel.cpp">
-      <Filter>소스 파일</Filter>
+    <ClCompile Include="Texture\Material.cpp">
+      <Filter>소스 파일\Texture</Filter>
     </ClCompile>
-=======
->>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
+    <ClCompile Include="Light\PointLight.cpp">
+      <Filter>소스 파일\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -116,42 +116,30 @@
     <ClInclude Include="Window\MainWindow.h">
       <Filter>소스 파일\Window</Filter>
     </ClInclude>
-    <ClInclude Include="Camera\Camera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture\DDSTextureLoader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Light\PointLight.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-<<<<<<< HEAD
-    <ClInclude Include="Model\Model.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture\Texture.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture\WICTextureLoader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture\Material.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\External\Assimp\include\assimp\config.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Renderer\InstancedRenderable.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>소스 파일\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\Scene.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Model\Model.h">
+      <Filter>소스 파일\Model</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\Voxel.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Texture\Material.h">
+      <Filter>소스 파일\Texture</Filter>
     </ClInclude>
-=======
->>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
+    <ClInclude Include="Texture\WICTextureLoader.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\DDSTextureLoader.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture\Texture.h">
+      <Filter>소스 파일\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Light\PointLight.h">
+      <Filter>소스 파일\Light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc">

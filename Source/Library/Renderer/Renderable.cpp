@@ -3,123 +3,18 @@
 #include <filesystem>
 namespace library
 {
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::initialize
-      Summary:  Initializes the buffers and the world matrix
-      Args:     ID3D11Device* pDevice
-                  The Direct3D device to create the buffers
-                ID3D11DeviceContext* pImmediateContext
-                  The Direct3D context to set buffers
-      Modifies: [m_vertexBuffer, m_indexBuffer, m_constantBuffer,
-                  m_world].
-      Returns:  HRESULT
-                  Status code
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::initialize definition (remove the comment)
-    --------------------------------------------------------------------*/
 
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::SetVertexShader
-      Summary:  Sets the vertex shader to be used for this renderable
-                object
-      Args:     const std::shared_ptr<VertexShader>& vertexShader
-                  Vertex shader to set to
-      Modifies: [m_vertexShader].
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::SetVertexShader definition (remove the comment)
-    --------------------------------------------------------------------*/
-
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::SetPixelShader
-      Summary:  Sets the pixel shader to be used for this renderable
-                object
-      Args:     const std::shared_ptr<PixelShader>& pixelShader
-                  Pixel shader to set to
-      Modifies: [m_pixelShader].
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::SetPixelShader definition (remove the comment)
-    --------------------------------------------------------------------*/
-
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::GetVertexShader
-      Summary:  Returns the vertex shader
-      Returns:  ComPtr<ID3D11VertexShader>&
-                  Vertex shader. Could be a nullptr
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::GetVertexShader definition (remove the comment)
-    --------------------------------------------------------------------*/
-
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::GetPixelShader
-      Summary:  Returns the vertex shader
-      Returns:  ComPtr<ID3D11PixelShader>&
-                  Pixel shader. Could be a nullptr
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::GetPixelShader definition (remove the comment)
-    --------------------------------------------------------------------*/
-
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::GetVertexLayout
-      Summary:  Returns the vertex input layout
-      Returns:  ComPtr<ID3D11InputLayout>&
-                  Vertex input layout
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::GetVertexLayout definition (remove the comment)
-    --------------------------------------------------------------------*/
-
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::GetVertexBuffer
-      Summary:  Returns the vertex buffer
-      Returns:  ComPtr<ID3D11Buffer>&
-                  Vertex buffer
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::GetVertexBuffer definition (remove the comment)
-    --------------------------------------------------------------------*/
-
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::GetIndexBuffer
-      Summary:  Returns the index buffer
-      Returns:  ComPtr<ID3D11Buffer>&
-                  Index buffer
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::GetIndexBuffer definition (remove the comment)
-    --------------------------------------------------------------------*/
-
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::GetConstantBuffer
-      Summary:  Returns the constant buffer
-      Returns:  ComPtr<ID3D11Buffer>&
-                  Constant buffer
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::GetConstantBuffer definition (remove the comment)
-    --------------------------------------------------------------------*/
-
-    /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
-      Method:   Renderable::GetWorldMatrix
-      Summary:  Returns the world matrix
-      Returns:  const XMMATRIX&
-                  World matrix
-    M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: Renderable::GetWorldMatrix definition (remove the comment)
-    --------------------------------------------------------------------*/
-    Renderable::Renderable(_In_ const std::filesystem::path& textureFilePath):
-        m_textureFilePath(textureFilePath),m_world(XMMatrixIdentity()),
-        m_bHasTextures(TRUE),m_outputColor()
-    {};
-
-    Renderable::Renderable(_In_ const XMFLOAT4& outputColor):
-        m_bHasTextures(FALSE),m_world(XMMatrixIdentity()),m_outputColor(outputColor)
-    {};
+    Renderable::Renderable(_In_ const XMFLOAT4& outputColor)
+        : m_vertexBuffer(nullptr)
+        , m_indexBuffer(nullptr)
+        , m_constantBuffer(nullptr)
+        , m_aMeshes(std::vector<BasicMeshEntry>())
+        , m_aMaterials(std::vector<Material>())
+        , m_vertexShader(nullptr)
+        , m_pixelShader(nullptr)
+        , m_outputColor(outputColor)
+        , m_padding()
+        , m_world(XMMatrixIdentity()) {};
 
     HRESULT Renderable::initialize(_In_ ID3D11Device* pDevice, _In_ ID3D11DeviceContext* pImmediateContext) {
         //Create the vertex buffer
@@ -193,31 +88,8 @@ namespace library
          cb.World = XMMatrixTranspose(XMMatrixIdentity());
         //cb.OutputColor = m_outputColor;
         //pImmediateContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &cb, 0, 0);
-        //----------------LAB06 ---------------------//
-        if (m_bHasTextures) {
-            hr = CreateDDSTextureFromFile(
-                pDevice,
-                m_textureFilePath.filename().wstring().c_str(),
-                nullptr,
-                m_textureRV.GetAddressOf()
-            );
-            if (FAILED(hr))
-            {
-                return hr;
-            }
-            // Create the sample state
-            D3D11_SAMPLER_DESC sampDesc = {};
-            sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-            sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-            sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-            sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-            sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-            sampDesc.MinLOD = 0;
-            sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
-            hr = pDevice->CreateSamplerState(&sampDesc, m_samplerLinear.GetAddressOf());
-            if (FAILED(hr))
-                return hr;
-        }
+
+
         return S_OK;
     };
     void Renderable::SetVertexShader(_In_ const std::shared_ptr<VertexShader>& vertexShader) {
@@ -248,6 +120,26 @@ namespace library
     const XMMATRIX& Renderable::GetWorldMatrix() const{
         return m_world;
     };
+    //-------LAB07--------//
+    const Material& Renderable::GetMaterial(UINT uIndex) const {
+        //범위에 따라서 줘야하는지?
+        if (uIndex >= m_aMaterials.size()) {
+            assert("NONONONO!!");
+        }
+        return m_aMaterials[uIndex];
+    };
+    const Renderable::BasicMeshEntry& Renderable::GetMesh(UINT uIndex) const {
+        if (uIndex >= m_aMeshes.size()) {
+            assert("NONONONO!!");
+        }
+        return m_aMeshes[uIndex];
+    };
+    UINT Renderable::GetNumMeshes() const {
+        return static_cast<UINT>(m_aMeshes.size());
+    }
+    UINT Renderable::GetNumMaterials() const {
+        return static_cast<UINT>(m_aMaterials.size());
+    }
     /*--------------------------------------------------------------------
   TODO: Renderable::GetWorldMatrix definition (remove the comment)
 --------------------------------------------------------------------*/
@@ -340,12 +232,7 @@ M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     /*--------------------------------------------------------------------
       TODO: Renderable::GetTextureResourceView definition (remove the comment)
     --------------------------------------------------------------------*/
-    ComPtr<ID3D11ShaderResourceView>& Renderable::GetTextureResourceView() {
-        return m_textureRV;
-    };
-    ComPtr<ID3D11SamplerState>& Renderable::GetSamplerState() {
-        return m_samplerLinear;
-    };
+
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderable::GetSamplerState
       Summary:  Returns the sampler state
@@ -358,7 +245,15 @@ M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     const XMFLOAT4& Renderable::GetOutputColor() const {
         return m_outputColor;
     };
-    BOOL Renderable::HasTexture() const {
-        return m_bHasTextures;
-    };
+    BOOL Renderable::HasTexture() const
+    {
+        if (m_aMaterials.size() > 0)
+        {
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
+        }
+    }
 }

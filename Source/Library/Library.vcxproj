@@ -55,7 +55,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories);$(SolutionDir)..\External\Assimp\Include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
       <WarningLevel>EnableAllWarnings</WarningLevel>
@@ -66,11 +66,13 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>mkdir "$(SolutionDir)..\Library\x64\Debug"
-copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Debug"</Command>
+      <Command>mkdir "$(SolutionDir)..\Library\x64\Debug" 
+copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Debug" 
+xcopy /y /d "$(SolutionDir)..\External\Assimp\Binary\x64\Debug\assimp-vc142-mtd.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies);d3dcompiler.lib</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies);d3dcompiler.lib;assimp-vc142-mtd.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\External\Assimp\Library\x64\Debug </AdditionalLibraryDirectories>
     </Lib>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -79,6 +81,10 @@ copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Debug"</Command>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>VS</EntryPointName>
     </FxCompile>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -87,7 +93,7 @@ copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Debug"</Command>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories);$(SolutionDir)..\External\Assimp\Include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/std:c++latest %(AdditionalOptions)</AdditionalOptions>
       <WarningLevel>EnableAllWarnings</WarningLevel>
@@ -101,10 +107,12 @@ copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Debug"</Command>
     </Link>
     <PostBuildEvent>
       <Command>mkdir "$(SolutionDir)..\Library\x64\Release"
-copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Release"</Command>
+copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Release"
+xcopy /y /d "$(SolutionDir)..\External\Assimp\Binary\x64\Release\assimp-vc142-mt.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies);d3dcompiler.lib</AdditionalDependencies>
+      <AdditionalDependencies>d3d11.lib;%(AdditionalDependencies);d3dcompiler.lib;assimp-vc142-mt.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\External\Assimp\Library\x64\Release</AdditionalLibraryDirectories>
     </Lib>
     <FxCompile>
       <ShaderType>Effect</ShaderType>
@@ -113,17 +121,16 @@ copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Release"</Command>
       <ShaderModel>5.0</ShaderModel>
       <EntryPointName>VS</EntryPointName>
     </FxCompile>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera\Camera.cpp" />
     <ClCompile Include="Common.h" />
     <ClCompile Include="Light\PointLight.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Model\Model.cpp" />
-    <ClCompile Include="Renderer\InstancedRenderable.cpp" />
-    <ClCompile Include="Scene\Scene.cpp" />
-=======
->>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
     <ClCompile Include="Texture\DDSTextureLoader.cpp" />
     <ClCompile Include="Game\Game.cpp">
       <FileType>CppCode</FileType>
@@ -133,24 +140,16 @@ copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Release"</Command>
     <ClCompile Include="Shader\PixelShader.cpp" />
     <ClCompile Include="Shader\Shader.cpp" />
     <ClCompile Include="Shader\VertexShader.cpp" />
-<<<<<<< HEAD
     <ClCompile Include="Texture\Texture.cpp" />
     <ClCompile Include="Texture\WICTextureLoader.cpp" />
     <ClCompile Include="Texture\Material.cpp" />
-    <ClCompile Include="Scene\Voxel.cpp" />
-=======
->>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
     <ClCompile Include="Window\MainWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\External\Assimp\include\assimp\config.h" />
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Light\PointLight.h" />
-<<<<<<< HEAD
     <ClInclude Include="Model\Model.h" />
-    <ClInclude Include="Renderer\InstancedRenderable.h" />
-    <ClInclude Include="Scene\Scene.h" />
-=======
->>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
     <ClInclude Include="Texture\DDSTextureLoader.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Renderer\DataTypes.h" />
@@ -160,13 +159,9 @@ copy "$(TargetDir)" "$(SolutionDir)..\Library\x64\Release"</Command>
     <ClInclude Include="Shader\PixelShader.h" />
     <ClInclude Include="Shader\Shader.h" />
     <ClInclude Include="Shader\VertexShader.h" />
-<<<<<<< HEAD
     <ClInclude Include="Texture\Material.h" />
     <ClInclude Include="Texture\Texture.h" />
     <ClInclude Include="Texture\WICTextureLoader.h" />
-    <ClInclude Include="Scene\Voxel.h" />
-=======
->>>>>>> parent of 81fa0bf ([LAB07] Lab07 Submit)
     <ClInclude Include="Window\BaseWindow.h" />
     <ClInclude Include="Window\MainWindow.h" />
   </ItemGroup>
