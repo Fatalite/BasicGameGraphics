@@ -97,7 +97,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         return 0;
     }
 
-    
+    /*
     std::shared_ptr<Cube> lightCube = std::make_shared<Cube>(color);
     lightCube->Translate(XMVectorSet(-5.77f, 5.77f, -5.77f, 0.0f));
     if (FAILED(game->GetRenderer()->AddRenderable(L"LightCube", lightCube)))
@@ -112,7 +112,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
-    
+    */
 
     XMStoreFloat4(&color, Colors::Red);
     std::shared_ptr<RotatingPointLight> rotatingPointLight = std::make_shared<RotatingPointLight>(

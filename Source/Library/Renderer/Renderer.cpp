@@ -397,13 +397,10 @@ namespace library
         {
             it->second->Update(deltaTime*(FLOAT)0.0001);
         }
-        m_camera.Update(deltaTime *100);
+        m_camera.Update(deltaTime);
         for (int i = 0; i < NUM_LIGHTS; i++) {
             m_aPointLights[i]->Update(deltaTime * (FLOAT)0.0001);
         };
-        for (auto& it : m_scenes[m_pszMainSceneName]->GetVoxels()) {
-            it->Update(deltaTime);
-        }
     };
     void Renderer::Render() {
         //CLEAR RENDER TARGET VIEW AND DEPTHSTENCIL!!
@@ -487,7 +484,7 @@ namespace library
             
             
         }
-        //Assignment02 INSTANCE RENDERING
+        //Assignment02
         for (UINT i = 0u; i < m_scenes.find(m_pszMainSceneName)->second->GetVoxels().size(); i++) {
 
 
@@ -527,30 +524,26 @@ namespace library
                 m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexShader().Get()
                 , nullptr
                 , 0);
-            m_immediateContext->VSSetConstantBuffers(0u, 1u, m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetConstantBuffer().GetAddressOf());
 
-            m_immediateContext->VSSetConstantBuffers(1u, 1u, m_cbChangeOnResize.GetAddressOf());
-            m_immediateContext->VSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
 
             //Set PIXEL SHADER
             m_immediateContext->PSSetShader(
                 m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetPixelShader().Get(),
                 nullptr, 0);
-            m_immediateContext->PSSetConstantBuffers(0u, 1u, m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetConstantBuffer().GetAddressOf());
-            m_immediateContext->PSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
 
-            m_immediateContext->PSSetConstantBuffers(3u, 1u, m_cbLights.GetAddressOf());
 
             //DRAW INSTNACE
              m_immediateContext->DrawIndexedInstanced(
                 m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetNumIndices(),
                 m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetNumInstances(),
+                0u,
                 0,
-                0,
-                0
+                0u
                 );
             
         }
+
+
 
         m_swapChain->Present(0, 0);
     };
