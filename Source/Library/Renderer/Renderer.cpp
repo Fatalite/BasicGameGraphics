@@ -343,6 +343,13 @@ namespace library
         {
             return hr;
         }
+
+        //init Scene and Their Voxels(Scene have Voxel Initialize)
+        for (auto& it : m_scenes) {
+            it.second->Initialize(m_d3dDevice.Get(), m_immediateContext.Get());
+
+        }
+
         m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         return S_OK;
 
@@ -473,7 +480,69 @@ namespace library
                 m_immediateContext->DrawIndexed(it->second->GetNumIndices(), 0u, 0);
             }
             
+            //Assignment02
+        for (UINT i = 0u; i < m_scenes.find(m_pszMainSceneName)->second->GetVoxels().size(); i++) {
+
+
+            //SET INPUT LAYOUT
+            UINT stride[2] = { sizeof(SimpleVertex),sizeof(InstanceData) };
+            UINT offset[2] = { 0,0 };
+
+            // Update Constant buffer 
+            CBChangesEveryFrame cb;
+            cb.World = XMMatrixTranspose(m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetWorldMatrix());
+            cb.OutputColor = m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetOutputColor();
+            m_immediateContext->UpdateSubresource(
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetConstantBuffer().Get(),
+                0, nullptr, &cb, 0, 0);
+
+
+            m_immediateContext->IASetInputLayout(
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexLayout().Get());
+
+            ComPtr<ID3D11Buffer> tmp[2] = 
+            { 
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexBuffer(),
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetInstanceBuffer()
+            };
+            m_immediateContext->IASetVertexBuffers(0, 2,tmp->GetAddressOf(), stride, offset);
+
+            m_immediateContext->IASetIndexBuffer(
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetIndexBuffer().Get(),
+                DXGI_FORMAT_R16_UINT, 0);
             
+
+            
+
+
+            //Set VERTEX SHADER
+            m_immediateContext->VSSetShader(
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexShader().Get()
+                , nullptr
+                , 0);
+            m_immediateContext->VSSetConstantBuffers(0u, 1u, m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetConstantBuffer().GetAddressOf());
+
+            m_immediateContext->VSSetConstantBuffers(1u, 1u, m_cbChangeOnResize.GetAddressOf());
+            m_immediateContext->VSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
+
+            //Set PIXEL SHADER
+            m_immediateContext->PSSetShader(
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetPixelShader().Get(),
+                nullptr, 0);
+            m_immediateContext->PSSetConstantBuffers(0u, 1u, m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetConstantBuffer().GetAddressOf());
+            m_immediateContext->PSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
+
+            m_immediateContext->PSSetConstantBuffers(3u, 1u, m_cbLights.GetAddressOf());
+            //DRAW INSTNACE
+            m_immediateContext->DrawIndexedInstanced(
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetNumIndices(),
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetNumInstances(),
+                0u,
+                0,
+                0u
+            );
+
+        }
         }
 
 
@@ -481,7 +550,45 @@ namespace library
 
         m_swapChain->Present(0, 0);
     };
+    HRESULT Renderer::AddScene(_In_ PCWSTR pszSceneName, const std::filesystem::path& sceneFilePath) {
+        if (!m_scenes.contains(pszSceneName)) {
+            //
+            m_scenes.insert(std::make_pair(pszSceneName, std::make_shared<library::Scene>(sceneFilePath)));
+        }
+        else {
+            //already exist
+            return E_FAIL;
+        }
+    }
 
+    //Assignments02
+    HRESULT Renderer::SetMainScene(_In_ PCWSTR pszSceneName) {
+        m_pszMainSceneName = pszSceneName;
+        return S_OK;
+    }
+
+    HRESULT Renderer::SetVertexShaderOfScene(_In_ PCWSTR pszSceneName, _In_ PCWSTR pszVertexShaderName) {
+        if (m_scenes.contains(pszSceneName)) {
+            if (m_vertexShaders.contains(pszVertexShaderName)) {
+                for (auto& it : m_scenes.find(pszSceneName)->second->GetVoxels()) {
+                    it->SetVertexShader(m_vertexShaders.find(pszVertexShaderName)->second);
+                }
+            }
+            return S_OK;
+        }
+        return E_FAIL;
+    }
+    HRESULT Renderer::SetPixelShaderOfScene(_In_ PCWSTR pszSceneName, _In_ PCWSTR pszPixelShaderName) {
+        if (m_scenes.contains(pszSceneName)) {
+            if (m_pixelShaders.contains(pszPixelShaderName)) {
+                for (auto& it : m_scenes.find(pszSceneName)->second->GetVoxels()) {
+                    it->SetPixelShader(m_pixelShaders.find(pszPixelShaderName)->second);
+                }
+            }
+            return S_OK;
+        }
+        return E_FAIL;
+    }
     HRESULT Renderer::SetVertexShaderOfRenderable(_In_ PCWSTR pszRenderableName, _In_ PCWSTR pszVertexShaderName) {
         // 해당 renderable이 있는지?
         if (!m_renderables.contains(pszRenderableName)) {
@@ -533,7 +640,7 @@ namespace library
     };
 
     HRESULT Renderer::AddPointLight(_In_ size_t index, _In_ const std::shared_ptr<PointLight>& pPointLight) {
-        if (index >= NUM_LIGHTS) {
+        if (index > NUM_LIGHTS) {
             return E_FAIL;
         }
         else {

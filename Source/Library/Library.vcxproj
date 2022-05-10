@@ -131,6 +131,9 @@ xcopy /y /d "$(SolutionDir)..\External\Assimp\Binary\x64\Release\assimp-vc142-mt
     <ClCompile Include="Common.h" />
     <ClCompile Include="Light\PointLight.cpp" />
     <ClCompile Include="Model\Model.cpp" />
+    <ClCompile Include="Renderer\InstancedRenderable.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\Voxel.cpp" />
     <ClCompile Include="Texture\DDSTextureLoader.cpp" />
     <ClCompile Include="Game\Game.cpp">
       <FileType>CppCode</FileType>
@@ -150,6 +153,9 @@ xcopy /y /d "$(SolutionDir)..\External\Assimp\Binary\x64\Release\assimp-vc142-mt
     <ClInclude Include="Camera\Camera.h" />
     <ClInclude Include="Light\PointLight.h" />
     <ClInclude Include="Model\Model.h" />
+    <ClInclude Include="Renderer\InstancedRenderable.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\Voxel.h" />
     <ClInclude Include="Texture\DDSTextureLoader.h" />
     <ClInclude Include="Game\Game.h" />
     <ClInclude Include="Renderer\DataTypes.h" />

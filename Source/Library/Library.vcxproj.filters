@@ -37,6 +37,9 @@
     <Filter Include="소스 파일\Light">
       <UniqueIdentifier>{5ccef035-f515-4aee-b751-7880d56810e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Scene">
+      <UniqueIdentifier>{239627ee-840f-4cb8-873c-db2a3214fc16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Common.h">
@@ -83,6 +86,15 @@
     </ClCompile>
     <ClCompile Include="Light\PointLight.cpp">
       <Filter>소스 파일\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer\InstancedRenderable.cpp">
+      <Filter>소스 파일\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Voxel.cpp">
+      <Filter>소스 파일\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +151,15 @@
     </ClInclude>
     <ClInclude Include="Light\PointLight.h">
       <Filter>소스 파일\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Voxel.h">
+      <Filter>소스 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\InstancedRenderable.h">
+      <Filter>소스 파일\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
