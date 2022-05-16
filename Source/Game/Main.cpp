@@ -97,7 +97,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     }
 
     std::shared_ptr<Cube> lightCube = std::make_shared<Cube>(color);
-    lightCube->Translate(XMVectorSet(-5.77f, 5.77f, -5.77f, 0.0f));
+    lightCube->Translate(XMVectorSet(-5.77f, 5.77f, -5.77f, 1.0f));
     if (FAILED(game->GetRenderer()->AddRenderable(L"LightCube", lightCube)))
     {
         return 0;

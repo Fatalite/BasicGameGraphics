@@ -22,7 +22,9 @@ namespace library
         m_projection(),
         m_renderables(std::unordered_map<std::wstring, std::shared_ptr<Renderable>>()),
         m_vertexShaders(std::unordered_map<std::wstring, std::shared_ptr<VertexShader>>()),
-        m_pixelShaders(std::unordered_map<std::wstring, std::shared_ptr<PixelShader>>()) {};
+        m_pixelShaders(std::unordered_map<std::wstring, std::shared_ptr<PixelShader>>()),
+        m_pszMainSceneName()
+    {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderer::Initialize
       Summary:  Creates Direct3D device and swap chain
@@ -256,8 +258,6 @@ namespace library
         );
         CBChangeOnResize cb;
         cb.Projection = XMMatrixTranspose(m_projection);
-
-        //
         
 
         D3D11_BUFFER_DESC bd;
@@ -440,8 +440,9 @@ namespace library
             
             m_immediateContext->IASetVertexBuffers(0u, 1u, it->second->GetVertexBuffer().GetAddressOf(), &stride, &offset);
             m_immediateContext->IASetIndexBuffer(it->second->GetIndexBuffer().Get(), DXGI_FORMAT_R16_UINT, 0);
+            
+            m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
             m_immediateContext->IASetInputLayout(it->second->GetVertexLayout().Get());
-
 
             m_immediateContext->VSSetShader(it->second->GetVertexShader().Get(), nullptr, 0);
             m_immediateContext->VSSetConstantBuffers(0u, 1u, it->second->GetConstantBuffer().GetAddressOf());
@@ -497,9 +498,6 @@ namespace library
                 0, nullptr, &cb, 0, 0);
 
 
-            m_immediateContext->IASetInputLayout(
-                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexLayout().Get());
-
             ComPtr<ID3D11Buffer> tmp[2] = 
             { 
                 m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexBuffer(),
@@ -511,9 +509,10 @@ namespace library
                 m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetIndexBuffer().Get(),
                 DXGI_FORMAT_R16_UINT, 0);
             
-
+            m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
             
-
+            m_immediateContext->IASetInputLayout(
+                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexLayout().Get());
 
             //Set VERTEX SHADER
             m_immediateContext->VSSetShader(
@@ -524,6 +523,7 @@ namespace library
 
             m_immediateContext->VSSetConstantBuffers(1u, 1u, m_cbChangeOnResize.GetAddressOf());
             m_immediateContext->VSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
+            //m_immediateContext->VSSetConstantBuffers(3u, 1, m_cbLights.GetAddressOf());
 
             //Set PIXEL SHADER
             m_immediateContext->PSSetShader(
@@ -554,6 +554,7 @@ namespace library
         if (!m_scenes.contains(pszSceneName)) {
             //
             m_scenes.insert(std::make_pair(pszSceneName, std::make_shared<library::Scene>(sceneFilePath)));
+            return S_OK;
         }
         else {
             //already exist

@@ -14,12 +14,7 @@ namespace library
     InstancedRenderable::InstancedRenderable
     (_In_ std::vector<InstanceData>&& aInstanceData, _In_ const XMFLOAT4& outputColor)
         : Renderable(outputColor),
-        m_padding(), m_instanceBuffer(nullptr)
-
-
-    {
-
-    }
+        m_padding(), m_instanceBuffer(nullptr), m_aInstanceData(std::move(aInstanceData)) {}
     void InstancedRenderable::SetInstanceData(_In_ std::vector<InstanceData>&& aInstanceData) {
         m_aInstanceData = std::move(aInstanceData);
     }
@@ -28,7 +23,7 @@ namespace library
         return m_instanceBuffer;
     }
     UINT InstancedRenderable::GetNumInstances() const {
-        return m_aInstanceData.size();
+        return static_cast<UINT>(m_aInstanceData.size());
     }
 
     HRESULT InstancedRenderable::initializeInstance(_In_ ID3D11Device* pDevice) {

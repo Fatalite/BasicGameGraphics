@@ -52,12 +52,10 @@ namespace library
         {
          { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,
         D3D11_INPUT_PER_VERTEX_DATA, 0 },
-         { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12,
+        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12,
         D3D11_INPUT_PER_VERTEX_DATA, 0 },
          { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 20,
         D3D11_INPUT_PER_VERTEX_DATA, 0 },
-
-        //Semantic Index must be increased to use mattrix
         { "INSTANCE_TRANSFORM", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 0,
         D3D11_INPUT_PER_INSTANCE_DATA, 1 },
         { "INSTANCE_TRANSFORM", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 16,
@@ -67,17 +65,6 @@ namespace library
         { "INSTANCE_TRANSFORM", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 1, 48,
         D3D11_INPUT_PER_INSTANCE_DATA, 1 },
         };
-        /*
-        InstanceLayout->SemanticName = "InstancedColor";
-        InstanceLayout->SemanticIndex = 0;
-        InstanceLayout->Format = DXGI_FORMAT_R32G32B32_FLOAT;
-        InstanceLayout->InputSlot = 1;
-        InstanceLayout->AlignedByteOffset = 0;
-        InstanceLayout->InputSlotClass = D3D11_INPUT_PER_INSTANCE_DATA;
-        InstanceLayout->InstanceDataStepRate = 1;
-        */
-        //Assignment02 InstanceLayout DESC
-
 
         UINT numElements = ARRAYSIZE(InstanceLayout);
 

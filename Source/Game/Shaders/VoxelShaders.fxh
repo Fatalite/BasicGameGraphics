@@ -45,7 +45,7 @@ struct VS_INPUT
 struct PS_INPUT
 {
     float4 Position : SV_POSITION;
-    float4 Color : COLOR;
+    float2 TexCoord : TEXCOORD0;
     float3 Normal : NORMAL;
     float3 WorldPosition : WORLDPOS;
 
@@ -63,20 +63,21 @@ PS_INPUT VSVoxel(VS_INPUT input)
     output.Position = mul(output.Position, View);
     output.Position = mul(output.Position, Projection);
     
-    //output.TexCoord = input.TexCoord;
-
-    output.Normal = normalize(mul(float4(input.Normal, 0), World).xyz);
     
-    output.Color = OutputColor;
+    output.TexCoord = input.TexCoord;
+    output.Normal = mul(float4(input.Normal, 0.0f), input.Transform).xyz;
+    output.Normal = mul(float4(output.Normal, 0.0f), World).xyz;
+    
+    //output.Color = OutputColor;
     return output;
 
 }
 
 float4 PSVoxel(PS_INPUT input) : SV_Target
 {
-    float3 diffuse = float3(0.1f, 0.1f, 0.1f);
+    float3 diffuse = float3(0.0f, 0.0f, 0.0f);
     float3 ambience = float3(0.1f, 0.1f, 0.1f);
-    float3 ambienceTerm = float3(0.1f, 0.1f, 0.1f);
+    float3 ambienceTerm = float3(0.0f, 0.0f, 0.0f);
     float3 specular = float3(0.0f, 0.0f, 0.0f);
     float3 viewDirection = normalize(input.WorldPosition - CameraPosition.xyz);
     
@@ -86,13 +87,13 @@ float4 PSVoxel(PS_INPUT input) : SV_Target
         
         float3 lightDirection = normalize(input.WorldPosition - LightPositions[i].xyz);
         float lambertianTerm = dot(normalize(input.Normal), -lightDirection);
-        diffuse += max(lambertianTerm, 0.0f) * LightColors[i].xyz;
+        diffuse += max(lambertianTerm, 0.0f) *  LightColors[i].xyz;
         
         float3 reflectDirection = normalize(reflect(lightDirection, input.Normal));
-        specular += pow(max(dot(-viewDirection, reflectDirection), 0.0f), 8.0f) * LightColors[i].xyz;
+        specular += pow(max(dot(-viewDirection, reflectDirection), 0.0f), 20.0f) * LightColors[i].xyz;
     }
     
 	
-    return float4(saturate(diffuse + specular + ambience), 1.0f) * input.Color;
+    return float4(saturate(diffuse + specular + ambience), 1.0f) * OutputColor;
 
 }

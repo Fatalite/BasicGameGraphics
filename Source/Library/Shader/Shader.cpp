@@ -58,7 +58,7 @@ namespace library
             m_pszEntryPoint, 
             m_pszShaderModel, 
             shaderFlags,
-            0, 
+            0u, 
             ppOutBlob, 
             errorBlob.GetAddressOf());
         //OutputDebugStringA((char*)errorBlob->GetBufferPointer());
