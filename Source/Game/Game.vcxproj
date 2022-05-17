@@ -130,6 +130,7 @@
     <None Include="Shaders\PhongShaders.fxh" />
     <None Include="Shaders\Shaders.fxh" />
     <None Include="Shaders\VoxelShaders.fxh" />
+    <None Include="SkinningShaders.fxh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="custom.dds" />
