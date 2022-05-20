@@ -75,7 +75,7 @@ namespace library
             //LAB 08//
             //Set m_globalInverseTransform 
             m_globalInverseTransform =  
-                ConvertMatrix(m_pScene->mRootNode->mTransformation);
+                XMMatrixTranspose(ConvertMatrix(m_pScene->mRootNode->mTransformation));
             
             XMMatrixInverse(nullptr, m_globalInverseTransform);
             // init Model
