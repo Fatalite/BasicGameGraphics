@@ -23,7 +23,9 @@ namespace library
         m_renderables(std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>()),
         m_vertexShaders(std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>()),
         m_pixelShaders(std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>>()),
-        m_models(std::unordered_map<PCWSTR, std::shared_ptr<Model>>())
+        m_models(std::unordered_map<PCWSTR, std::shared_ptr<Model>>()),
+        m_padding(),
+        m_pszMainSceneName()
     {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Renderer::Initialize
@@ -408,11 +410,11 @@ namespace library
         };
 
         for (auto it : m_models) {
-            it.second->Update(deltaTime);
+            it.second->Update(100* deltaTime);
         }
 
     };
-    void Renderer::Render(UINT boneIdex) {
+    void Renderer::Render() {
         //CLEAR RENDER TARGET VIEW AND DEPTHSTENCIL!!
         float ClearColor[4] = { 0.0f, 0.0f, 0.6f, 1.0f };
         m_immediateContext->ClearRenderTargetView(m_renderTargetView.Get(), ClearColor);
@@ -561,30 +563,42 @@ namespace library
             UINT offset[2] = { 0,0 };
 
             m_immediateContext->IASetInputLayout(it.second->GetVertexLayout().Get());
-
+            
             ComPtr<ID3D11Buffer> tmp[2] =
             {
                 it.second->GetVertexBuffer(),
                 it.second->GetAnimationBuffer(),
             };
-            m_immediateContext->IASetVertexBuffers(0, 2, tmp->GetAddressOf(), stride, offset);
+            m_immediateContext->IASetVertexBuffers(0, 2u, tmp->GetAddressOf(), stride, offset);
             m_immediateContext->IASetIndexBuffer(
-                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetIndexBuffer().Get(),
+                it.second->GetIndexBuffer().Get(),
                 DXGI_FORMAT_R16_UINT, 0);
 
             // Update Constant buffer 
             CBChangesEveryFrame cb;
-            cb.World = XMMatrixTranspose(m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetWorldMatrix());
-            cb.OutputColor = m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetOutputColor();
+            cb.World = XMMatrixTranspose(it.second->GetWorldMatrix());
+            cb.OutputColor = it.second->GetOutputColor();
             m_immediateContext->UpdateSubresource(
-                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetConstantBuffer().Get(),
+                it.second->GetConstantBuffer().Get(),
                 0, nullptr, &cb, 0, 0);
+
+
+            CBSkinning ck = { XMMatrixIdentity(), };
+
+            for (UINT iidx = 0u; iidx< it.second->GetBoneTransforms().size(); iidx++) {
+                ck.BoneTransforms[iidx] = XMMatrixTranspose(it.second->GetBoneTransforms()[iidx]);
+            }
+
+            m_immediateContext->UpdateSubresource(
+                it.second->GetSkinningConstantBuffer().Get(),
+                0, nullptr, &ck, 0, 0);
 
             m_immediateContext->VSSetShader(it.second->GetVertexShader().Get(), nullptr, 0);
             m_immediateContext->VSSetConstantBuffers(0u, 1u, it.second->GetConstantBuffer().GetAddressOf());
             m_immediateContext->VSSetConstantBuffers(1u, 1u, m_cbChangeOnResize.GetAddressOf());
             m_immediateContext->VSSetConstantBuffers(2u, 1u, m_camera.GetConstantBuffer().GetAddressOf());
 
+            m_immediateContext->VSSetConstantBuffers(4u, 1u, it.second->GetSkinningConstantBuffer().GetAddressOf());
 
             m_immediateContext->PSSetShader(it.second->GetPixelShader().Get(), nullptr, 0);
             m_immediateContext->PSSetConstantBuffers(0u, 1u, it.second->GetConstantBuffer().GetAddressOf());
