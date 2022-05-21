@@ -64,10 +64,18 @@ namespace library
         //OutputDebugStringA((char*)errorBlob->GetBufferPointer());
         if (FAILED(hr))
         {
-            if (errorBlob)
-            {
-                OutputDebugStringA(reinterpret_cast<const char*>(errorBlob->GetBufferPointer()));
-            }
+            WCHAR szMessage[256];
+            swprintf_s(
+                szMessage,
+                L"Shader.cpp",
+                m_pszFileName
+            );
+            MessageBox(
+                nullptr,
+                szMessage,
+                L"Error",
+                MB_OK
+            );
             return hr;
         }
         return S_OK;
