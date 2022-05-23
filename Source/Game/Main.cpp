@@ -58,7 +58,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
-    
+
     std::shared_ptr<library::VertexShader> voxelVertexShader = std::make_shared<library::VertexShader>(L"Shaders/VoxelShaders.fxh", "VSVoxel", "vs_5_0");
     if (FAILED(game->GetRenderer()->AddVertexShader(L"VoxelShader", voxelVertexShader)))
     {
@@ -82,9 +82,9 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     {
         return 0;
     }
-    //BobLampClean/boblampclean.md5mesh
+
     std::shared_ptr<library::Model> warrior = std::make_shared<library::Model>(L"Content/BobLampClean/boblampclean.md5mesh");
-    warrior->RotateY(XM_PIDIV2);
+    warrior->RotateX(XM_PIDIV2);
     warrior->Scale(0.1f, 0.1f, 0.1f);
 
     if (FAILED(game->GetRenderer()->AddModel(L"Warrior", warrior)))
@@ -92,17 +92,10 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
         return 0;
     }
 
-<<<<<<< HEAD
-    std::shared_ptr<Cube> lightCube = std::make_shared<Cube>(color);
-    lightCube->Translate(XMVectorSet(-5.77f, 5.77f, -5.77f, 1.0f));
-    if (FAILED(game->GetRenderer()->AddRenderable(L"LightCube", lightCube)))
-=======
     if (FAILED(game->GetRenderer()->SetVertexShaderOfModel(L"Warrior", L"PhongSkinningShader")))
->>>>>>> LAB08
     {
         return 0;
     }
-
     if (FAILED(game->GetRenderer()->SetPixelShaderOfModel(L"Warrior", L"PhongSkinningShader")))
     {
         return 0;

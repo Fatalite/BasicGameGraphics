@@ -20,17 +20,11 @@ namespace library
         m_renderTargetView(nullptr),
         m_camera(XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f)),
         m_projection(),
-<<<<<<< HEAD
-        m_renderables(std::unordered_map<std::wstring, std::shared_ptr<Renderable>>()),
-        m_vertexShaders(std::unordered_map<std::wstring, std::shared_ptr<VertexShader>>()),
-        m_pixelShaders(std::unordered_map<std::wstring, std::shared_ptr<PixelShader>>()),
-=======
         m_renderables(std::unordered_map<PCWSTR, std::shared_ptr<Renderable>>()),
         m_vertexShaders(std::unordered_map<PCWSTR, std::shared_ptr<VertexShader>>()),
         m_pixelShaders(std::unordered_map<PCWSTR, std::shared_ptr<PixelShader>>()),
         m_models(std::unordered_map<PCWSTR, std::shared_ptr<Model>>()),
         m_padding(),
->>>>>>> LAB08
         m_pszMainSceneName()
     {};
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
@@ -588,29 +582,14 @@ namespace library
                 0, nullptr, &cb, 0, 0);
 
 
-<<<<<<< HEAD
-            ComPtr<ID3D11Buffer> tmp[2] = 
-            { 
-                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexBuffer(),
-                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetInstanceBuffer()
-            };
-            m_immediateContext->IASetVertexBuffers(0, 2,tmp->GetAddressOf(), stride, offset);
 
-            m_immediateContext->IASetIndexBuffer(
-                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetIndexBuffer().Get(),
-                DXGI_FORMAT_R16_UINT, 0);
-            
-            m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-            
-            m_immediateContext->IASetInputLayout(
-                m_scenes.find(m_pszMainSceneName)->second->GetVoxels()[i]->GetVertexLayout().Get());
-=======
+          
             CBSkinning ck = { XMMatrixIdentity(), };
 
             for (UINT iidx = 0u; iidx< it.second->GetBoneTransforms().size(); iidx++) {
                 ck.BoneTransforms[iidx] = XMMatrixTranspose(it.second->GetBoneTransforms()[iidx]);
             }
->>>>>>> LAB08
+
 
             m_immediateContext->UpdateSubresource(
                 it.second->GetSkinningConstantBuffer().Get(),
