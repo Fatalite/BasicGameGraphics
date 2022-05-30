@@ -44,13 +44,21 @@ namespace library
 
     // Constructor //
     Model::Model(_In_ const std::filesystem::path& filePath): 
-        Renderable(XMFLOAT4(1.0,1.0,1.0,1.0)),
-        m_filePath(filePath),
-        m_aVertices(std::vector<SimpleVertex>()),
-        m_aIndices(std::vector<WORD>()),
-        m_aAnimationData(std::vector<AnimationData>()),
-        m_timeSinceLoaded(0.0f),
-        m_aTransforms(std::vector<XMMATRIX>(256))
+        Renderable(XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f))
+        , m_filePath(filePath)
+        , m_animationBuffer(nullptr)
+        , m_skinningConstantBuffer(nullptr)
+        , m_aVertices(std::vector<SimpleVertex>())
+        , m_aAnimationData(std::vector<AnimationData>())
+        , m_aIndices(std::vector<WORD>())
+        , m_aBoneData(std::vector<VertexBoneData>())
+        , m_aBoneInfo(std::vector<BoneInfo>())
+        , m_aTransforms(std::vector<XMMATRIX>())
+        , m_boneNameToIndexMap(std::unordered_map<std::string, UINT>())
+        , m_pScene(nullptr)
+        , m_timeSinceLoaded(0)
+        , m_globalInverseTransform(XMMatrixIdentity())
+        
     {};
     // Main Logic //
     HRESULT Model::Initialize(_In_ ID3D11Device* pDevice, _In_ ID3D11DeviceContext* pImmediateContext)
@@ -80,46 +88,8 @@ namespace library
             XMMatrixInverse(nullptr, m_globalInverseTransform);
             // init Model
             hr = initFromScene(pDevice, pImmediateContext, m_pScene, m_filePath);
-
-            //Create the Vertex buffer
-            D3D11_BUFFER_DESC bufferDesc = {
-            .ByteWidth = (sizeof(AnimationData) * GetNumVertices()),
-            .Usage = D3D11_USAGE_DEFAULT,
-            .BindFlags = D3D11_BIND_VERTEX_BUFFER,
-            .CPUAccessFlags = 0,
-            .MiscFlags = 0,
-            .StructureByteStride = 0
-            };
-
-            D3D11_SUBRESOURCE_DATA subData = {
-            .pSysMem = m_aAnimationData.data(),
-            .SysMemPitch = 0,
-            .SysMemSlicePitch = 0,
-            };
-
-            hr = pDevice->CreateBuffer(&bufferDesc, &subData, m_animationBuffer.GetAddressOf());
             if (FAILED(hr)) return (hr);
-
-            D3D11_BUFFER_DESC bd;
-            bd.ByteWidth = (sizeof(XMMATRIX) * 256);
-            bd.Usage = D3D11_USAGE_DEFAULT;
-            bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-            bd.CPUAccessFlags = 0;
-            bd.MiscFlags = 0;
-            bd.StructureByteStride = 0;
-
-            
-            D3D11_SUBRESOURCE_DATA initData;
-            initData.pSysMem = GetBoneTransforms().data();
-            initData.SysMemPitch = 0;
-            initData.SysMemSlicePitch = 0;
-
-            hr = pDevice->CreateBuffer(
-                &bd,
-                &initData,
-                m_skinningConstantBuffer.GetAddressOf()
-            );
-            if (FAILED(hr)) return hr; 
+ 
 
         }
         else
@@ -131,7 +101,47 @@ namespace library
             OutputDebugStringA(sm_pImporter->GetErrorString());
             OutputDebugString(L"\n");
         }
+        //Create the Vertex buffer
+        D3D11_BUFFER_DESC bufferDesc = {
+        .ByteWidth = (sizeof(AnimationData) * GetNumVertices()),
+        .Usage = D3D11_USAGE_DEFAULT,
+        .BindFlags = D3D11_BIND_VERTEX_BUFFER,
+        .CPUAccessFlags = 0,
+        .MiscFlags = 0,
+        .StructureByteStride = 0
+        };
 
+        D3D11_SUBRESOURCE_DATA subData = {
+        .pSysMem = m_aAnimationData.data(),
+        .SysMemPitch = 0,
+        .SysMemSlicePitch = 0,
+        };
+
+        hr = pDevice->CreateBuffer(&bufferDesc, &subData, m_animationBuffer.GetAddressOf());
+        if (FAILED(hr)) return (hr);
+
+        D3D11_BUFFER_DESC bd;
+        bd.ByteWidth = sizeof(CBSkinning);
+        bd.Usage = D3D11_USAGE_DEFAULT;
+        bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+        bd.CPUAccessFlags = 0;
+        bd.MiscFlags = 0;
+        bd.StructureByteStride = 0;
+
+
+        /*
+        D3D11_SUBRESOURCE_DATA initData;
+        initData.pSysMem = GetBoneTransforms().data();
+        initData.SysMemPitch = 0;
+        initData.SysMemSlicePitch = 0;
+        */
+
+        hr = pDevice->CreateBuffer(
+            &bd,
+            nullptr,
+            m_skinningConstantBuffer.GetAddressOf()
+        );
+        if (FAILED(hr)) return hr;
         return hr;
     }
     void Model::Update(_In_ FLOAT deltaTime)
@@ -187,8 +197,7 @@ namespace library
 
     void Model::countVerticesAndIndices(_Inout_ UINT& uOutNumVertices, _Inout_ UINT& uOutNumIndices, _In_ const aiScene* pScene) {
 
-        m_aMeshes.resize(pScene->mNumMeshes);
-        m_aMaterials.resize(pScene->mNumMaterials);
+
         
         UINT uNumVertices = 0u;
         UINT uNumIndices = 0u;
@@ -199,6 +208,7 @@ namespace library
             m_aMeshes[i].uNumIndices = pScene->mMeshes[i]->mNumFaces * 3u;
             m_aMeshes[i].uBaseVertex = uNumVertices;
             m_aMeshes[i].uBaseIndex = uNumIndices;
+
             uNumVertices += pScene->mMeshes[i]->mNumVertices;
             uNumIndices += m_aMeshes[i].uNumIndices;
         };
@@ -309,6 +319,46 @@ namespace library
         }
     }
 
+    HRESULT Model::loadNormalTexture(_In_ ID3D11Device* pDevice, _In_ ID3D11DeviceContext* pImmediateContext, _In_ const std::filesystem::path& parentDirectory, _In_ const aiMaterial* pMaterial, _In_ UINT uIndex)
+    {
+        HRESULT hr = S_OK;
+        m_aMaterials[uIndex]->pNormal = nullptr;
+
+        if (pMaterial->GetTextureCount(aiTextureType_HEIGHT) > 0)
+        {
+            aiString aiPath;
+
+            if (pMaterial->GetTexture(aiTextureType_HEIGHT, 0u, &aiPath, nullptr, nullptr, nullptr, nullptr, nullptr) == AI_SUCCESS)
+            {
+                std::string szPath(aiPath.data);
+
+                if (szPath.substr(0ull, 2ull) == ".\\")
+                {
+                    szPath = szPath.substr(2ull, szPath.size() - 2ull);
+                }
+
+                std::filesystem::path fullPath = parentDirectory / szPath;
+
+                m_aMaterials[uIndex]->pNormal = std::make_shared<Texture>(fullPath);
+                m_bHasNormalMap = true;
+
+                if (FAILED(hr))
+                {
+                    OutputDebugString(L"Error loading normal texture \"");
+                    OutputDebugString(fullPath.c_str());
+                    OutputDebugString(L"\"\n");
+
+                    return hr;
+                }
+
+                OutputDebugString(L"Loaded normal texture \"");
+                OutputDebugString(fullPath.c_str());
+                OutputDebugString(L"\"\n");
+            }
+        }
+
+        return hr;
+    }
 
     HRESULT Model::initFromScene(
         _In_ ID3D11Device* pDevice,
@@ -316,7 +366,7 @@ namespace library
         _In_ const aiScene* pScene,
         _In_ const std::filesystem::path& filePath
     ) {
-       
+        m_aMeshes.resize(pScene->mNumMeshes);
         unsigned int NumVertices = 0u;
         unsigned int NumIndices = 0u;
         countVerticesAndIndices(NumVertices, NumIndices,m_pScene);
@@ -368,17 +418,12 @@ namespace library
         {
             const aiMaterial* pMaterial = pScene->mMaterials[i];
 
-            hr = loadTextures(pDevice, pImmediateContext, parentDirectory, pMaterial, i);
-            if (FAILED(hr))
-            {
-                MessageBox(
-                    nullptr,
-                    L"Call to loadTextures failed!",
-                    L"Game Graphics Programming",
-                    NULL
-                );
-                return hr;
-            }
+            std::string szName = filePath.string() + std::to_string(i);
+            std::wstring pwszName(szName.length(), L' ');
+            std::copy(szName.begin(), szName.end(), pwszName.begin());
+            m_aMaterials.push_back(std::make_shared<Material>(pwszName));
+
+            loadTextures(pDevice, pImmediateContext, parentDirectory, pMaterial, i);
         }
 
         return hr;
@@ -393,7 +438,7 @@ namespace library
     )
     {
         HRESULT hr = S_OK;
-        m_aMaterials[uIndex].pDiffuse = nullptr;
+        m_aMaterials[uIndex]->pDiffuse = nullptr;
 
         if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0)
         {
@@ -410,9 +455,9 @@ namespace library
 
                 std::filesystem::path fullPath = parentDirectory / szPath;
 
-                m_aMaterials[uIndex].pDiffuse = std::make_shared<Texture>(fullPath);
+                m_aMaterials[uIndex]->pDiffuse = std::make_shared<Texture>(fullPath);
 
-                hr = m_aMaterials[uIndex].pDiffuse->Initialize(pDevice, pImmediateContext);
+                hr = m_aMaterials[uIndex]->pDiffuse->Initialize(pDevice, pImmediateContext);
                 if (FAILED(hr))
                 {
                     OutputDebugString(L"Error loading diffuse texture \"");
@@ -441,7 +486,7 @@ namespace library
     )
     {
         HRESULT hr = S_OK;
-        m_aMaterials[uIndex].pSpecular = nullptr;
+        m_aMaterials[uIndex]->pSpecularExponent = nullptr;
 
         if (pMaterial->GetTextureCount(aiTextureType_SHININESS) > 0)
         {
@@ -458,9 +503,9 @@ namespace library
 
                 std::filesystem::path fullPath = parentDirectory / szPath;
 
-                m_aMaterials[uIndex].pSpecular = std::make_shared<Texture>(fullPath);
+                m_aMaterials[uIndex]->pSpecularExponent = std::make_shared<Texture>(fullPath);
 
-                hr = m_aMaterials[uIndex].pSpecular->Initialize(pDevice, pImmediateContext);
+                hr = m_aMaterials[uIndex]->pSpecularExponent->Initialize(pDevice, pImmediateContext);
                 if (FAILED(hr))
                 {
                     OutputDebugString(L"Error loading specular texture \"");
@@ -478,6 +523,8 @@ namespace library
 
         return hr;
     }
+
+
 
     HRESULT Model::loadTextures(
         _In_ ID3D11Device* pDevice,
@@ -498,7 +545,11 @@ namespace library
         {
             return hr;
         }
-
+        hr = loadNormalTexture(pDevice, pImmediateContext, parentDirectory, pMaterial, uIndex);
+        if (FAILED(hr))
+        {
+            return hr;
+        }
         return hr;
     }
 
@@ -543,7 +594,16 @@ namespace library
             const aiVector3D& normal = pMesh->mNormals[i];
             const aiVector3D& texCoord = pMesh->HasTextureCoords(0u) ?
                 pMesh->mTextureCoords[0][i] : zero3d;
+            const aiVector3D& tangent = pMesh->HasTangentsAndBitangents() ?
+                pMesh->mTangents[i] : zero3d;
+            const aiVector3D& bitangent = pMesh->HasTangentsAndBitangents() ?
+                pMesh->mBitangents[i] : zero3d;
 
+            NormalData normalData =
+            {
+                .Tangent = XMFLOAT3(tangent.x,tangent.y,tangent.z),
+                .Bitangent = XMFLOAT3(bitangent.x,bitangent.y,bitangent.z)
+            };
             SimpleVertex vertex =
             {
             .Position = XMFLOAT3(position.x, position.y, position.z),
@@ -552,6 +612,7 @@ namespace library
             };
 
             m_aVertices.push_back(vertex);
+            m_aNormalData.push_back(normalData);
         }
         
         for (int i = 0; i < pMesh->mNumFaces; i++) {

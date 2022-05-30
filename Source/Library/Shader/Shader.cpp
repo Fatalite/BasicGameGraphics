@@ -21,7 +21,9 @@ namespace library
     Shader::Shader(_In_ PCWSTR pszFileName, _In_ PCSTR pszEntryPoint, _In_ PCSTR pszShaderModel) : 
         m_pszFileName(pszFileName),
         m_pszEntryPoint(pszEntryPoint),
-        m_pszShaderModel(pszShaderModel) {};
+        m_pszShaderModel(pszShaderModel) {
+    
+    };
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   Shader::GetFileName
       Summary:  Returns the shader file name
