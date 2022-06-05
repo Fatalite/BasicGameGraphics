@@ -11,7 +11,7 @@ cbuffer cbLights : register(b3)
  float4 LightColors[2];
 };
 
-cbuffer cbChangeOnCameraMovement : register(b0)
+cbuffer cbChangeOnCameraMovement : register(b2)
 {
 
 	matrix View;
@@ -24,7 +24,7 @@ cbuffer CBChangeOnResize : register(b1)
 
 	matrix Projection;
 };
-cbuffer  cbChangesEveryFrame : register(b2)
+cbuffer  cbChangesEveryFrame : register(b0)
 {
 	matrix World;
     float4 OutputColor;

@@ -41,7 +41,7 @@ namespace library
         if (FAILED(hr)) return (hr);
 
         //Normal Mapping
-        if (HasTexture() && m_aNormalData.empty()) {
+        if (m_aNormalData.empty()) {
             calculateNormalMapVectors();
         }
         D3D11_BUFFER_DESC bufferDescofNormal = {
@@ -116,7 +116,7 @@ namespace library
         {
             return hr;
         }
-         cb.World = XMMatrixTranspose(XMMatrixIdentity());
+        cb.World = XMMatrixTranspose(XMMatrixIdentity());
         //cb.OutputColor = m_outputColor;
         //pImmediateContext->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &cb, 0, 0);
 
@@ -240,7 +240,8 @@ M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
     void Renderable::Scale(_In_ FLOAT scaleX, _In_ FLOAT scaleY, _In_ FLOAT scaleZ)
     {
-        m_world =  XMMatrixScaling(scaleX, scaleY, scaleZ);
+        
+        m_world *= XMMatrixScaling(scaleX, scaleY, scaleZ);
     }
 
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M

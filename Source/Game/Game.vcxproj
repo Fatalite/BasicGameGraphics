@@ -131,6 +131,7 @@
     <None Include="Shaders\Shaders.fxh" />
     <None Include="Shaders\SkinningShaders.fxh" />
     <None Include="Shaders\VoxelShaders.fxh" />
+    <None Include="ShadowShaders.fxh" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="custom.dds" />

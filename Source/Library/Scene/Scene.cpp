@@ -28,7 +28,7 @@ namespace library
         , m_voxels()
         , m_renderables()
         , m_models()
-        , m_aPointLights{ nullptr, nullptr }
+        , m_aPointLights{ nullptr}
         , m_vertexShaders()
         , m_pixelShaders()
         , m_materials()
@@ -355,17 +355,17 @@ namespace library
     {
         for (auto it = m_renderables.begin(); it != m_renderables.end(); ++it)
         {
-            it->second->Update(deltaTime / 100);
+            it->second->Update(deltaTime / 100000);
         }
 
         for (auto it = m_models.begin(); it != m_models.end(); ++it)
         {
-            it->second->Update(deltaTime / 100);
+            it->second->Update(deltaTime / 100000);
         }
 
         for (UINT lightIdx = 0; lightIdx < NUM_LIGHTS; ++lightIdx)
         {
-            m_aPointLights[lightIdx]->Update(deltaTime/100);
+            m_aPointLights[lightIdx]->Update(deltaTime/100000);
         }
     }
 
