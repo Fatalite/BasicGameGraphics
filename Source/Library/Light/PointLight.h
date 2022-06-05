@@ -29,6 +29,8 @@ namespace library
         const XMMATRIX& GetViewMatrix() const;
         const XMMATRIX& GetProjectionMatrix() const;
 
+        FLOAT GetAttenuationDistance() const;
+
         virtual void Initialize(_In_ UINT uWidth, _In_ UINT uHeight);
         virtual void Update(_In_ FLOAT deltaTime);
     protected:
@@ -39,7 +41,7 @@ namespace library
         XMVECTOR m_up;
         XMMATRIX m_view;
         XMMATRIX m_projection;
-
+        FLOAT m_attenuationDistance;
         static constexpr const XMVECTORF32 DEFAULT_UP = { 0.0f, 1.0f, 0.0f, 0.0f };
     };
 }

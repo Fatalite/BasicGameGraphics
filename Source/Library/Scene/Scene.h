@@ -11,7 +11,7 @@
 #include "Common.h"
 
 #include <fstream>
-
+#include "Renderer/Skybox.h"
 #include "Model/Model.h"
 #include "Light/PointLight.h"
 #include "Renderer/Renderable.h"
@@ -41,7 +41,7 @@ namespace library
         HRESULT AddVertexShader(_In_ PCWSTR pszVertexShaderName, _In_ const std::shared_ptr<VertexShader>& vertexShader);
         HRESULT AddPixelShader(_In_ PCWSTR pszPixelShaderName, _In_ const std::shared_ptr<PixelShader>& pixelShader);
         HRESULT AddMaterial(_In_ const std::shared_ptr<Material>& material);
-
+        HRESULT AddSkyBox(_In_ const std::shared_ptr<Skybox>& skybox);
         void Update(_In_ FLOAT deltaTime);
 
         std::vector<std::shared_ptr<Voxel>>& GetVoxels();
@@ -51,7 +51,7 @@ namespace library
         std::unordered_map<std::wstring, std::shared_ptr<VertexShader>>& GetVertexShaders();
         std::unordered_map<std::wstring, std::shared_ptr<PixelShader>>& GetPixelShaders();
         std::unordered_map<std::wstring, std::shared_ptr<Material>>& GetMaterials();
-
+        std::shared_ptr<Skybox>& GetSkyBox();
         const std::filesystem::path& GetFilePath() const;
         PCWSTR GetFileName() const;
 
