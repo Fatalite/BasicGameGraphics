@@ -439,8 +439,6 @@ namespace library
             m_shadowMapTexture->GetRenderTargetView().GetAddressOf(), 
             m_depthStencilView.Get());
 
-        // Set primitive topology
-        m_immediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         //Just Clear Render target and Stencil View by White Color 
         float whiteColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
         m_immediateContext->ClearRenderTargetView(m_shadowMapTexture->GetRenderTargetView().Get(), whiteColor);
