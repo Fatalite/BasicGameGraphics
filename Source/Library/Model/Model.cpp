@@ -59,7 +59,10 @@ namespace library
         , m_timeSinceLoaded(0)
         , m_globalInverseTransform(XMMatrixIdentity())
         
+        
     {};
+
+
     // Main Logic //
     HRESULT Model::Initialize(_In_ ID3D11Device* pDevice, _In_ ID3D11DeviceContext* pImmediateContext)
     {
@@ -76,6 +79,8 @@ namespace library
         //if (m_pScene->HasAnimations()) {
         //    return E_FAIL;
         //}
+
+        m_pScene = sm_pImporter->GetOrphanedScene();
         if (m_pScene)
         {
             
@@ -149,17 +154,20 @@ namespace library
         UNREFERENCED_PARAMETER(deltaTime);
         //Update m_timeSinceLoaded
         m_timeSinceLoaded += deltaTime;
-
-        if (m_pScene->HasAnimations()) {
+        
+        if (m_pScene->HasAnimations() == true) {
             if (m_pScene->mRootNode != nullptr) {
-                FLOAT ticks = fmod(deltaTime, m_pScene->mAnimations[0]->mDuration);
-                readNodeHierarchy(ticks, m_pScene->mRootNode, 
-                    ConvertMatrix(m_pScene->mRootNode->mTransformation));
-                m_aTransforms.resize(m_aBoneInfo.size());
-                //UINT size = m_aBoneInfo.size();
-                for (UINT i=0u; i < m_aBoneInfo.size(); i++) {
-                    m_aTransforms[i] = m_aBoneInfo[i].FinalTransformation;
+                if (m_pScene->mAnimations != nullptr) {
+                    ////FLOAT ticks = fmod(deltaTime, m_pScene->mAnimations[0]->mDuration);
+                    //readNodeHierarchy(deltaTime, m_pScene->mRootNode,
+                    //    ConvertMatrix(m_pScene->mRootNode->mTransformation));
+                    //m_aTransforms.resize(m_aBoneInfo.size());
+                    ////UINT size = m_aBoneInfo.size();
+                    //for (UINT i = 0u; i < m_aBoneInfo.size(); i++) {
+                    //    m_aTransforms[i] = m_aBoneInfo[i].FinalTransformation;
+                    //}
                 }
+
             }
         }
     }

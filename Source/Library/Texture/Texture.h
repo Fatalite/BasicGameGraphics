@@ -14,13 +14,16 @@ namespace library
 {
     class Texture
     {
+
+    public:
+
         enum class eTextureSamplerType : size_t
         {
             TRILINEAR_WRAP = 0,
             TRILINEAR_CLAMP,
             COUNT,
         };
-    public:
+
         Texture() = delete;
         Texture(_In_ const std::filesystem::path& filePath);
         Texture(const Texture& other) = delete;

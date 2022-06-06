@@ -32,6 +32,7 @@ namespace library
         , m_vertexShaders()
         , m_pixelShaders()
         , m_materials()
+        , m_skyBox()
     {
         std::ifstream inputFile;
         inputFile.open(m_filePath.string());
@@ -216,6 +217,12 @@ namespace library
                 return hr;
             }
         }
+        //Initialize
+        //If skybox is not nullptr, initialize
+
+        if (m_skyBox != nullptr) {
+            m_skyBox.get()->Initialize(pDevice, pImmediateContext);
+        }
 
         return S_OK;
     }
@@ -367,6 +374,9 @@ namespace library
         {
             m_aPointLights[lightIdx]->Update(deltaTime/100000);
         }
+
+        //Update Skybox;
+        m_skyBox.get()->Update(deltaTime);
     }
 
     std::vector<std::shared_ptr<Voxel>>& Scene::GetVoxels()
@@ -587,5 +597,27 @@ namespace library
     {
         return lerp(x, y, s * s * (3.0f - 2.0f * s));
     }
+    std::shared_ptr<Skybox>& Scene::GetSkyBox() {
+        return m_skyBox;
+    }
 
+    HRESULT Scene::AddSkyBox(_In_ const std::shared_ptr<Skybox>& skybox) {
+
+        if (skybox != nullptr) {
+            m_skyBox = skybox;
+        }
+        else {
+            return E_INVALIDARG;
+        }
+
+    };
+/*
+    HRESULT AddPointLight(_In_ const std::shared_ptr<PointLight>& pointLight) {
+        for (UINT idx = 0u; idx < 10; idx++) {
+            if (m_aPointLights[idx] != nullptr) {
+                m_aPointLights[idx] = pointLight;
+            }
+        }
+    }
+*/
 }

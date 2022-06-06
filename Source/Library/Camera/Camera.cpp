@@ -128,15 +128,15 @@ namespace library
     void Camera::HandleInput(_In_ const DirectionsInput& directions, _In_ const MouseRelativeMovement& mouseRelativeMovement, _In_ FLOAT deltaTime) {
         //PITCH!!!! PIDIV2   
         //CAMERA ROTATION LOGIC(MOUSE)
-        if (m_pitch + mouseRelativeMovement.Y * m_rotationSpeed * deltaTime
+        if (m_pitch + mouseRelativeMovement.Y * m_rotationSpeed * deltaTime/5
             < XM_PIDIV2 
             && 
-            m_pitch + mouseRelativeMovement.Y * m_rotationSpeed * deltaTime
+            m_pitch + mouseRelativeMovement.Y * m_rotationSpeed * deltaTime / 5
             > -XM_PIDIV2) {
-            m_pitch = m_pitch + mouseRelativeMovement.Y * m_rotationSpeed * deltaTime;
+            m_pitch = m_pitch + mouseRelativeMovement.Y * m_rotationSpeed * deltaTime / 5;
         }
 
-        m_yaw = m_yaw + mouseRelativeMovement.X * m_rotationSpeed * deltaTime ;
+        m_yaw = m_yaw + mouseRelativeMovement.X * m_rotationSpeed * deltaTime / 5;
 
         //TRANSLATE LOGIC(KEYBOARD)
         if (directions.bUp == TRUE) {
@@ -183,9 +183,9 @@ namespace library
 
             //UPDATE BY DELTATIME AND TRAVELSPEED
             //지금 속도가 조금 빠릅니다.
-            m_eye += m_moveLeftRight * m_cameraRight * m_travelSpeed *deltaTime;
-            m_eye += m_moveBackForward * m_cameraForward * m_travelSpeed * deltaTime ;
-            m_eye += m_moveUpDown * m_cameraUp * m_travelSpeed * deltaTime;
+            m_eye += m_moveLeftRight * m_cameraRight * m_travelSpeed *deltaTime/30;
+            m_eye += m_moveBackForward * m_cameraForward * m_travelSpeed * deltaTime/30;
+            m_eye += m_moveUpDown * m_cameraUp * m_travelSpeed * deltaTime/30;
 
             m_moveLeftRight = 0.0f;
             m_moveBackForward = 0.0f;

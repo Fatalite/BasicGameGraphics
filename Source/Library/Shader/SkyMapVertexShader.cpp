@@ -14,9 +14,8 @@ namespace library
                   Specifies the shader target or set of shader features
                   to compile against
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: SkyMapVertexShader::SkyMapVertexShader definition (remove the comment)
-    --------------------------------------------------------------------*/
+    SkyMapVertexShader::SkyMapVertexShader(_In_ PCWSTR pszFileName, _In_ PCSTR pszEntryPoint, _In_ PCSTR pszShaderModel) :
+        VertexShader(pszFileName, pszEntryPoint ,pszShaderModel) {};
 
     /*M+M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M+++M
       Method:   SkyMapVertexShader::Initialize
@@ -26,7 +25,43 @@ namespace library
       Returns:  HRESULT
                   Status code
     M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M---M-M*/
-    /*--------------------------------------------------------------------
-      TODO: SkyMapVertexShader::Initialize definition (remove the comment)
-    --------------------------------------------------------------------*/
+    HRESULT SkyMapVertexShader::Initialize(_In_ ID3D11Device* pDevice) {
+
+        ComPtr<ID3DBlob> vsBlob;
+        HRESULT hr = compile(vsBlob.GetAddressOf());
+        if (FAILED(hr))
+        {
+            WCHAR szMessage[256];
+            swprintf_s(
+                szMessage,
+                L"The FX file %s cannot be compiled. Please run this executable from the directory that contains the FX file.",
+                m_pszFileName
+            );
+            MessageBox(
+                nullptr,
+                szMessage,
+                L"Error",
+                MB_OK
+            );
+            return hr;
+        }
+
+        hr = pDevice->CreateVertexShader(vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), nullptr, m_vertexShader.GetAddressOf());
+        if (FAILED(hr))
+        {
+            return hr;
+        }
+
+        // Define the input layout
+        D3D11_INPUT_ELEMENT_DESC skyLayouts[] =
+        {
+            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { "TEXCOORD", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+            { "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+        };
+        UINT uNumElements = ARRAYSIZE(skyLayouts);
+
+        // Create the input layout
+         hr = pDevice->CreateInputLayout(skyLayouts, uNumElements, vsBlob->GetBufferPointer(), vsBlob->GetBufferSize(), m_vertexLayout.GetAddressOf());
+    }
 }
